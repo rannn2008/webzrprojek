@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pondok Es Teller ZR | Segar, Creamy, Bikin Nagih</title>
+    <meta name="description"
+        content="Pondok Es Teller ZR Kota Padang. Es teller segar dengan buah pilihan, gula asli, dan alpukat melimpah. Pesan langsung via WhatsApp.">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://images.pexels.com">
+    <style>
+        :root {
+            --green: #147a3f;
+            --green-dark: #0d4f30;
+            --green-soft: #e8f8d9;
+            --lime: #b7e044;
+            --yellow: #ffd447;
+            --orange: #ff8f3f;
+            --cream: #fff8df;
+            --ink: #18332a;
+            --muted: #64756b;
+            --white: #ffffff;
+            --line: rgba(24, 51, 42, 0.14);
+            --shadow: 0 18px 45px rgba(13, 79, 48, 0.16);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--ink);
+            background: var(--cream);
+            line-height: 1.6;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+            background: rgba(20, 122, 63, 0.92);
+            backdrop-filter: blur(16px);
+            color: var(--white);
+        }
+
+        .nav {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .brand-mark {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: var(--yellow);
+            color: var(--green-dark);
+            box-shadow: inset 0 -4px 0 rgba(13, 79, 48, 0.14);
+            font-size: 22px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .nav-links a {
+            opacity: 0.92;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 46px;
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            color: var(--green-dark);
+            background: var(--yellow);
+            box-shadow: 0 12px 24px rgba(255, 143, 63, 0.22);
+        }
+
+        .btn-green {
+            color: var(--white);
+            background: var(--green);
+            box-shadow: 0 12px 24px rgba(13, 79, 48, 0.18);
+        }
+
+        .btn-light {
+            color: var(--green-dark);
+            background: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.54);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 690px;
+            display: grid;
+            align-items: center;
+            overflow: hidden;
+            background:
+                linear-gradient(90deg, rgba(13, 79, 48, 0.92) 0%, rgba(20, 122, 63, 0.78) 42%, rgba(20, 122, 63, 0.22) 100%),
+                url("https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=1800&q=85") center/cover;
+            color: var(--white);
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: auto 0 0;
+            height: 90px;
+            background: linear-gradient(180deg, rgba(255, 248, 223, 0), var(--cream));
+        }
+
+        .hero-grid {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 380px;
+            gap: 36px;
+            align-items: center;
+            padding: 78px 0 120px;
+        }
+
+        .hero-copy {
+            max-width: 710px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 16px;
+            padding: 7px 11px;
+            border-radius: 999px;
+            background: rgba(255, 212, 71, 0.18);
+            color: #fff3a3;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            max-width: 720px;
+            margin-bottom: 18px;
+            font-size: clamp(42px, 6vw, 76px);
+            line-height: 0.98;
+            letter-spacing: 0;
+        }
+
+        .hero-copy p {
+            max-width: 620px;
+            margin-bottom: 26px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 19px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .hero-panel {
+            align-self: stretch;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            gap: 12px;
+        }
+
+        .fresh-card {
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 8px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        .fresh-card strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--yellow);
+            font-size: 21px;
+        }
+
+        .fresh-card span {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        section {
+            padding: 78px 0;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .section-head h2 {
+            margin-bottom: 8px;
+            font-size: clamp(30px, 4vw, 46px);
+            line-height: 1.05;
+            letter-spacing: 0;
+            color: var(--green-dark);
+        }
+
+        .section-head p {
+            max-width: 590px;
+            margin-bottom: 0;
+            color: var(--muted);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .menu-card {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--white);
+            box-shadow: 0 10px 28px rgba(13, 79, 48, 0.08);
+        }
+
+        .menu-photo {
+            aspect-ratio: 4 / 3;
+            width: 100%;
+            object-fit: cover;
+            background: var(--green-soft);
+        }
+
+        .menu-body {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            padding: 18px;
+        }
+
+        .menu-title {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .menu-title h3 {
+            margin-bottom: 0;
+            font-size: 21px;
+            line-height: 1.15;
+        }
+
+        .price {
+            flex: 0 0 auto;
+            border-radius: 999px;
+            padding: 5px 9px;
+            background: var(--green-soft);
+            color: var(--green-dark);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .menu-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .menu-pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 30px;
+            border-radius: 999px;
+            padding: 5px 10px;
+            background: #fff6c7;
+            color: var(--green-dark);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .price-note {
+            margin-top: 16px;
+            border: 1px solid rgba(20, 122, 63, 0.16);
+            border-radius: 8px;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.78);
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .menu-body p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .choose-menu {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        label {
+            display: grid;
+            gap: 5px;
+            color: var(--green-dark);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            min-height: 42px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 10px 11px;
+            color: var(--ink);
+            background: #fffdf5;
+            font: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 78px;
+            resize: vertical;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(183, 224, 68, 0.28);
+        }
+
+        .feature-band {
+            background: var(--green-dark);
+            color: var(--white);
+        }
+
+        .feature-band .section-head h2,
+        .feature-band .section-head p {
+            color: var(--white);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .feature {
+            min-height: 150px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 8px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-icon {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            margin-bottom: 14px;
+            border-radius: 8px;
+            background: var(--yellow);
+            color: var(--green-dark);
+            font-size: 22px;
+        }
+
+        .feature h3 {
+            margin-bottom: 6px;
+        }
+
+        .feature p {
+            margin-bottom: 0;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 14px;
+        }
+
+        .location-wrap {
+            display: grid;
+            grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .location-info,
+        .order-box {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 24px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .info-list {
+            display: grid;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 10px;
+            align-items: start;
+            color: var(--muted);
+        }
+
+        .info-item strong {
+            display: block;
+            color: var(--ink);
+        }
+
+        .map-frame {
+            min-height: 390px;
+            overflow: hidden;
+            border: 0;
+            border-radius: 8px;
+            background:
+                linear-gradient(rgba(20, 122, 63, 0.1), rgba(20, 122, 63, 0.1)),
+                url("https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80") center/cover;
+        }
+
+        .map-frame iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 390px;
+            border: 0;
+        }
+
+        .quick-order {
+            position: relative;
+            overflow: hidden;
+            padding: 92px 0;
+            background:
+                linear-gradient(135deg, rgba(255, 212, 71, 0.92), rgba(183, 224, 68, 0.86)),
+                url("https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=1600&q=80") center/cover;
+        }
+
+        .quick-order::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 16% 24%, rgba(255, 255, 255, 0.56), transparent 28%),
+                linear-gradient(90deg, rgba(255, 248, 223, 0.96), rgba(255, 248, 223, 0.74) 45%, rgba(255, 248, 223, 0.18));
+            pointer-events: none;
+        }
+
+        .order-box {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1.22fr);
+            gap: 28px;
+            align-items: stretch;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.72);
+            box-shadow: 0 28px 70px rgba(13, 79, 48, 0.2);
+            backdrop-filter: blur(12px);
+        }
+
+        .order-copy {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100%;
+            border-radius: 8px;
+            padding: 30px;
+            background:
+                linear-gradient(180deg, rgba(13, 79, 48, 0.92), rgba(20, 122, 63, 0.78)),
+                url("https://images.unsplash.com/photo-1622597467836-f3285f2131b8?auto=format&fit=crop&w=900&q=80") center/cover;
+            color: var(--white);
+        }
+
+        .order-box h2 {
+            margin-bottom: 10px;
+            color: var(--white);
+            font-size: clamp(32px, 4vw, 54px);
+            line-height: 1.05;
+        }
+
+        .order-box p {
+            margin-bottom: 0;
+            color: rgba(255, 255, 255, 0.86);
+        }
+
+        .order-kicker {
+            display: inline-flex;
+            width: fit-content;
+            margin-bottom: 18px;
+            border-radius: 999px;
+            padding: 7px 12px;
+            background: rgba(255, 212, 71, 0.94);
+            color: var(--green-dark);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .order-highlights {
+            display: grid;
+            gap: 10px;
+            margin-top: 26px;
+        }
+
+        .order-highlight {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 8px;
+            padding: 11px 12px;
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .order-highlight strong {
+            color: var(--yellow);
+            white-space: nowrap;
+        }
+
+        .wide-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            align-content: start;
+            border: 1px solid rgba(20, 122, 63, 0.12);
+            border-radius: 8px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+        }
+
+        .wide-form .full {
+            grid-column: 1 / -1;
+        }
+
+        .add-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 160px;
+            gap: 12px;
+            grid-column: 1 / -1;
+            align-items: end;
+        }
+
+        .add-row .btn {
+            min-height: 52px;
+            box-shadow: 0 16px 28px rgba(255, 143, 63, 0.22);
+        }
+
+        .cart-list {
+            grid-column: 1 / -1;
+            display: grid;
+            gap: 10px;
+        }
+
+        .cart-empty,
+        .cart-item {
+            border: 1px solid rgba(20, 122, 63, 0.18);
+            border-radius: 8px;
+            padding: 13px 14px;
+            background: #fffdf5;
+        }
+
+        .cart-empty {
+            color: var(--muted);
+            font-weight: 700;
+            text-align: center;
+            background:
+                repeating-linear-gradient(135deg, rgba(20, 122, 63, 0.04) 0 8px, transparent 8px 16px),
+                #fffdf5;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+            background: linear-gradient(180deg, #ffffff, #fffdf5);
+            box-shadow: 0 8px 18px rgba(13, 79, 48, 0.06);
+        }
+
+        .cart-name {
+            color: var(--green-dark);
+            font-weight: 900;
+        }
+
+        .cart-detail {
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .cart-remove {
+            min-width: 38px;
+            min-height: 38px;
+            border: 0;
+            border-radius: 8px;
+            background: #ffe6d8;
+            color: #8b2d12;
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .cart-remove:hover {
+            background: #ffd2bd;
+        }
+
+        .order-summary {
+            grid-column: 1 / -1;
+            display: grid;
+            gap: 9px;
+            border: 1px solid rgba(20, 122, 63, 0.18);
+            border-radius: 8px;
+            padding: 16px;
+            background:
+                linear-gradient(135deg, rgba(244, 255, 233, 0.98), rgba(255, 246, 199, 0.72));
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .summary-row strong {
+            color: var(--green-dark);
+        }
+
+        .summary-row.total {
+            border-top: 1px dashed rgba(20, 122, 63, 0.28);
+            padding-top: 11px;
+            color: var(--green-dark);
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .testimonials {
+            background:
+                linear-gradient(180deg, #fff8df, #f4ffe9);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .testimonial-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 20px;
+            background: var(--white);
+            box-shadow: 0 12px 28px rgba(13, 79, 48, 0.08);
+        }
+
+        .stars {
+            margin-bottom: 10px;
+            color: #f5a400;
+            font-weight: 900;
+        }
+
+        .testimonial-card p {
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .testimonial-card strong {
+            color: var(--green-dark);
+        }
+
+        .footer {
+            padding: 28px 0;
+            background: #092e20;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            font-size: 14px;
+        }
+
+        .footer strong {
+            color: var(--white);
+        }
+
+        .floating-wa {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 30;
+            width: 56px;
+            height: 56px;
+            border-radius: 999px;
+            background: #25d366;
+            color: white;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 14px 30px rgba(37, 211, 102, 0.36);
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        @media (max-width: 900px) {
+            .nav {
+                min-height: auto;
+                padding: 12px 0;
+                align-items: start;
+                flex-direction: column;
+            }
+
+            .nav-links {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 4px;
+            }
+
+            .hero {
+                min-height: auto;
+            }
+
+            .hero-grid,
+            .location-wrap,
+            .order-box {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-grid {
+                padding: 58px 0 110px;
+            }
+
+            .hero-panel {
+                max-width: 520px;
+            }
+
+            .menu-grid,
+            .feature-grid,
+            .testimonial-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                width: min(100% - 22px, 1120px);
+            }
+
+            .nav-links {
+                gap: 14px;
+                font-size: 13px;
+            }
+
+            h1 {
+                font-size: 42px;
+            }
+
+            .hero-copy p {
+                font-size: 16px;
+            }
+
+            .section-head {
+                display: block;
+            }
+
+            .menu-grid,
+            .feature-grid,
+            .testimonial-grid,
+            .wide-form,
+            .add-row {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 56px 0;
+            }
+
+            .footer-inner {
+                display: grid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <nav class="container nav" aria-label="Navigasi utama">
+            <a class="brand" href="#beranda">
+                <span class="brand-mark">ZR</span>
+                <span>Pondok Es Teller ZR</span>
+            </a>
+            <div class="nav-links">
+                <a href="#beranda">Beranda</a>
+                <a href="#menu">Menu</a>
+                <a href="#keunggulan">Keunggulan</a>
+                <a href="#testimoni">Testimoni</a>
+                <a href="#lokasi">Lokasi</a>
+                <a class="btn btn-primary" href="#pesan">Pesan</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="beranda">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <p class="eyebrow">Segar dari Kota Padang</p>
+                    <h1>Pondok Es Teller ZR</h1>
+                    <p>Es teller creamy dengan buah segar pilihan, gula asli, dan alpukat yang jadi bintang utama di
+                        setiap sendokannya.</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#pesan">Pesan Sekarang</a>
+                        <a class="btn btn-light" href="#menu">Lihat Menu</a>
+                    </div>
+                </div>
+                <div class="hero-panel" aria-label="Highlight produk">
+                    <div class="fresh-card">
+                        <strong>Alpukat Melimpah</strong>
+                        <span>Tekstur lembut, rasa legit, dan cocok dipadukan dengan es teller dingin.</span>
+                    </div>
+                    <div class="fresh-card">
+                        <strong>Buka 10.00 - 22.00</strong>
+                        <span>Siap nemenin siang panas sampai malam santai.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="menu">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <h2>Menu Favorit</h2>
+                        <p>Lihat harga dan rating menu dulu, lalu pilih menu favoritmu untuk mengisi form pesanan
+                            lengkap di bawah.</p>
+                    </div>
+                </div>
+
+                <div class="menu-grid">
+                    <article class="menu-card">
+                        <img class="menu-photo" src="foto2/estelleroriginal.jpg"
+                            alt="Es Teller Original Pondok Es Teller ZR">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Original</h3>
+                                <span class="price">Rp10.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.8</span>
+                                <span class="menu-pill">Best seller</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Racikan klasik berisi buah segar, kuah manis, dan sensasi dingin yang pas.</p>
+                            <button class="btn btn-green choose-menu" type="button"
+                                data-menu="Es Teller Original">Tambah ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=85"
+                            alt="Es teller alpukat spesial">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Alpukat Spesial</h3>
+                                <span class="price">Rp16.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.9</span>
+                                <span class="menu-pill">Alpukat favorit</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Menu unggulan dengan alpukat lebih banyak, creamy, dan bikin puas.</p>
+                            <button class="btn btn-green choose-menu" type="button"
+                                data-menu="Es Teller Alpukat Spesial">Tambah ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=85"
+                            alt="Es teller durian">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Durian</h3>
+                                <span class="price">Rp18.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.7</span>
+                                <span class="menu-pill">Aroma durian</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Tambahan aroma durian untuk rasa yang lebih tebal dan nikmat.</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="Es Teller Durian">Tambah
+                                ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=85"
+                            alt="Es teller jumbo">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Jumbo</h3>
+                                <span class="price">Rp20.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.8</span>
+                                <span class="menu-pill">Porsi besar</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Porsi lebih besar untuk yang lagi haus berat dan butuh segar maksimal.</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="Es Teller Jumbo">Tambah
+                                ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=800&q=85"
+                            alt="Es teller campur">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Campur</h3>
+                                <span class="price">Rp15.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.7</span>
+                                <span class="menu-pill">Buah campur</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Campuran buah pilihan dengan rasa manis segar yang cocok untuk semua orang.</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="Es Teller Campur">Tambah
+                                ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=85"
+                            alt="Paket es teller keluarga">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Paket Keluarga</h3>
+                                <span class="price">Rp55.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.9</span>
+                                <span class="menu-pill">Untuk ramai</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Paket ramai-ramai untuk keluarga, teman kantor, atau kumpul santai.</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="Paket Keluarga">Tambah ke
+                                Pesanan</button>
+                        </div>
+                    </article>
+                </div>
+                <div class="price-note">Catatan: harga menu masih bisa disesuaikan dan dapat berubah sewaktu-waktu sesuai stok bahan.</div>
+            </div>
+        </section>
+
+        <section class="feature-band" id="keunggulan">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <h2>Kenapa Banyak yang Cocok?</h2>
+                        <p>Dibuat untuk rasa segar yang gampang disukai, dari anak muda sampai keluarga.</p>
+                    </div>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature">
+                        <div class="feature-icon">A</div>
+                        <h3>Alpukat Juara</h3>
+                        <p>Alpukat jadi bahan unggulan dengan rasa lembut dan porsi yang terasa.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">B</div>
+                        <h3>Buah Segar Pilihan</h3>
+                        <p>Setiap sajian dibuat dengan buah pilihan agar rasa tetap segar.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">G</div>
+                        <h3>Gula Asli</h3>
+                        <p>Manisnya lebih mantap karena memakai gula asli, bukan asal manis.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">C</div>
+                        <h3>Creamy dan Dingin</h3>
+                        <p>Kuah manis creamy dipadukan es dingin untuk rasa yang adem.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">S</div>
+                        <h3>Cocok Semua Kalangan</h3>
+                        <p>Rasanya ramah untuk anak-anak, anak muda, keluarga, dan pekerja.</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">R</div>
+                        <h3>Bisa Pesan Ramai</h3>
+                        <p>Cocok untuk pesanan pribadi, kumpul keluarga, atau traktiran kantor.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials" id="testimoni">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <h2>Kata Pelanggan</h2>
+                        <p>Beberapa kesan singkat untuk membantu pembeli baru lebih yakin sebelum pesan.</p>
+                    </div>
+                </div>
+                <div class="testimonial-grid">
+                    <article class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>Rasanya segar, manisnya pas, dan alpukatnya terasa banget. Cocok buat siang-siang.</p>
+                        <strong>Rani, Padang</strong>
+                    </article>
+                    <article class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>Porsinya puas dan isiannya ramai. Enak buat pesan bareng teman kantor.</p>
+                        <strong>Fajar, Karyawan</strong>
+                    </article>
+                    <article class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>Pesan lewat WhatsApp praktis, tinggal pilih menu dan totalnya langsung jelas.</p>
+                        <strong>Maya, Mahasiswa</strong>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="lokasi">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <h2>Lokasi dan Jam Buka</h2>
+                        <p>Mampir langsung ke Pondok Es Teller ZR atau pesan dulu lewat WhatsApp biar lebih praktis.</p>
+                    </div>
+                </div>
+                <div class="location-wrap">
+                    <div class="location-info">
+                        <h3>Pondok Es Teller ZR</h3>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <span>📍</span>
+                                <div><strong>Kota Padang</strong>Lokasi tersedia di Google Maps.</div>
+                            </div>
+                            <div class="info-item">
+                                <span>🕙</span>
+                                <div><strong>10.00 - 22.00</strong>Buka setiap hari selama stok tersedia.</div>
+                            </div>
+                            <div class="info-item">
+                                <span>☎</span>
+                                <div><strong>WhatsApp</strong>0813-7411-0444 atau 0813-6348-9111</div>
+                            </div>
+                        </div>
+                        <a class="btn btn-green" target="_blank" rel="noopener"
+                            href="https://www.google.com/maps/place/Pondok+Es+Teler+ZR+(Es+Teler+Kota+Padang)/data=!4m2!3m1!1s0x0:0x33d947a3e084bd9?sa=X&ved=1t:2428&ictx=111">Buka
+                            Google Maps</a>
+                    </div>
+                    <div class="map-frame" aria-label="Peta lokasi Pondok Es Teller ZR">
+                        <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                            src="https://www.google.com/maps?q=Pondok%20Es%20Teler%20ZR%20Kota%20Padang&output=embed"
+                            title="Peta Pondok Es Teller ZR"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-order" id="pesan">
+            <div class="container">
+                <div class="order-box">
+                    <div class="order-copy">
+                        <div>
+                            <span class="order-kicker">Pesan cepat via WhatsApp</span>
+                            <h2>Lagi haus? Pesan Es Teller ZR sekarang.</h2>
+                            <p>Tambahkan beberapa menu ke pesanan, cek totalnya, lalu kirim semuanya lewat WhatsApp.</p>
+                        </div>
+                        <div class="order-highlights" aria-label="Ringkasan layanan">
+                            <div class="order-highlight">
+                                <span>Alpukat pilihan</span>
+                                <strong>Fresh</strong>
+                            </div>
+                            <div class="order-highlight">
+                                <span>Metode pesanan</span>
+                                <strong>Pickup / Delivery</strong>
+                            </div>
+                            <div class="order-highlight">
+                                <span>Jam buka</span>
+                                <strong>10.00 - 22.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="wide-form" id="mainOrderForm">
+                        <label>Nama
+                            <input type="text" name="nama" placeholder="Nama kamu" required>
+                        </label>
+                        <label>Metode
+                            <select name="metode" required>
+                                <option>Ambil Sendiri</option>
+                                <option>Delivery</option>
+                            </select>
+                        </label>
+                        <label>Kontak WhatsApp
+                            <select name="kontak" required>
+                                <option value="6281374110444">WA Utama - 0813-7411-0444</option>
+                                <option value="6281363489111">WA Kedua - 0813-6348-9111</option>
+                            </select>
+                        </label>
+                        <label class="full">Menu
+                            <select name="menu" required>
+                                <option value="Es Teller Original" data-price="12000">Es Teller Original - Rp12.000
+                                </option>
+                                <option value="Es Teller Alpukat Spesial" data-price="16000">Es Teller Alpukat Spesial -
+                                    Rp16.000</option>
+                                <option value="Es Teller Durian" data-price="18000">Es Teller Durian - Rp18.000</option>
+                                <option value="Es Teller Jumbo" data-price="20000">Es Teller Jumbo - Rp20.000</option>
+                                <option value="Es Teller Campur" data-price="15000">Es Teller Campur - Rp15.000</option>
+                                <option value="Paket Keluarga" data-price="55000">Paket Keluarga - Rp55.000</option>
+                            </select>
+                        </label>
+                        <div class="add-row">
+                            <label>Jumlah
+                                <input type="number" name="jumlah" min="1" value="1" required>
+                            </label>
+                            <button class="btn btn-primary" id="addMenuButton" type="button">Tambah Menu</button>
+                        </div>
+                        <label class="full hidden" id="deliveryAddressField">Alamat Delivery
+                            <textarea name="alamat"
+                                placeholder="Tulis alamat lengkap, patokan, dan nomor yang bisa dihubungi"></textarea>
+                        </label>
+                        <label class="full">Catatan
+                            <textarea name="catatan"
+                                placeholder="Contoh: esnya sedikit, tambah alpukat, alamat delivery, dan lainnya"></textarea>
+                        </label>
+                        <div class="cart-list full" id="cartList" aria-live="polite">
+                            <div class="cart-empty">Belum ada menu di pesanan.</div>
+                        </div>
+                        <div class="order-summary" aria-live="polite">
+                            <div class="summary-row">
+                                <span>Total item</span>
+                                <strong id="summaryQty">0</strong>
+                            </div>
+                            <div class="summary-row">
+                                <span>Jumlah menu</span>
+                                <strong id="summaryMenuCount">0</strong>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total estimasi</span>
+                                <strong id="summaryTotal">Rp0</strong>
+                            </div>
+                        </div>
+                        <button class="btn btn-green full" type="submit">Kirim Pesanan ke WhatsApp</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div><strong>Pondok Es Teller ZR</strong> - Kota Padang</div>
+            <div>Buka 10.00 - 22.00</div>
+            <a href="https://wa.me/6281374110444" target="_blank" rel="noopener">WhatsApp Utama</a>
+        </div>
+    </footer>
+
+    <a class="floating-wa" href="https://wa.me/6281374110444" target="_blank" rel="noopener"
+        aria-label="Chat WhatsApp">W</a>
+
+    <script>
+        const whatsappMain = "6281374110444";
+        const whatsappSecond = "6281363489111";
+        const mainOrderForm = document.getElementById("mainOrderForm");
+        const menuSelect = mainOrderForm.elements.menu;
+        const jumlahInput = mainOrderForm.elements.jumlah;
+        const metodeSelect = mainOrderForm.elements.metode;
+        const alamatInput = mainOrderForm.elements.alamat;
+        const deliveryAddressField = document.getElementById("deliveryAddressField");
+        const cartList = document.getElementById("cartList");
+        const cart = [];
+        const formatRupiah = new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            maximumFractionDigits: 0
+        });
+
+        function getSelectedPrice() {
+            return Number(menuSelect.selectedOptions[0]?.dataset.price || 0);
+        }
+
+        function addSelectedMenu() {
+            const menu = menuSelect.value;
+            const harga = getSelectedPrice();
+            const jumlah = Math.max(1, Number(jumlahInput.value || 1));
+            const existing = cart.find((item) => item.menu === menu);
+
+            if (existing) {
+                existing.jumlah += jumlah;
+            } else {
+                cart.push({ menu, harga, jumlah });
+            }
+
+            jumlahInput.value = 1;
+            renderCart();
+        }
+
+        function renderCart() {
+            if (!cart.length) {
+                cartList.innerHTML = '<div class="cart-empty">Belum ada menu di pesanan.</div>';
+            } else {
+                cartList.innerHTML = cart.map((item, index) => {
+                    const subtotal = item.harga * item.jumlah;
+                    return `
+                        <div class="cart-item">
+                            <div>
+                                <div class="cart-name">${item.menu}</div>
+                                <div class="cart-detail">${item.jumlah} x ${formatRupiah.format(item.harga)} = ${formatRupiah.format(subtotal)}</div>
+                            </div>
+                            <button class="cart-remove" type="button" data-index="${index}" aria-label="Hapus ${item.menu}">X</button>
+                        </div>
+                    `;
+                }).join("");
+            }
+
+            const qty = cart.reduce((sum, item) => sum + item.jumlah, 0);
+            const total = cart.reduce((sum, item) => sum + item.harga * item.jumlah, 0);
+
+            document.getElementById("summaryQty").textContent = qty;
+            document.getElementById("summaryMenuCount").textContent = cart.length;
+            document.getElementById("summaryTotal").textContent = formatRupiah.format(total);
+        }
+
+        function toggleDeliveryAddress() {
+            const isDelivery = metodeSelect.value === "Delivery";
+
+            deliveryAddressField.classList.toggle("hidden", !isDelivery);
+            alamatInput.required = isDelivery;
+
+            if (!isDelivery) {
+                alamatInput.value = "";
+            }
+        }
+
+        function openWhatsapp({ items, metode, phone, nama = "", alamat = "", catatan = "" }) {
+            const total = items.reduce((sum, item) => sum + item.harga * item.jumlah, 0);
+            const orderLines = items.map((item, index) => {
+                const subtotal = item.harga * item.jumlah;
+                return `${index + 1}. ${item.menu} - ${item.jumlah} x ${formatRupiah.format(item.harga)} = ${formatRupiah.format(subtotal)}`;
+            });
+
+            const lines = [
+                "Halo Pondok Es Teller ZR, saya mau pesan:",
+                "",
+                ...orderLines,
+                "",
+                `Total item: ${items.reduce((sum, item) => sum + item.jumlah, 0)}`,
+                `Total estimasi: ${formatRupiah.format(total)}`,
+                `Metode: ${metode}`,
+                nama ? `Nama: ${nama}` : "",
+                alamat ? `Alamat delivery: ${alamat}` : "",
+                catatan ? `Catatan: ${catatan}` : "",
+                "",
+                "Apakah pesanan saya bisa diproses?"
+            ].filter(Boolean);
+
+            const message = encodeURIComponent(lines.join("\n"));
+            window.open(`https://wa.me/${phone}?text=${message}`, "_blank", "noopener");
+        }
+
+        document.querySelectorAll(".choose-menu").forEach((button) => {
+            button.addEventListener("click", () => {
+                menuSelect.value = button.dataset.menu;
+                addSelectedMenu();
+                document.getElementById("pesan").scrollIntoView({ behavior: "smooth", block: "start" });
+                setTimeout(() => mainOrderForm.elements.nama.focus(), 450);
+            });
+        });
+
+        document.getElementById("addMenuButton").addEventListener("click", addSelectedMenu);
+
+        cartList.addEventListener("click", (event) => {
+            const removeButton = event.target.closest(".cart-remove");
+
+            if (!removeButton) {
+                return;
+            }
+
+            cart.splice(Number(removeButton.dataset.index), 1);
+            renderCart();
+        });
+
+        metodeSelect.addEventListener("change", toggleDeliveryAddress);
+        toggleDeliveryAddress();
+        renderCart();
+
+        mainOrderForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const data = new FormData(event.currentTarget);
+
+            if (!cart.length) {
+                addSelectedMenu();
+            }
+
+            openWhatsapp({
+                nama: data.get("nama"),
+                items: cart,
+                metode: data.get("metode"),
+                phone: data.get("kontak") || whatsappMain,
+                alamat: data.get("alamat"),
+                catatan: data.get("catatan")
+            });
+        });
+    </script>
+</body>
+
+</html>
