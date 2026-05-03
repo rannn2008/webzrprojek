@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -290,7 +291,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: 
+            background:
                 radial-gradient(circle at 0% 0%, rgba(20, 122, 63, 0.15) 0%, transparent 50%),
                 radial-gradient(circle at 100% 100%, rgba(255, 212, 71, 0.15) 0%, transparent 50%),
                 rgba(255, 248, 223, 0.8);
@@ -317,8 +318,15 @@
         }
 
         @keyframes cardEntry {
-            from { opacity: 0; transform: scale(0.9) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .login-header {
@@ -376,7 +384,7 @@
         .login-tab.active {
             background: var(--white);
             color: var(--green-dark);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .login-field {
@@ -425,6 +433,7 @@
         }
 
         @media (max-width: 880px) {
+
             .layout,
             .menu-item,
             .auth-panel,
@@ -443,8 +452,9 @@
         }
     </style>
 </head>
+
 <body>
-    <div class="login-overlay hidden" id="loginOverlay">
+    <div class="login-overlay" id="loginOverlay">
         <div class="login-card">
             <div class="login-header">
                 <div class="login-logo">ZR</div>
@@ -474,8 +484,11 @@
             <div class="hidden" id="tabContentHelp">
                 <div class="note" style="background: rgba(20, 122, 63, 0.05); color: var(--ink);">
                     <p style="margin-top: 0;"><strong>Lupa Password?</strong></p>
-                    <p>Hubungi pengembang sistem atau cek file <code>supabase-setup.sql</code> untuk konfigurasi akun admin pertama kali.</p>
-                    <p style="margin-bottom: 0;">Pastikan Supabase Config sudah terisi dengan benar di <code>supabase-config.js</code>.</p>
+                    <p>Hubungi pengembang sistem atau cek file <code>supabase-setup.sql</code> untuk konfigurasi akun
+                        admin pertama kali.</p>
+                    <p style="margin-bottom: 0;">Pastikan Supabase Config sudah terisi dengan benar di
+                        <code>supabase-config.js</code>.
+                    </p>
                 </div>
             </div>
 
@@ -502,7 +515,8 @@
         <section class="hero">
             <div class="container">
                 <h1>Kelola Menu Pondok Es Teller ZR</h1>
-                <p>Tambah menu, ubah harga, ganti foto, atur status, lalu cek hasilnya di halaman utama. Data ini tersimpan lokal di browser untuk tahap persiapan sebelum publish.</p>
+                <p>Tambah menu, ubah harga, ganti foto, atur status, lalu cek hasilnya di halaman utama. Data ini
+                    tersimpan lokal di browser untuk tahap persiapan sebelum publish.</p>
                 <div class="admin-status" id="adminStatus">Memuat status...</div>
             </div>
         </section>
@@ -544,7 +558,8 @@
                         <button class="btn" id="cancelEditButton" type="button">Batal Edit</button>
                         <button class="btn btn-danger" id="resetButton" type="button">Reset Default</button>
                     </div>
-                    <div class="note">Untuk foto, pilih file dari komputer atau isi URL foto. Kalau pilih file, gambar disimpan di browser sebagai preview lokal.</div>
+                    <div class="note">Untuk foto, pilih file dari komputer atau isi URL foto. Kalau pilih file, gambar
+                        disimpan di browser sebagai preview lokal.</div>
                 </form>
             </aside>
 
@@ -642,7 +657,7 @@
             tab.addEventListener("click", () => {
                 loginTabs.forEach(t => t.classList.remove("active"));
                 tab.classList.add("active");
-                
+
                 const target = tab.dataset.tab;
                 if (target === "login") {
                     tabContentLogin.classList.remove("hidden");
@@ -953,8 +968,13 @@
 
         async function refreshAuthState() {
             if (!supabaseClient) {
-                loginOverlay.classList.add("hidden");
-                adminStatus.textContent = "Mode lokal aktif. Isi Supabase config untuk database online.";
+                const isLocalLoggedIn = sessionStorage.getItem("zrAdminLocalLogin") === "true";
+                loginOverlay.classList.toggle("hidden", isLocalLoggedIn);
+                logoutButton.classList.toggle("hidden", !isLocalLoggedIn);
+                menuForm.closest(".panel").classList.toggle("hidden", !isLocalLoggedIn);
+                adminStatus.textContent = isLocalLoggedIn
+                    ? "Mode lokal aktif. Admin sudah login (Sesi Sementara)."
+                    : "Mode lokal aktif. Silakan login (Email: zahran@gmail.com, Pass: z4hr4aiwa).";
                 await renderMenus();
                 return;
             }
@@ -976,15 +996,34 @@
             event.preventDefault();
 
             const formData = new FormData(authFormMain);
+            const email = formData.get("email");
+            const password = formData.get("password");
             const submitBtn = authFormMain.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
-            
+
             submitBtn.textContent = "Memverifikasi...";
             submitBtn.disabled = true;
 
+            if (!supabaseClient) {
+                // Simulated Login for Local Mode
+                setTimeout(async () => {
+                    if (email === "zahranalsyafitdei@gmail.com" && password === "z4hr4aiwa") {
+                        sessionStorage.setItem("zrAdminLocalLogin", "true");
+                        adminStatus.textContent = "Login lokal berhasil.";
+                        await refreshAuthState();
+                    } else {
+                        adminStatus.textContent = "Login lokal gagal. Gunakan zahranalsyafitdei@gmail.com / z4hr4aiwa";
+                        alert("Login Gagal! Gunakan:\nEmail: zahranalsyafitdei@gmail.com\nPassword: z4hr4aiwa");
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 800);
+                return;
+            }
+
             const { error } = await supabaseClient.auth.signInWithPassword({
-                email: formData.get("email"),
-                password: formData.get("password")
+                email: email,
+                password: password
             });
 
             if (error) {
@@ -999,11 +1038,16 @@
         });
 
         logoutButton.addEventListener("click", async () => {
-            await supabaseClient.auth.signOut();
+            if (supabaseClient) {
+                await supabaseClient.auth.signOut();
+            } else {
+                sessionStorage.removeItem("zrAdminLocalLogin");
+            }
             await refreshAuthState();
         });
 
         await refreshAuthState();
     </script>
 </body>
+
 </html>
