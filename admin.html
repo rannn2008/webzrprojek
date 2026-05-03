@@ -181,6 +181,37 @@
             box-shadow: 0 0 0 3px rgba(183, 224, 68, 0.28);
         }
 
+        .hidden {
+            display: none !important;
+        }
+
+        .auth-panel {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: end;
+            margin-top: 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .auth-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .admin-status {
+            margin-top: 12px;
+            border-radius: 8px;
+            padding: 10px 12px;
+            background: #f4ffe9;
+            color: var(--green-dark);
+            font-weight: 800;
+        }
+
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -253,7 +284,9 @@
 
         @media (max-width: 880px) {
             .layout,
-            .menu-item {
+            .menu-item,
+            .auth-panel,
+            .auth-form {
                 grid-template-columns: 1fr;
             }
 
@@ -284,6 +317,19 @@
             <div class="container">
                 <h1>Kelola Menu Pondok Es Teller ZR</h1>
                 <p>Tambah menu, ubah harga, ganti foto, atur status, lalu cek hasilnya di halaman utama. Data ini tersimpan lokal di browser untuk tahap persiapan sebelum publish.</p>
+                <div class="auth-panel hidden" id="authPanel">
+                    <form class="auth-form" id="authForm">
+                        <label>Email Admin
+                            <input type="email" name="email" placeholder="admin@email.com" required>
+                        </label>
+                        <label>Password
+                            <input type="password" name="password" placeholder="Password" required>
+                        </label>
+                        <button class="btn btn-green" type="submit">Login Admin</button>
+                    </form>
+                    <button class="btn btn-danger hidden" id="logoutButton" type="button">Logout</button>
+                </div>
+                <div class="admin-status" id="adminStatus">Mode lokal aktif. Isi Supabase config untuk database online.</div>
             </div>
         </section>
 
@@ -335,8 +381,21 @@
         </section>
     </main>
 
-    <script>
+    <script src="supabase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
         const menuStorageKey = "pondokEsTellerZrMenus";
+        const supabaseConfig = window.ZR_SUPABASE || {};
+        const hasSupabaseConfig = Boolean(
+            supabaseConfig.url &&
+            supabaseConfig.anonKey &&
+            !supabaseConfig.url.includes("ISI_") &&
+            !supabaseConfig.anonKey.includes("ISI_") &&
+            window.supabase
+        );
+        const supabaseClient = hasSupabaseConfig
+            ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
+            : null;
         const defaultMenus = [
             {
                 name: "Es Teller Original",
@@ -396,6 +455,10 @@
 
         const menuForm = document.getElementById("menuForm");
         const menuList = document.getElementById("menuList");
+        const adminStatus = document.getElementById("adminStatus");
+        const authPanel = document.getElementById("authPanel");
+        const authForm = document.getElementById("authForm");
+        const logoutButton = document.getElementById("logoutButton");
         const formatRupiah = new Intl.NumberFormat("id-ID", {
             style: "currency",
             currency: "IDR",
@@ -411,7 +474,35 @@
                 .replace(/'/g, "&#039;");
         }
 
-        function getMenus() {
+        function normalizeMenu(menu) {
+            return {
+                id: menu.id || "",
+                name: menu.name,
+                price: Number(menu.price || 0),
+                description: menu.description || "",
+                image: menu.image_url || menu.image || "",
+                rating: menu.rating || "4.8",
+                badges: Array.isArray(menu.badges) ? menu.badges : [],
+                status: menu.status || "Tersedia",
+                sort_order: Number(menu.sort_order || 0)
+            };
+        }
+
+        async function getMenus() {
+            if (supabaseClient) {
+                const { data, error } = await supabaseClient
+                    .from("menus")
+                    .select("*")
+                    .order("sort_order", { ascending: true })
+                    .order("created_at", { ascending: true });
+
+                if (!error && Array.isArray(data)) {
+                    return data.map(normalizeMenu);
+                }
+
+                adminStatus.textContent = `Gagal membaca Supabase: ${error?.message || "unknown error"}`;
+            }
+
             try {
                 const savedMenus = JSON.parse(localStorage.getItem(menuStorageKey));
                 return Array.isArray(savedMenus) && savedMenus.length ? savedMenus : defaultMenus;
@@ -420,8 +511,90 @@
             }
         }
 
-        function saveMenus(menus) {
+        async function saveMenus(menus) {
             localStorage.setItem(menuStorageKey, JSON.stringify(menus));
+        }
+
+        async function saveMenu(menu, existingMenu) {
+            if (!supabaseClient) {
+                const menus = await getMenus();
+
+                if (existingMenu?.localIndex !== undefined) {
+                    menus[existingMenu.localIndex] = menu;
+                } else {
+                    menus.push(menu);
+                }
+
+                await saveMenus(menus);
+                return;
+            }
+
+            const payload = {
+                name: menu.name,
+                price: menu.price,
+                description: menu.description,
+                image_url: menu.image,
+                rating: menu.rating,
+                badges: menu.badges,
+                status: menu.status,
+                sort_order: existingMenu?.sort_order || Date.now()
+            };
+
+            const query = existingMenu?.id
+                ? supabaseClient.from("menus").update(payload).eq("id", existingMenu.id)
+                : supabaseClient.from("menus").insert(payload);
+            const { error } = await query;
+
+            if (error) {
+                throw error;
+            }
+        }
+
+        async function deleteMenu(menu, localIndex) {
+            if (!supabaseClient) {
+                const menus = await getMenus();
+                menus.splice(localIndex, 1);
+                await saveMenus(menus);
+                return;
+            }
+
+            const { error } = await supabaseClient.from("menus").delete().eq("id", menu.id);
+
+            if (error) {
+                throw error;
+            }
+        }
+
+        async function resetMenus() {
+            if (!supabaseClient) {
+                await saveMenus(defaultMenus);
+                return;
+            }
+
+            const { error: deleteError } = await supabaseClient
+                .from("menus")
+                .delete()
+                .not("id", "is", null);
+
+            if (deleteError) {
+                throw deleteError;
+            }
+
+            const payload = defaultMenus.map((menu, index) => ({
+                name: menu.name,
+                price: menu.price,
+                description: menu.description,
+                image_url: menu.image,
+                rating: menu.rating,
+                badges: menu.badges,
+                status: menu.status,
+                sort_order: index + 1
+            }));
+            const { error: insertError } = await supabaseClient.from("menus").insert(payload);
+
+            if (insertError) {
+                throw insertError;
+            }
         }
 
         function resetForm() {
@@ -431,8 +604,8 @@
             document.getElementById("formTitle").textContent = "Tambah Menu";
         }
 
-        function renderMenus() {
-            const menus = getMenus();
+        async function renderMenus() {
+            const menus = await getMenus();
 
             menuList.innerHTML = menus.map((menu, index) => {
                 const badges = [`Rating ${menu.rating || "4.8"}`, ...(menu.badges || []), menu.status || "Tersedia"];
@@ -450,8 +623,8 @@
                             </div>
                         </div>
                         <div class="item-actions">
-                            <button class="btn" type="button" data-action="edit" data-index="${index}">Edit</button>
-                            <button class="btn btn-danger" type="button" data-action="delete" data-index="${index}">Hapus</button>
+                            <button class="btn" type="button" data-action="edit" data-index="${index}" data-id="${escapeHtml(menu.id || "")}">Edit</button>
+                            <button class="btn btn-danger" type="button" data-action="delete" data-index="${index}" data-id="${escapeHtml(menu.id || "")}">Hapus</button>
                         </div>
                     </article>
                 `;
@@ -471,56 +644,86 @@
             });
         }
 
+        async function uploadPhoto(file) {
+            if (!file) {
+                return "";
+            }
+
+            if (!supabaseClient) {
+                return readPhotoAsDataUrl(file);
+            }
+
+            const extension = file.name.split(".").pop() || "jpg";
+            const path = `${crypto.randomUUID()}.${extension}`;
+            const { error } = await supabaseClient.storage
+                .from(supabaseConfig.imageBucket || "menu-images")
+                .upload(path, file, { upsert: false });
+
+            if (error) {
+                throw error;
+            }
+
+            const { data } = supabaseClient.storage
+                .from(supabaseConfig.imageBucket || "menu-images")
+                .getPublicUrl(path);
+
+            return data.publicUrl;
+        }
+
         menuForm.addEventListener("submit", async (event) => {
             event.preventDefault();
 
-            const formData = new FormData(menuForm);
-            const menus = getMenus();
-            const editIndex = formData.get("editIndex");
-            const photoDataUrl = await readPhotoAsDataUrl(menuForm.elements.photo.files[0]);
-            const existingImage = editIndex !== "" ? menus[Number(editIndex)]?.image : "";
-            const image = photoDataUrl || formData.get("image").trim() || existingImage || "foto2/estelleroriginal.jpg";
-            const badges = formData.get("badges")
-                .split(",")
-                .map((badge) => badge.trim())
-                .filter(Boolean);
+            try {
+                const formData = new FormData(menuForm);
+                const menus = await getMenus();
+                const editIndex = formData.get("editIndex");
+                const existingMenu = editIndex !== "" ? menus[Number(editIndex)] : null;
+                const uploadedPhoto = await uploadPhoto(menuForm.elements.photo.files[0]);
+                const existingImage = editIndex !== "" ? menus[Number(editIndex)]?.image : "";
+                const image = uploadedPhoto || formData.get("image").trim() || existingImage || "foto2/estelleroriginal.jpg";
+                const badges = formData.get("badges")
+                    .split(",")
+                    .map((badge) => badge.trim())
+                    .filter(Boolean);
 
-            const menu = {
-                name: formData.get("name").trim(),
-                price: Number(formData.get("price") || 0),
-                description: formData.get("description").trim(),
-                image,
-                rating: formData.get("rating").trim() || "4.8",
-                badges,
-                status: formData.get("status")
-            };
+                const menu = {
+                    name: formData.get("name").trim(),
+                    price: Number(formData.get("price") || 0),
+                    description: formData.get("description").trim(),
+                    image,
+                    rating: formData.get("rating").trim() || "4.8",
+                    badges,
+                    status: formData.get("status")
+                };
 
-            if (editIndex === "") {
-                menus.push(menu);
-            } else {
-                menus[Number(editIndex)] = menu;
+                await saveMenu(menu, existingMenu ? { ...existingMenu, localIndex: Number(editIndex) } : null);
+                resetForm();
+                adminStatus.textContent = "Menu berhasil disimpan.";
+                await renderMenus();
+            } catch (error) {
+                adminStatus.textContent = `Gagal menyimpan menu: ${error.message}`;
             }
-
-            saveMenus(menus);
-            resetForm();
-            renderMenus();
         });
 
-        menuList.addEventListener("click", (event) => {
+        menuList.addEventListener("click", async (event) => {
             const button = event.target.closest("button[data-action]");
 
             if (!button) {
                 return;
             }
 
-            const menus = getMenus();
+            const menus = await getMenus();
             const index = Number(button.dataset.index);
             const action = button.dataset.action;
 
             if (action === "delete") {
-                menus.splice(index, 1);
-                saveMenus(menus);
-                renderMenus();
+                try {
+                    await deleteMenu(menus[index], index);
+                    adminStatus.textContent = "Menu berhasil dihapus.";
+                    await renderMenus();
+                } catch (error) {
+                    adminStatus.textContent = `Gagal menghapus menu: ${error.message}`;
+                }
                 return;
             }
 
@@ -539,17 +742,62 @@
 
         document.getElementById("cancelEditButton").addEventListener("click", resetForm);
 
-        document.getElementById("resetButton").addEventListener("click", () => {
-            saveMenus(defaultMenus);
-            resetForm();
-            renderMenus();
+        document.getElementById("resetButton").addEventListener("click", async () => {
+            try {
+                await resetMenus();
+                resetForm();
+                adminStatus.textContent = "Menu berhasil direset ke default.";
+                await renderMenus();
+            } catch (error) {
+                adminStatus.textContent = `Gagal reset menu: ${error.message}`;
+            }
         });
 
         if (!localStorage.getItem(menuStorageKey)) {
-            saveMenus(defaultMenus);
+            await saveMenus(defaultMenus);
         }
 
-        renderMenus();
+        async function refreshAuthState() {
+            if (!supabaseClient) {
+                authPanel.classList.add("hidden");
+                adminStatus.textContent = "Mode lokal aktif. Isi Supabase config untuk database online.";
+                await renderMenus();
+                return;
+            }
+
+            authPanel.classList.remove("hidden");
+            const { data } = await supabaseClient.auth.getSession();
+            const isLoggedIn = Boolean(data.session);
+
+            authForm.classList.toggle("hidden", isLoggedIn);
+            logoutButton.classList.toggle("hidden", !isLoggedIn);
+            menuForm.closest(".panel").classList.toggle("hidden", !isLoggedIn);
+            adminStatus.textContent = isLoggedIn
+                ? "Supabase aktif. Admin sudah login, perubahan tersimpan online."
+                : "Supabase aktif. Login dulu untuk mengubah menu online.";
+
+            await renderMenus();
+        }
+
+        authForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(authForm);
+            const { error } = await supabaseClient.auth.signInWithPassword({
+                email: formData.get("email"),
+                password: formData.get("password")
+            });
+
+            adminStatus.textContent = error ? `Login gagal: ${error.message}` : "Login berhasil.";
+            await refreshAuthState();
+        });
+
+        logoutButton.addEventListener("click", async () => {
+            await supabaseClient.auth.signOut();
+            await refreshAuthState();
+        });
+
+        await refreshAuthState();
     </script>
 </body>
 </html>
