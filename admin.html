@@ -282,6 +282,148 @@
             gap: 8px;
         }
 
+        /* Modern Login UI */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(20, 122, 63, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(255, 212, 71, 0.15) 0%, transparent 50%),
+                rgba(255, 248, 223, 0.8);
+            backdrop-filter: blur(20px);
+            opacity: 1;
+            visibility: visible;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .login-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .login-card {
+            width: min(440px, calc(100% - 32px));
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 40px 80px rgba(13, 79, 48, 0.15);
+            animation: cardEntry 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes cardEntry {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo {
+            width: 64px;
+            height: 64px;
+            background: var(--yellow);
+            color: var(--green-dark);
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            font-size: 32px;
+            font-weight: 900;
+            margin: 0 auto 16px;
+            box-shadow: 0 10px 20px rgba(255, 212, 71, 0.3);
+        }
+
+        .login-header h2 {
+            margin: 0;
+            color: var(--green-dark);
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        .login-header p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .login-tabs {
+            display: flex;
+            background: rgba(24, 51, 42, 0.05);
+            padding: 6px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--muted);
+            transition: all 0.2s;
+        }
+
+        .login-tab.active {
+            background: var(--white);
+            color: var(--green-dark);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .login-field {
+            margin-bottom: 20px;
+        }
+
+        .login-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .login-field input {
+            background: var(--white);
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .login-field input:focus {
+            border-color: var(--green);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(20, 122, 63, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            height: 52px;
+            font-size: 16px;
+            margin-top: 8px;
+            box-shadow: 0 12px 24px rgba(20, 122, 63, 0.2);
+        }
+
+        .login-footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .login-footer a {
+            color: var(--green);
+            font-weight: 800;
+        }
+
         @media (max-width: 880px) {
             .layout,
             .menu-item,
@@ -302,13 +444,57 @@
     </style>
 </head>
 <body>
+    <div class="login-overlay hidden" id="loginOverlay">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">ZR</div>
+                <h2>Admin Login</h2>
+                <p>Pondok Es Teller ZR Dashboard</p>
+            </div>
+
+            <div class="login-tabs">
+                <div class="login-tab active" data-tab="login">Login</div>
+                <div class="login-tab" data-tab="help">Bantuan</div>
+            </div>
+
+            <div id="tabContentLogin">
+                <form id="authFormMain">
+                    <div class="login-field">
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="admin@estellerzr.com" required>
+                    </div>
+                    <div class="login-field">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="••••••••" required>
+                    </div>
+                    <button class="btn btn-green btn-login" type="submit">Akses Dashboard</button>
+                </form>
+            </div>
+
+            <div class="hidden" id="tabContentHelp">
+                <div class="note" style="background: rgba(20, 122, 63, 0.05); color: var(--ink);">
+                    <p style="margin-top: 0;"><strong>Lupa Password?</strong></p>
+                    <p>Hubungi pengembang sistem atau cek file <code>supabase-setup.sql</code> untuk konfigurasi akun admin pertama kali.</p>
+                    <p style="margin-bottom: 0;">Pastikan Supabase Config sudah terisi dengan benar di <code>supabase-config.js</code>.</p>
+                </div>
+            </div>
+
+            <div class="login-footer">
+                &copy; 2024 <a href="index.html">Pondok Es Teller ZR</a>. All rights reserved.
+            </div>
+        </div>
+    </div>
+
     <header class="topbar">
         <nav class="container nav">
             <a class="brand" href="index.html">
                 <span class="brand-mark">ZR</span>
                 <span>Admin Menu</span>
             </a>
-            <a class="btn" href="index.html">Lihat Web</a>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-danger hidden" id="logoutButton" type="button">Keluar</button>
+                <a class="btn" href="index.html">Lihat Web</a>
+            </div>
         </nav>
     </header>
 
@@ -317,19 +503,7 @@
             <div class="container">
                 <h1>Kelola Menu Pondok Es Teller ZR</h1>
                 <p>Tambah menu, ubah harga, ganti foto, atur status, lalu cek hasilnya di halaman utama. Data ini tersimpan lokal di browser untuk tahap persiapan sebelum publish.</p>
-                <div class="auth-panel hidden" id="authPanel">
-                    <form class="auth-form" id="authForm">
-                        <label>Email Admin
-                            <input type="email" name="email" placeholder="admin@email.com" required>
-                        </label>
-                        <label>Password
-                            <input type="password" name="password" placeholder="Password" required>
-                        </label>
-                        <button class="btn btn-green" type="submit">Login Admin</button>
-                    </form>
-                    <button class="btn btn-danger hidden" id="logoutButton" type="button">Logout</button>
-                </div>
-                <div class="admin-status" id="adminStatus">Mode lokal aktif. Isi Supabase config untuk database online.</div>
+                <div class="admin-status" id="adminStatus">Memuat status...</div>
             </div>
         </section>
 
@@ -456,9 +630,29 @@
         const menuForm = document.getElementById("menuForm");
         const menuList = document.getElementById("menuList");
         const adminStatus = document.getElementById("adminStatus");
-        const authPanel = document.getElementById("authPanel");
-        const authForm = document.getElementById("authForm");
+        const loginOverlay = document.getElementById("loginOverlay");
+        const authFormMain = document.getElementById("authFormMain");
         const logoutButton = document.getElementById("logoutButton");
+        const loginTabs = document.querySelectorAll(".login-tab");
+        const tabContentLogin = document.getElementById("tabContentLogin");
+        const tabContentHelp = document.getElementById("tabContentHelp");
+
+        // Tab Switching Logic
+        loginTabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                loginTabs.forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+                
+                const target = tab.dataset.tab;
+                if (target === "login") {
+                    tabContentLogin.classList.remove("hidden");
+                    tabContentHelp.classList.add("hidden");
+                } else {
+                    tabContentLogin.classList.add("hidden");
+                    tabContentHelp.classList.remove("hidden");
+                }
+            });
+        });
         const formatRupiah = new Intl.NumberFormat("id-ID", {
             style: "currency",
             currency: "IDR",
@@ -759,17 +953,16 @@
 
         async function refreshAuthState() {
             if (!supabaseClient) {
-                authPanel.classList.add("hidden");
+                loginOverlay.classList.add("hidden");
                 adminStatus.textContent = "Mode lokal aktif. Isi Supabase config untuk database online.";
                 await renderMenus();
                 return;
             }
 
-            authPanel.classList.remove("hidden");
             const { data } = await supabaseClient.auth.getSession();
             const isLoggedIn = Boolean(data.session);
 
-            authForm.classList.toggle("hidden", isLoggedIn);
+            loginOverlay.classList.toggle("hidden", isLoggedIn);
             logoutButton.classList.toggle("hidden", !isLoggedIn);
             menuForm.closest(".panel").classList.toggle("hidden", !isLoggedIn);
             adminStatus.textContent = isLoggedIn
@@ -779,17 +972,30 @@
             await renderMenus();
         }
 
-        authForm.addEventListener("submit", async (event) => {
+        authFormMain.addEventListener("submit", async (event) => {
             event.preventDefault();
 
-            const formData = new FormData(authForm);
+            const formData = new FormData(authFormMain);
+            const submitBtn = authFormMain.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = "Memverifikasi...";
+            submitBtn.disabled = true;
+
             const { error } = await supabaseClient.auth.signInWithPassword({
                 email: formData.get("email"),
                 password: formData.get("password")
             });
 
-            adminStatus.textContent = error ? `Login gagal: ${error.message}` : "Login berhasil.";
-            await refreshAuthState();
+            if (error) {
+                adminStatus.textContent = `Login gagal: ${error.message}`;
+                alert(`Login Gagal: ${error.message}`);
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            } else {
+                adminStatus.textContent = "Login berhasil.";
+                await refreshAuthState();
+            }
         });
 
         logoutButton.addEventListener("click", async () => {
