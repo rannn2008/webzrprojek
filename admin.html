@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Menu | Pondok Es Teller ZR</title>
+    <style>
+        :root {
+            --green: #147a3f;
+            --green-dark: #0d4f30;
+            --yellow: #ffd447;
+            --cream: #fff8df;
+            --ink: #18332a;
+            --muted: #64756b;
+            --line: rgba(24, 51, 42, 0.14);
+            --white: #ffffff;
+            --danger: #a73717;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--ink);
+            background:
+                linear-gradient(135deg, rgba(255, 212, 71, 0.24), rgba(183, 224, 68, 0.2)),
+                var(--cream);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: min(1120px, calc(100% - 28px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            background: var(--green);
+            color: var(--white);
+            box-shadow: 0 10px 24px rgba(13, 79, 48, 0.18);
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+        }
+
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: var(--yellow);
+            color: var(--green-dark);
+            font-size: 22px;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 16px;
+            background: var(--yellow);
+            color: var(--green-dark);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 900;
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: #ffe1d4;
+            color: var(--danger);
+        }
+
+        .hero {
+            padding: 44px 0 20px;
+        }
+
+        h1 {
+            max-width: 760px;
+            margin: 0 0 10px;
+            color: var(--green-dark);
+            font-size: clamp(34px, 5vw, 58px);
+            line-height: 1.04;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 0;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 390px minmax(0, 1fr);
+            gap: 20px;
+            align-items: start;
+            padding: 24px 0 60px;
+        }
+
+        .panel {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 18px 44px rgba(13, 79, 48, 0.11);
+        }
+
+        .panel h2 {
+            margin: 0 0 16px;
+            color: var(--green-dark);
+            font-size: 24px;
+        }
+
+        form {
+            display: grid;
+            gap: 12px;
+        }
+
+        label {
+            display: grid;
+            gap: 6px;
+            color: var(--green-dark);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            min-height: 44px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 10px 11px;
+            background: #fffdf5;
+            color: var(--ink);
+            font: inherit;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 92px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(183, 224, 68, 0.28);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .note {
+            border-radius: 8px;
+            padding: 12px;
+            background: #f4ffe9;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .menu-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .menu-item {
+            display: grid;
+            grid-template-columns: 118px minmax(0, 1fr) auto;
+            gap: 14px;
+            align-items: center;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+            background: var(--white);
+        }
+
+        .menu-item img {
+            width: 118px;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #f4ffe9;
+        }
+
+        .menu-item h3 {
+            margin: 0 0 4px;
+            color: var(--green-dark);
+        }
+
+        .menu-item p {
+            margin: 0 0 8px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 4px 9px;
+            background: #fff6c7;
+            color: var(--green-dark);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .item-actions {
+            display: grid;
+            gap: 8px;
+        }
+
+        @media (max-width: 880px) {
+            .layout,
+            .menu-item {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-item img {
+                width: 100%;
+                aspect-ratio: 16 / 9;
+            }
+
+            .item-actions {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <nav class="container nav">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">ZR</span>
+                <span>Admin Menu</span>
+            </a>
+            <a class="btn" href="index.html">Lihat Web</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Kelola Menu Pondok Es Teller ZR</h1>
+                <p>Tambah menu, ubah harga, ganti foto, atur status, lalu cek hasilnya di halaman utama. Data ini tersimpan lokal di browser untuk tahap persiapan sebelum publish.</p>
+            </div>
+        </section>
+
+        <section class="container layout">
+            <aside class="panel">
+                <h2 id="formTitle">Tambah Menu</h2>
+                <form id="menuForm">
+                    <input type="hidden" name="editIndex" value="">
+                    <label>Nama Menu
+                        <input type="text" name="name" placeholder="Contoh: Es Teller Cokelat" required>
+                    </label>
+                    <label>Harga
+                        <input type="number" name="price" min="0" placeholder="15000" required>
+                    </label>
+                    <label>Deskripsi
+                        <textarea name="description" placeholder="Tulis deskripsi singkat menu" required></textarea>
+                    </label>
+                    <label>Foto Menu
+                        <input type="file" name="photo" accept="image/*">
+                    </label>
+                    <label>URL Foto
+                        <input type="text" name="image" placeholder="foto2/namafoto.jpg atau link gambar">
+                    </label>
+                    <label>Rating
+                        <input type="text" name="rating" placeholder="4.8" value="4.8">
+                    </label>
+                    <label>Badge
+                        <input type="text" name="badges" placeholder="Best seller, Tersedia">
+                    </label>
+                    <label>Status
+                        <select name="status">
+                            <option>Tersedia</option>
+                            <option>Habis</option>
+                        </select>
+                    </label>
+                    <div class="actions">
+                        <button class="btn btn-green" type="submit">Simpan Menu</button>
+                        <button class="btn" id="cancelEditButton" type="button">Batal Edit</button>
+                        <button class="btn btn-danger" id="resetButton" type="button">Reset Default</button>
+                    </div>
+                    <div class="note">Untuk foto, pilih file dari komputer atau isi URL foto. Kalau pilih file, gambar disimpan di browser sebagai preview lokal.</div>
+                </form>
+            </aside>
+
+            <section class="panel">
+                <h2>Daftar Menu</h2>
+                <div class="menu-list" id="menuList"></div>
+            </section>
+        </section>
+    </main>
+
+    <script>
+        const menuStorageKey = "pondokEsTellerZrMenus";
+        const defaultMenus = [
+            {
+                name: "Es Teller Original",
+                price: 12000,
+                description: "Racikan klasik berisi buah segar, kuah manis, dan sensasi dingin yang pas.",
+                image: "foto2/estelleroriginal.jpg",
+                rating: "4.8",
+                badges: ["Best seller", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Es Teller Alpukat Spesial",
+                price: 16000,
+                description: "Menu unggulan dengan alpukat lebih banyak, creamy, dan bikin puas.",
+                image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=85",
+                rating: "4.9",
+                badges: ["Alpukat favorit", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Es Teller Durian",
+                price: 18000,
+                description: "Tambahan aroma durian untuk rasa yang lebih tebal dan nikmat.",
+                image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=85",
+                rating: "4.7",
+                badges: ["Aroma durian", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Es Teller Jumbo",
+                price: 20000,
+                description: "Porsi lebih besar untuk yang lagi haus berat dan butuh segar maksimal.",
+                image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=85",
+                rating: "4.8",
+                badges: ["Porsi besar", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Es Teller Campur",
+                price: 15000,
+                description: "Campuran buah pilihan dengan rasa manis segar yang cocok untuk semua orang.",
+                image: "https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=800&q=85",
+                rating: "4.7",
+                badges: ["Buah campur", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Paket Keluarga",
+                price: 55000,
+                description: "Paket ramai-ramai untuk keluarga, teman kantor, atau kumpul santai.",
+                image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=85",
+                rating: "4.9",
+                badges: ["Untuk ramai", "Tersedia"],
+                status: "Tersedia"
+            }
+        ];
+
+        const menuForm = document.getElementById("menuForm");
+        const menuList = document.getElementById("menuList");
+        const formatRupiah = new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            maximumFractionDigits: 0
+        });
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function getMenus() {
+            try {
+                const savedMenus = JSON.parse(localStorage.getItem(menuStorageKey));
+                return Array.isArray(savedMenus) && savedMenus.length ? savedMenus : defaultMenus;
+            } catch (error) {
+                return defaultMenus;
+            }
+        }
+
+        function saveMenus(menus) {
+            localStorage.setItem(menuStorageKey, JSON.stringify(menus));
+        }
+
+        function resetForm() {
+            menuForm.reset();
+            menuForm.elements.editIndex.value = "";
+            menuForm.elements.rating.value = "4.8";
+            document.getElementById("formTitle").textContent = "Tambah Menu";
+        }
+
+        function renderMenus() {
+            const menus = getMenus();
+
+            menuList.innerHTML = menus.map((menu, index) => {
+                const badges = [`Rating ${menu.rating || "4.8"}`, ...(menu.badges || []), menu.status || "Tersedia"];
+                const uniqueBadges = [...new Set(badges.filter(Boolean))];
+
+                return `
+                    <article class="menu-item">
+                        <img src="${escapeHtml(menu.image || "")}" alt="${escapeHtml(menu.name)}">
+                        <div>
+                            <h3>${escapeHtml(menu.name)}</h3>
+                            <p>${escapeHtml(menu.description)}</p>
+                            <div class="meta">
+                                <span class="pill">${formatRupiah.format(Number(menu.price || 0))}</span>
+                                ${uniqueBadges.map((badge) => `<span class="pill">${escapeHtml(badge)}</span>`).join("")}
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn" type="button" data-action="edit" data-index="${index}">Edit</button>
+                            <button class="btn btn-danger" type="button" data-action="delete" data-index="${index}">Hapus</button>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        function readPhotoAsDataUrl(file) {
+            return new Promise((resolve) => {
+                if (!file) {
+                    resolve("");
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        menuForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(menuForm);
+            const menus = getMenus();
+            const editIndex = formData.get("editIndex");
+            const photoDataUrl = await readPhotoAsDataUrl(menuForm.elements.photo.files[0]);
+            const existingImage = editIndex !== "" ? menus[Number(editIndex)]?.image : "";
+            const image = photoDataUrl || formData.get("image").trim() || existingImage || "foto2/estelleroriginal.jpg";
+            const badges = formData.get("badges")
+                .split(",")
+                .map((badge) => badge.trim())
+                .filter(Boolean);
+
+            const menu = {
+                name: formData.get("name").trim(),
+                price: Number(formData.get("price") || 0),
+                description: formData.get("description").trim(),
+                image,
+                rating: formData.get("rating").trim() || "4.8",
+                badges,
+                status: formData.get("status")
+            };
+
+            if (editIndex === "") {
+                menus.push(menu);
+            } else {
+                menus[Number(editIndex)] = menu;
+            }
+
+            saveMenus(menus);
+            resetForm();
+            renderMenus();
+        });
+
+        menuList.addEventListener("click", (event) => {
+            const button = event.target.closest("button[data-action]");
+
+            if (!button) {
+                return;
+            }
+
+            const menus = getMenus();
+            const index = Number(button.dataset.index);
+            const action = button.dataset.action;
+
+            if (action === "delete") {
+                menus.splice(index, 1);
+                saveMenus(menus);
+                renderMenus();
+                return;
+            }
+
+            const menu = menus[index];
+            menuForm.elements.editIndex.value = index;
+            menuForm.elements.name.value = menu.name;
+            menuForm.elements.price.value = menu.price;
+            menuForm.elements.description.value = menu.description;
+            menuForm.elements.image.value = menu.image;
+            menuForm.elements.rating.value = menu.rating || "4.8";
+            menuForm.elements.badges.value = (menu.badges || []).join(", ");
+            menuForm.elements.status.value = menu.status || "Tersedia";
+            document.getElementById("formTitle").textContent = "Edit Menu";
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        document.getElementById("cancelEditButton").addEventListener("click", resetForm);
+
+        document.getElementById("resetButton").addEventListener("click", () => {
+            saveMenus(defaultMenus);
+            resetForm();
+            renderMenus();
+        });
+
+        if (!localStorage.getItem(menuStorageKey)) {
+            saveMenus(defaultMenus);
+        }
+
+        renderMenus();
+    </script>
+</body>
+</html>
