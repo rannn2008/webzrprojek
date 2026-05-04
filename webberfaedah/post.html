@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tulis cerita atau curhatanmu secara anonim di Ruang Curhat Anonim.">
+  <title>Tulis Cerita — Ruang Curhat Anonim</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+</head>
+<body data-page="post">
+  <div class="bg-decoration bg-blob-1"></div>
+  <div class="bg-decoration bg-blob-2"></div>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><div class="logo-icon">💜</div><span>RuangCurhat</span></a>
+      <nav class="nav-desktop">
+        <a href="index.html" class="nav-link">Beranda</a>
+        <a href="post.html" class="nav-link active">Tulis Cerita</a>
+        <a href="guidelines.html" class="nav-link">Pedoman</a>
+        <a href="about.html" class="nav-link">Tentang</a>
+      </nav>
+      <a href="post.html" class="btn-write">✍️ Tulis Cerita</a>
+      <button class="mobile-menu-btn" aria-label="Menu"><div class="hamburger"><span></span><span></span><span></span></div></button>
+    </div>
+  </header>
+  <nav class="mobile-nav">
+    <a href="index.html">🏠 Beranda</a>
+    <a href="post.html" class="active">✍️ Tulis Cerita</a>
+    <a href="guidelines.html">📜 Pedoman</a>
+    <a href="about.html">💡 Tentang</a>
+  </nav>
+
+  <main class="post-page">
+    <a href="index.html" class="back-link">← Kembali ke Beranda</a>
+
+    <div class="post-card" id="postFormCard">
+      <h2>✍️ Ceritakan Pengalamanmu</h2>
+      <p class="post-subtitle">Semua cerita bersifat anonim. Identitasmu aman bersama kami.</p>
+
+      <form id="postForm">
+        <div class="form-group">
+          <label class="form-label">Bagaimana perasaanmu saat ini? <span class="required">*</span></label>
+          <div class="mood-selector" id="moodSelector"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="categorySelect">Kategori <span class="required">*</span></label>
+          <select class="form-select" id="categorySelect"></select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="storyTitle">Judul Cerita <span class="required">*</span></label>
+          <input type="text" class="form-input" id="storyTitle" placeholder="Beri judul singkat untuk ceritamu..." maxlength="100" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="storyContent">Ceritamu <span class="required">*</span></label>
+          <textarea class="form-textarea" id="storyContent" placeholder="Tulis cerita, curhat, atau pengalamanmu di sini. Kamu aman, tidak ada yang akan tau siapa kamu..." required></textarea>
+          <div class="char-count" id="charCount">0 / 5000</div>
+          <p class="form-hint">💡 Tips: Cerita yang jujur dan detail biasanya mendapat lebih banyak dukungan.</p>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%">🚀 Publikasikan Cerita</button>
+      </form>
+    </div>
+
+    <div class="post-success" id="postSuccess">
+      <div class="success-icon">🎉</div>
+      <h3>Ceritamu Berhasil Dipublikasikan!</h3>
+      <p>Terima kasih sudah berani berbagi. Kamu keren! Semoga ceritamu bisa membantu orang lain yang mengalami hal serupa.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="index.html" class="btn btn-secondary">📖 Lihat Semua Cerita</a>
+        <a href="" class="btn btn-primary new-story-link">👀 Lihat Ceritamu</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 RuangCurhat Anonim. Dibuat dengan 💜</p>
+        <div class="footer-bottom-links"><a href="guidelines.html">Privasi</a><a href="guidelines.html">Ketentuan</a></div>
+      </div>
+    </div>
+  </footer>
+  <script src="js/app.js"></script>
+</body>
+</html>

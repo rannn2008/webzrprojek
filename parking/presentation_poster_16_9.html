@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SpotFinder Presentation Poster</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00e5ff;
+            --secondary: #007bff;
+            --bg: #0c111b;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: #fff;
+            width: 1920px;
+            height: 1080px;
+            /* Standard 16:9 */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(0, 229, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 123, 255, 0.1) 0px, transparent 50%);
+        }
+
+        .poster {
+            width: 1800px;
+            height: 980px;
+            background: var(--glass);
+            border: 2px solid var(--border);
+            border-radius: 40px;
+            backdrop-filter: blur(20px);
+            padding: 60px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 50px;
+            position: relative;
+        }
+
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00e5ff, #007bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            color: var(--primary);
+            letter-spacing: 5px;
+            font-weight: 600;
+        }
+
+        .content-section {
+            margin: 30px 0;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        .hardware-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .hw-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hw-item i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .hw-item span {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .workflow {
+            list-style: none;
+        }
+
+        .workflow li {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 15px;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+        }
+
+        .workflow li b {
+            color: #fff;
+        }
+
+        .image-box {
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: #000;
+            position: relative;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 50px;
+            right: 60px;
+            text-align: right;
+        }
+
+        .author-tag {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+        }
+
+        .author-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #4ade80;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="poster">
+        <div class="left-col">
+            <div class="header">
+                <p>IOT INTELLIGENCE</p>
+                <h1>SPOTFINDER</h1>
+                <div style="font-size:1.2rem; color:#94a3b8;">Smart Real-time Parking Management System</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">HARDWARE STACK</div>
+                <div class="hardware-grid">
+                    <div class="hw-item"><i class="fas fa-microchip"></i><span>ESP32 Wi-Fi</span></div>
+                    <div class="hw-item"><i class="fas fa-id-card"></i><span>RFID RC522</span></div>
+                    <div class="hw-item"><i class="fas fa-wave-square"></i><span>Ultrasonic Sensor</span></div>
+                    <div class="hw-item"><i class="fas fa-door-open"></i><span>Servo Gate Control</span></div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">CORE SYSTEM WORKFLOW</div>
+                <ul class="workflow">
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> <span><b>Smart Reservation</b>:
+                            Booking slot via Web Dashboard (15m expiry).</span></li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> <span><b>Identity Verification</b>:
+                            Automated RFID tap with balance check.</span></li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> <span><b>Real-time Monitoring</b>:
+                            Live slots update (Available/Occupied).</span></li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> <span><b>Smart Payment</b>:
+                            Auto-deduction fee with Top-up History.</span></li>
+                </ul>
+            </div>
+
+            <div class="footer">
+                <div class="author-tag">Project Created By:</div>
+                <div class="author-name">ZAHRAN AL SYAFIT</div>
+            </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="image-box" style="flex:1.2;">
+                <img src="assets/img/qris_mock.png" style="opacity:0.8;">
+                <div
+                    style="position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.7); padding:10px 20px; border-radius:10px; font-size:0.9rem;">
+                    <i class="fas fa-mobile-screen"></i> Professional Top-up & QRIS System
+                </div>
+            </div>
+            <div class="image-box" style="flex:1;">
+                <!-- Menggunakan gambar poster yang baru digenerate -->
+                <img src="spotfinder_landscape_poster_1776867728099.png">
+                <div
+                    style="position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.7); padding:10px 20px; border-radius:10px; font-size:0.9rem;">
+                    <i class="fas fa-desktop"></i> Next-Gen Web Dashboard UI
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

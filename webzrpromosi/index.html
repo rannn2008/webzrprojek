@@ -66,6 +66,19 @@
             color: var(--white);
         }
 
+        .data-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            margin-left: 12px;
+        }
+
         .nav {
             min-height: 72px;
             display: flex;
@@ -875,6 +888,7 @@
             <a class="brand" href="#beranda">
                 <span class="brand-mark">ZR</span>
                 <span>Pondok Es Teller ZR</span>
+                <span id="dataSourceBadge" class="data-badge" style="display: none;">Data Lokal</span>
             </a>
             <div class="nav-links">
                 <a href="#beranda">Beranda</a>
@@ -923,7 +937,7 @@
                     </div>
                 </div>
 
-                <div class="menu-grid">
+                <div class="menu-grid" id="menuGrid">
                     <article class="menu-card">
                         <img class="menu-photo" src="foto2/estelleroriginal.jpg"
                             alt="Es Teller Original Pondok Es Teller ZR">
@@ -1043,7 +1057,8 @@
                         </div>
                     </article>
                 </div>
-                <div class="price-note">Catatan: harga menu masih bisa disesuaikan dan dapat berubah sewaktu-waktu sesuai stok bahan.</div>
+                <div class="price-note">Catatan: harga menu masih bisa disesuaikan dan dapat berubah sewaktu-waktu
+                    sesuai stok bahan.</div>
             </div>
         </section>
 
@@ -1132,7 +1147,8 @@
                         <div class="info-list">
                             <div class="info-item">
                                 <span>📍</span>
-                                <div><strong>Kota Padang</strong>Lokasi tersedia di Google Maps.</div>
+                                <div><strong>Kota Padang</strong>Jl. Kalumbuk No21, Lokasi tersedia di Google Maps.
+                                </div>
                             </div>
                             <div class="info-item">
                                 <span>🕙</span>
@@ -1257,9 +1273,68 @@
     <a class="floating-wa" href="https://wa.me/6281374110444" target="_blank" rel="noopener"
         aria-label="Chat WhatsApp">W</a>
 
-    <script>
+    <script src="supabase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
         const whatsappMain = "6281374110444";
         const whatsappSecond = "6281363489111";
+        const menuStorageKey = "pondokEsTellerZrMenus";
+        const defaultMenus = [
+            {
+                name: "Es Teller Original",
+                price: 12000,
+                description: "Racikan klasik berisi buah segar, kuah manis, dan sensasi dingin yang pas.",
+                image: "foto2/estelleroriginal.jpg",
+                rating: "4.8",
+                badges: ["Best seller", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Es Teller Alpukat Spesial",
+                price: 16000,
+                description: "Menu unggulan dengan alpukat lebih banyak, creamy, dan bikin puas.",
+                image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=85",
+                rating: "4.9",
+                badges: ["Alpukat favorit", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Es Teller Durian",
+                price: 18000,
+                description: "Tambahan aroma durian untuk rasa yang lebih tebal dan nikmat.",
+                image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=85",
+                rating: "4.7",
+                badges: ["Aroma durian", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Es Teller Jumbo",
+                price: 20000,
+                description: "Porsi lebih besar untuk yang lagi haus berat dan butuh segar maksimal.",
+                image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=85",
+                rating: "4.8",
+                badges: ["Porsi besar", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Es Teller Campur",
+                price: 15000,
+                description: "Campuran buah pilihan dengan rasa manis segar yang cocok untuk semua orang.",
+                image: "https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=800&q=85",
+                rating: "4.7",
+                badges: ["Buah campur", "Tersedia"],
+                status: "Tersedia"
+            },
+            {
+                name: "Paket Keluarga",
+                price: 55000,
+                description: "Paket ramai-ramai untuk keluarga, teman kantor, atau kumpul santai.",
+                image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=85",
+                rating: "4.9",
+                badges: ["Untuk ramai", "Tersedia"],
+                status: "Tersedia"
+            }
+        ];
         const mainOrderForm = document.getElementById("mainOrderForm");
         const menuSelect = mainOrderForm.elements.menu;
         const jumlahInput = mainOrderForm.elements.jumlah;
@@ -1273,6 +1348,101 @@
             currency: "IDR",
             maximumFractionDigits: 0
         });
+        const supabaseConfig = window.ZR_SUPABASE || {};
+        const hasSupabaseConfig = Boolean(
+            supabaseConfig.url &&
+            supabaseConfig.anonKey &&
+            !supabaseConfig.url.includes("ISI_") &&
+            !supabaseConfig.anonKey.includes("ISI_") &&
+            window.supabase
+        );
+        const supabaseClient = hasSupabaseConfig
+            ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
+            : null;
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function normalizeMenu(menu) {
+            return {
+                id: menu.id || "",
+                name: menu.name,
+                price: Number(menu.price || 0),
+                description: menu.description || "",
+                image: menu.image_url || menu.image || "",
+                rating: menu.rating || "4.8",
+                badges: Array.isArray(menu.badges) ? menu.badges : [],
+                status: menu.status || "Tersedia"
+            };
+        }
+
+        async function getMenus() {
+            if (supabaseClient) {
+                const { data, error } = await supabaseClient
+                    .from("menus")
+                    .select("*")
+                    .order("sort_order", { ascending: true })
+                    .order("created_at", { ascending: true });
+
+                if (!error && Array.isArray(data) && data.length) {
+                    return data.map(normalizeMenu);
+                }
+            }
+
+            try {
+                const savedMenus = JSON.parse(localStorage.getItem(menuStorageKey));
+                return Array.isArray(savedMenus) && savedMenus.length ? savedMenus : defaultMenus;
+            } catch (error) {
+                return defaultMenus;
+            }
+        }
+
+        async function renderMenuCatalog() {
+            const menus = await getMenus();
+            const menuGrid = document.getElementById("menuGrid");
+
+            menuGrid.innerHTML = menus.map((menu) => {
+                const isAvailable = menu.status !== "Habis";
+                const badges = [`Rating ${menu.rating || "4.8"}`, ...(menu.badges || []), menu.status || "Tersedia"];
+                const uniqueBadges = [...new Set(badges.filter(Boolean))];
+
+                return `
+                    <article class="menu-card">
+                        <img class="menu-photo" src="${escapeHtml(menu.image)}" alt="${escapeHtml(menu.name)}">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>${escapeHtml(menu.name)}</h3>
+                                <span class="price">${formatRupiah.format(Number(menu.price || 0))}</span>
+                            </div>
+                            <div class="menu-meta">
+                                ${uniqueBadges.map((badge) => `<span class="menu-pill">${escapeHtml(badge)}</span>`).join("")}
+                            </div>
+                            <p>${escapeHtml(menu.description || "")}</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="${escapeHtml(menu.name)}" ${isAvailable ? "" : "disabled"}>${isAvailable ? "Tambah ke Pesanan" : "Sedang Habis"}</button>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+
+            // Update data source badge
+            const badge = document.getElementById("dataSourceBadge");
+            if (badge) {
+                badge.style.display = "inline-flex";
+                badge.textContent = supabaseClient ? "Cloud Sync" : "Data Lokal";
+                badge.style.background = supabaseClient ? "rgba(183, 224, 68, 0.25)" : "rgba(255, 143, 63, 0.25)";
+            }
+
+            const availableMenus = menus.filter((menu) => menu.status !== "Habis");
+            menuSelect.innerHTML = availableMenus.map((menu) => {
+                return `<option value="${escapeHtml(menu.name)}" data-price="${Number(menu.price || 0)}">${escapeHtml(menu.name)} - ${formatRupiah.format(Number(menu.price || 0))}</option>`;
+            }).join("");
+        }
 
         function getSelectedPrice() {
             return Number(menuSelect.selectedOptions[0]?.dataset.price || 0);
@@ -1356,6 +1526,8 @@
             const message = encodeURIComponent(lines.join("\n"));
             window.open(`https://wa.me/${phone}?text=${message}`, "_blank", "noopener");
         }
+
+        await renderMenuCatalog();
 
         document.querySelectorAll(".choose-menu").forEach((button) => {
             button.addEventListener("click", () => {

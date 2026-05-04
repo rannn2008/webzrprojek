@@ -1,0 +1,91 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">SpotFinder Premium Logo</title>
+  <desc id="desc">Elegant smart parking logo for SpotFinder with a parking pin mark, neon blue-green accents, and the SpotFinder wordmark.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0C111B"/>
+      <stop offset="0.52" stop-color="#080D18"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="aqua" x1="251" y1="171" x2="626" y2="637" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00E5FF"/>
+      <stop offset="0.5" stop-color="#007BFF"/>
+      <stop offset="1" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="word" x1="689" y1="328" x2="1368" y2="459" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.56" stop-color="#D9F7FF"/>
+      <stop offset="1" stop-color="#00E5FF"/>
+    </linearGradient>
+    <linearGradient id="line" x1="692" y1="510" x2="1148" y2="510" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00E5FF"/>
+      <stop offset="1" stop-color="#10B981"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(417 416) rotate(54.9) scale(455 455)">
+      <stop stop-color="#00E5FF" stop-opacity="0.28"/>
+      <stop offset="0.42" stop-color="#007BFF" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#00E5FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow" x="117" y="73" width="631" height="687" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="0" stdDeviation="24" flood-color="#00E5FF" flood-opacity="0.42"/>
+      <feDropShadow dx="0" dy="18" stdDeviation="28" flood-color="#020617" flood-opacity="0.55"/>
+    </filter>
+    <filter id="wordShadow" x="632" y="264" width="850" height="174" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#020617" flood-opacity="0.65"/>
+    </filter>
+    <clipPath id="cardClip">
+      <rect x="80" y="95" width="1440" height="710" rx="54"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <g opacity="0.34">
+    <path d="M0 170H1600M0 330H1600M0 490H1600M0 650H1600M240 0V900M480 0V900M720 0V900M960 0V900M1200 0V900M1440 0V900" stroke="#94A3B8" stroke-opacity="0.08"/>
+  </g>
+  <circle cx="405" cy="415" r="470" fill="url(#glow)"/>
+  <circle cx="1300" cy="168" r="236" fill="#007BFF" opacity="0.07"/>
+  <circle cx="1436" cy="705" r="278" fill="#10B981" opacity="0.06"/>
+
+  <rect x="80" y="95" width="1440" height="710" rx="54" fill="#111827" fill-opacity="0.74"/>
+  <rect x="80" y="95" width="1440" height="710" rx="54" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="2"/>
+  <g clip-path="url(#cardClip)">
+    <path d="M88 676C302 542 456 661 627 527C800 391 956 451 1142 318C1274 223 1386 217 1528 260" stroke="#00E5FF" stroke-opacity="0.08" stroke-width="58" stroke-linecap="round"/>
+    <path d="M97 711C308 577 474 695 647 564C820 433 961 483 1168 342C1304 249 1403 246 1532 286" stroke="#10B981" stroke-opacity="0.08" stroke-width="34" stroke-linecap="round"/>
+  </g>
+
+  <g filter="url(#softGlow)">
+    <path d="M426 141C306.5 141 210 236.6 210 354.4C210 511.7 426 714 426 714C426 714 642 511.7 642 354.4C642 236.6 545.5 141 426 141Z" fill="url(#aqua)"/>
+    <path d="M426 199C338.3 199 267 269.6 267 356.4C267 472.4 426 620.9 426 620.9C426 620.9 585 472.4 585 356.4C585 269.6 513.7 199 426 199Z" fill="#0C111B"/>
+    <path d="M346 277H452.6C520.1 277 564 315.8 564 375.2C564 435.8 517.5 475.9 448.7 475.9H410.4V537H346V277ZM446 421.1C478.9 421.1 499.4 404 499.4 377.2C499.4 350.7 479.1 335.2 446.2 335.2H410.4V421.1H446Z" fill="url(#aqua)"/>
+    <path d="M300 569C360.4 605.6 462.8 608.7 533 566" stroke="url(#line)" stroke-width="23" stroke-linecap="round"/>
+    <path d="M254 545C202.5 496.8 188.4 433.2 211 368" stroke="#00E5FF" stroke-width="13" stroke-linecap="round" opacity="0.56"/>
+    <path d="M604 350C631.2 425.6 610.7 499.6 552 553" stroke="#10B981" stroke-width="13" stroke-linecap="round" opacity="0.56"/>
+    <g transform="translate(538 536)">
+      <path d="M24 40H112" stroke="#D9F7FF" stroke-opacity="0.62" stroke-width="10" stroke-linecap="round"/>
+      <path d="M34 17H92C103 17 112 26 112 37V49H14V37C14 26 23 17 34 17Z" fill="#10B981"/>
+      <path d="M43 17L54 0H76L88 17" stroke="#D9F7FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="36" cy="49" r="11" fill="#0C111B" stroke="#D9F7FF" stroke-width="5"/>
+      <circle cx="90" cy="49" r="11" fill="#0C111B" stroke="#D9F7FF" stroke-width="5"/>
+    </g>
+  </g>
+
+  <g filter="url(#wordShadow)">
+    <text x="684" y="416" fill="url(#word)" font-family="Poppins, Montserrat, Segoe UI, Arial, sans-serif" font-size="134" font-weight="800" letter-spacing="0">SpotFinder</text>
+  </g>
+  <rect x="692" y="487" width="456" height="10" rx="5" fill="url(#line)"/>
+  <text x="692" y="559" fill="#94A3B8" font-family="Poppins, Montserrat, Segoe UI, Arial, sans-serif" font-size="34" font-weight="600" letter-spacing="8">SMART PARKING SYSTEM</text>
+
+  <g font-family="Poppins, Montserrat, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#D9F7FF">
+    <rect x="692" y="620" width="178" height="58" rx="20" fill="#00E5FF" fill-opacity="0.11" stroke="#00E5FF" stroke-opacity="0.34"/>
+    <text x="727" y="657">RFID</text>
+    <circle cx="715" cy="649" r="8" fill="#00E5FF"/>
+
+    <rect x="895" y="620" width="232" height="58" rx="20" fill="#10B981" fill-opacity="0.11" stroke="#10B981" stroke-opacity="0.34"/>
+    <text x="933" y="657">LIVE SENSOR</text>
+    <circle cx="918" cy="649" r="8" fill="#10B981"/>
+
+    <rect x="1152" y="620" width="205" height="58" rx="20" fill="#007BFF" fill-opacity="0.13" stroke="#00E5FF" stroke-opacity="0.28"/>
+    <text x="1190" y="657">AUTO GATE</text>
+    <circle cx="1175" cy="649" r="8" fill="#00E5FF"/>
+  </g>
+</svg>

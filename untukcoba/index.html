@@ -1,0 +1,663 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pondok Es Teller ZR - Rajanya Es Kota Padang</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader">
+            <div class="ice-cream-loader"></div>
+            <p>Menyiapkan kesegaran untuk Anda...</p>
+        </div>
+    </div>
+
+    <!-- Promo Banner -->
+    <div class="promo-banner">
+        <div class="container">
+            <p><i class="fas fa-sparkles"></i> <strong>PENAWARAN EXCLUSIVE:</strong> Nikmati Kesegaran Berlipat dengan
+                Promo Buy 2 Get 1 Free! <a href="#pemesanan">Amankan Slot Pesanan Anda â†’</a></p>
+        </div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-ice-cream"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Pondok Es Teller ZR</h1>
+                    <p>Rajanya Es Kota Padang</p>
+                </div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#about">Tentang Kami</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#pemesanan">Pesan Sekarang</a></li>
+                    <li><a href="#galeri">Galeri</a></li>
+                    <li><a href="#keunggulan">Keunggulan</a></li>
+                    <li><a href="#testimoni">Testimoni</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#kontak">Kontak</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container" data-aos="fade-up">
+            <div class="hero-content">
+                <h1 class="fade-in">Pondok Es Teller ZR</h1>
+                <p class="slogan fade-in">"Rajanya Es Kota Padang"</p>
+                <p class="fade-in">Segarkan hari Anda dengan es teller terlezat di Padang. Perpaduan sempurna buah
+                    segar, kelapa muda, dan sirup khas yang bikin nagih!</p>
+                <div class="cta-buttons">
+                    <a href="#pemesanan" class="btn btn-primary">Pesan Sekarang</a>
+                    <a href="#menu" class="btn btn-secondary">Lihat Menu</a>
+                </div>
+
+                <!-- Promo Timer -->
+                <div class="promo-timer fade-in">
+                    <h3>Promo Berakhir Dalam:</h3>
+                    <div class="timer">
+                        <span id="days">00</span>H :
+                        <span id="hours">00</span>J :
+                        <span id="minutes">00</span>M :
+                        <span id="seconds">00</span>D
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tentang Kami -->
+    <section class="about" id="about">
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div class="section-title">
+                <h2>Tentang Kami</h2>
+                <p>Kenali lebih dekat kedai es teller favorit warga Padang yang sudah melegenda</p>
+            </div>
+            <div class="about-content">
+                <div class="about-img" data-aos="fade-right">
+                    <img src="coba1.jpg" alt="Pondok Es Teller ZR Showcase">
+                </div>
+                <div class="about-text">
+                    <h3>Kedai Es Teller Terfavorit di Kota Padang</h3>
+                    <p><span class="highlight">Pondok Es Teller ZR</span> adalah tempat legendaris yang telah menjadi
+                        destinasi utama pencinta es teller di Kota Padang sejak tahun 2010. Kami hadir dengan konsep
+                        sederhana tetapi penuh kehangatan, menyajikan kebahagiaan dalam setiap sajian.</p>
+                    <p>Dengan menggunakan <span class="highlight">bahan-bahan segar pilihan</span>, porsi yang melimpah,
+                        dan resep rahasia turun-temurun, kami berkomitmen untuk memberikan pengalaman menyegarkan yang
+                        tak terlupakan bagi setiap pelanggan.</p>
+                    <p>Setiap hari, ratusan porsi es teller kami sajikan dengan penuh cinta untuk memuaskan dahaga
+                        masyarakat Padang yang mencintai kuliner segar dan berkualitas. <span class="highlight">Rasa
+                            autentik dan harga terjangkau</span> adalah janji kami untuk Anda.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu-section" id="menu">
+        <div class="container" data-aos="fade-up">
+            <div class="section-title">
+                <h2>Menu Unggulan</h2>
+                <p>Pilihan es teller terbaik dengan rasa khas yang bikin ketagihan</p>
+            </div>
+
+            <!-- Menu Categories -->
+            <div class="menu-categories">
+                <button class="category-btn active" data-category="all">Semua Menu</button>
+                <button class="category-btn" data-category="original">Original</button>
+                <button class="category-btn" data-category="premium">Premium</button>
+                <button class="category-btn" data-category="icecream">Dengan Ice Cream</button>
+            </div>
+
+            <div class="menu-items">
+                <!-- Menu items akan diisi oleh JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeri Section -->
+    <section class="galeri" id="galeri">
+        <div class="container" data-aos="fade-up">
+            <div class="section-title">
+                <h2>Galeri Kedai</h2>
+                <p>Lihat suasana nyaman dan bersih di Pondok Es Teller ZR</p>
+            </div>
+            <div class="galeri-grid">
+                <div class="galeri-item">
+                    <img src="coba1.jpg" alt="Suasana Kedai">
+                    <div class="galeri-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="coba2.jpg" alt="Proses Pembuatan">
+                    <div class="galeri-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="coba3.jpg" alt="Pelayanan Ramah">
+                    <div class="galeri-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="coba4.jpg" alt="Area Duduk">
+                    <div class="galeri-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="coba5.jpg" alt="Area Duduk">
+                    <div class="galeri-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="galeri-item">
+                    <img src="coba6.jpg" alt="Area Duduk">
+                    <div class="galeri-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keunggulan Kami -->
+    <section class="keunggulan" id="keunggulan">
+        <div class="container" data-aos="fade-up">
+            <div class="section-title">
+                <h2>Keunggulan Kami</h2>
+                <p>Alasan mengapa Pondok Es Teller ZR menjadi pilihan utama warga Padang</p>
+            </div>
+            <div class="keunggulan-items">
+                <div class="keunggulan-item">
+                    <div class="keunggulan-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Rasa Otentik</h3>
+                    <p>Resep turun-temurun yang diolah dengan penuh cinta, menghasilkan cita rasa khas yang sulit
+                        ditemukan di tempat lain.</p>
+                </div>
+                <div class="keunggulan-item">
+                    <div class="keunggulan-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Harga Terjangkau</h3>
+                    <p>Harga bersahabat dengan porsi melimpah, cocok untuk semua kalangan tanpa menguras kantong.</p>
+                </div>
+                <div class="keunggulan-item">
+                    <div class="keunggulan-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Pelayanan Cepat & Ramah</h3>
+                    <p>Proses pesanan yang cepat dengan pelayanan ramah khas Minangkabau membuat Anda betah
+                        berlama-lama.</p>
+                </div>
+                <div class="keunggulan-item">
+                    <div class="keunggulan-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Cocok untuk Semua Usia</h3>
+                    <p>Dari anak-anak hingga orang tua, semua bisa menikmati kesegaran es teller kami dengan rasa yang
+                        pas di lidah.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimoni Pelanggan -->
+    <section class="testimoni" id="testimoni">
+        <div class="container" data-aos="fade-up">
+            <div class="section-title">
+                <h2>Testimoni Pelanggan</h2>
+                <p>Apa kata mereka yang sudah merasakan kesegaran es teller kami</p>
+            </div>
+            <div class="testimoni-items">
+                <div class="testimoni-item">
+                    <div class="testimoni-text">
+                        "Sudah jadi langganan sejak 2015. Rasa es tellernya konsisten enak dan segar. Porsinya juga
+                        banyak banget, puas banget setiap kali datang kesini! Lokasinya strategis dan pelayanannya
+                        ramah."
+                    </div>
+                    <div class="testimoni-author">
+                        <div class="author-img">A</div>
+                        <div class="author-info">
+                            <h4>Andi Pratama</h4>
+                            <p>Warga Padang Timur</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimoni-item">
+                    <div class="testimoni-text">
+                        "Es teller premium dengan ice creamnya juara! Rasanya legit dan wangi, dicampur dengan kelapa
+                        muda dan alpukat, benar-benar kombinasi sempurna. Tempatnya nyaman buat nongkrong juga. Harga
+                        sangat worth it!"
+                    </div>
+                    <div class="testimoni-author">
+                        <div class="author-img">S</div>
+                        <div class="author-info">
+                            <h4>Sari Dewi</h4>
+                            <p>Mahasiswi UNAND</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimoni-item">
+                    <div class="testimoni-text">
+                        "Setiap pulang kampung ke Padang, Pondok Es Teller ZR selalu jadi tujuan pertama. Rasanya khas
+                        banget, gak bisa ditemukan di kota lain. Harga murah, rasa premium! Ini es teller terbaik di
+                        Padang."
+                    </div>
+                    <div class="testimoni-author">
+                        <div class="author-img">R</div>
+                        <div class="author-info">
+                            <h4>Rizky Ananda</h4>
+                            <p>Perantau di Jakarta</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-title">
+                <h2>Pertanyaan Umum</h2>
+                <p>Temukan jawaban untuk pertanyaan yang sering diajukan</p>
+            </div>
+            <div class="faq-items">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Apakah tersedia delivery/pengantaran?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Ya! Kami melayani delivery melalui WhatsApp. Minimal order Rp 50.000 untuk area Padang Timur
+                            dan sekitarnya. Gratis ongkir untuk order di atas Rp 100.000.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Berapa lama waktu penyajian?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Untuk pesanan dine-in, es teller akan disajikan dalam 5-10 menit. Untuk pesanan
+                            takeaway/delivery, waktu persiapan sekitar 15-20 menit tergantung jumlah pesanan.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Apakah ada tempat parkir yang luas?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Ya, kami menyediakan area parkir yang luas untuk motor dan mobil. Parkir gratis untuk semua
+                            pelanggan.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Apakah buka di hari libur nasional?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Kami buka setiap hari termasuk hari libur nasional. Jam operasional pada hari libur mengikuti
+                            jam operasional weekend (09.00 - 23.00 WIB).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lokasi & Kontak -->
+    <section class="kontak" id="kontak">
+        <div class="container">
+            <div class="section-title">
+                <h2>Lokasi & Kontak</h2>
+                <p>Kunjungi kedai kami atau pesan sekarang melalui WhatsApp</p>
+            </div>
+            <div class="kontak-content">
+                <div class="kontak-info">
+                    <div class="kontak-item">
+                        <div class="kontak-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="kontak-text">
+                            <h3>Alamat Kedai</h3>
+                            <p>Jl. Raya Kalumbuk No.21, Kalumbuk, Kec. Kuranji, Kota Padang, Sumatera Barat 25175</p>
+                            <p><em>Dekat dengan SDIT Adzkia 2 dan D'besto Fried Chicken</em></p>
+                        </div>
+                    </div>
+                    <div class="kontak-item">
+                        <div class="kontak-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="kontak-text">
+                            <h3>Jam Operasional</h3>
+                            <div class="jam-buka">
+                                <h3>Buka Setiap Hari</h3>
+                                <p><strong>Senin - Jumat:</strong> 10.00 - 22.00 WIB</p>
+                                <p><strong>Sabtu - Minggu:</strong> 09.00 - 23.00 WIB</p>
+                                <p><em>*Hari libur nasional tetap buka</em></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kontak-item">
+                        <div class="kontak-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="kontak-text">
+                            <h3>Telepon & WhatsApp</h3>
+                            <p><strong>0813-7411-0444</strong> (Customer Service)</p>
+                            <p><strong>0813-6348-9111</strong> (Delivery Order)</p>
+                        </div>
+                    </div>
+
+                    <a href="https://wa.me/6281374110444?text=Halo%20Pondok%20Es%20Teller%20ZR,%20saya%20mau%20pesan"
+                        target="_blank" class="whatsapp-btn">
+                        <i class="fab fa-whatsapp"></i> Pesan via WhatsApp Sekarang
+                    </a>
+                </div>
+                <div class="map">
+                    <!-- Google Maps Embed -->
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.320773607318!2d100.3912593!3d-0.9190448!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2fd4b8f81f0657d5%3A0x33d947a3e084bd9!2sPondok%20Es%20Teler%20ZR%20(Es%20Teler%20Kota%20Padang)!5e0!3m2!1sid!2sid!4v1705085692871!5m2!1sid!2sid"
+                        class="map-iframe" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        title="Lokasi Pondok Es Teller ZR di Google Maps">
+                    </iframe>
+                    <div class="map-overlay"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SISTEM PEMESANAN SECTION - DIPINDAH KE BAWAH -->
+    <section class="pemesanan" id="pemesanan">
+        <div class="container">
+            <div class="section-title">
+                <h2>Pesan Sekarang</h2>
+                <p>Pesan berbagai menu es teller favorit Anda dalam satu pesanan</p>
+            </div>
+
+            <div class="pemesanan-container">
+                <div class="form-pesan-wrapper">
+                    <!-- Form Data Diri & Pesanan -->
+                    <div class="bagian-form">
+                        <h3><i class="fas fa-user"></i> Data Diri & Pesanan</h3>
+
+                        <form id="formPemesanan">
+                            <!-- Nama Pemesan -->
+                            <div class="form-group">
+                                <label for="nama">Nama Lengkap *</label>
+                                <input type="text" id="nama" class="form-control" placeholder="Masukkan nama lengkap"
+                                    required>
+                            </div>
+
+                            <!-- Nomor WhatsApp -->
+                            <div class="form-group">
+                                <label for="whatsapp">Nomor WhatsApp *</label>
+                                <input type="tel" id="whatsapp" class="form-control" placeholder="Contoh: 081234567890"
+                                    required>
+                            </div>
+
+                            <!-- Alamat Pengiriman -->
+                            <div class="form-group">
+                                <label for="alamat">Alamat Lengkap (Untuk Delivery)</label>
+                                <textarea id="alamat" class="form-control" rows="3"
+                                    placeholder="Masukkan alamat lengkap jika pesanan diantar"></textarea>
+                                <div class="ongkir-info">
+                                    <strong>Info Ongkir:</strong> Gratis ongkir untuk pesanan di atas Rp 100.000 (maks 5
+                                    km dari kedai). Biaya ongkir Rp 10.000 - Rp 25.000 tergantung jarak.
+                                </div>
+                            </div>
+
+                            <!-- Pilih Menu (Multi-item) -->
+                            <div class="form-group">
+                                <label>Pilih Menu Es Teller *</label>
+                                <div id="keranjang-pesanan">
+                                    <!-- Item pesanan akan ditambahkan di sini -->
+                                </div>
+
+                                <button type="button" class="btn-tambah-menu" id="btnTambahMenu">
+                                    <i class="fas fa-plus-circle"></i> Tambah Menu Lain
+                                </button>
+
+                                <div id="pesan-kosong" class="pesan-kosong">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <p>Belum ada menu yang dipilih. Klik tombol "Tambah Menu" untuk memulai pesanan
+                                        Anda.</p>
+                                </div>
+                            </div>
+
+                            <!-- Separator -->
+                            <div class="separator"></div>
+
+                            <!-- Tanggal Pengambilan/Pengantaran -->
+                            <div class="form-group">
+                                <label for="tanggal">Tanggal Pengambilan/Pengantaran *</label>
+                                <input type="date" id="tanggal" class="form-control" required>
+                            </div>
+
+                            <!-- Waktu -->
+                            <div class="form-group">
+                                <label for="waktu">Waktu *</label>
+                                <select id="waktu" class="form-control select-control" required>
+                                    <option value="">Pilih waktu</option>
+                                    <option value="10:00">10:00 WIB</option>
+                                    <option value="11:00">11:00 WIB</option>
+                                    <option value="12:00" selected>12:00 WIB</option>
+                                    <option value="13:00">13:00 WIB</option>
+                                    <option value="14:00">14:00 WIB</option>
+                                    <option value="15:00">15:00 WIB</option>
+                                    <option value="16:00">16:00 WIB</option>
+                                    <option value="17:00">17:00 WIB</option>
+                                    <option value="18:00">18:00 WIB</option>
+                                    <option value="19:00">19:00 WIB</option>
+                                    <option value="20:00">20:00 WIB</option>
+                                    <option value="21:00">21:00 WIB</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Metode Pengambilan *</label>
+                                <div style="display: flex; gap: 20px; margin-top: 10px;">
+                                    <label
+                                        style="display: flex; align-items: center; cursor: pointer; padding: 15px 20px; border-radius: 12px; border: 2px solid #e0e0e0; transition: all 0.3s; background: white; flex: 1; min-width: 180px; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                                        <input type="radio" name="metode" value="Ambil di Tempat" checked
+                                            style="margin-right: 12px; width: 20px; height: 20px; accent-color: #2e7d32; cursor: pointer;">
+                                        <span style="font-weight: 600; color: #333; font-size: 1.1rem;">Ambil di
+                                            Tempat</span>
+                                    </label>
+                                    <label
+                                        style="display: flex; align-items: center; cursor: pointer; padding: 15px 20px; border-radius: 12px; border: 2px solid #e0e0e0; transition: all 0.3s; background: white; flex: 1; min-width: 180px; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                                        <input type="radio" name="metode" value="Delivery (Diantar)"
+                                            style="margin-right: 12px; width: 20px; height: 20px; accent-color: #2e7d32; cursor: pointer;">
+                                        <span style="font-weight: 600; color: #333; font-size: 1.1rem;">Delivery
+                                            (Diantar)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Catatan Tambahan -->
+                            <div class="form-group">
+                                <label for="catatan">Catatan Tambahan</label>
+                                <textarea id="catatan" class="form-control" rows="3"
+                                    placeholder="Contoh: Kurangi gula, tambahkan es krim, dll."></textarea>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Rincian Pesanan -->
+                    <div class="rincian-pesanan">
+                        <h3><i class="fas fa-receipt"></i> Rincian Pesanan</h3>
+
+                        <div class="detail-pesanan">
+                            <div class="detail-item">
+                                <span class="label">Menu</span>
+                                <span class="value" id="detail-menu">Belum dipilih</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Jumlah Item</span>
+                                <span class="value" id="detail-jumlah-item">0</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Total Porsi</span>
+                                <span class="value" id="detail-total-porsi">0</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Tanggal</span>
+                                <span class="value" id="detail-tanggal">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Waktu</span>
+                                <span class="value" id="detail-waktu">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Metode</span>
+                                <span class="value" id="detail-metode">Ambil di Tempat</span>
+                            </div>
+                        </div>
+
+                        <div class="total-pesanan">
+                            <span class="label">Total Pembayaran</span>
+                            <span class="value" id="total-harga">Rp 0</span>
+                        </div>
+
+                        <button type="button" class="btn-pesan-wa" id="btnPesanWA">
+                            <i class="fab fa-whatsapp"></i> Pesan via WhatsApp
+                        </button>
+
+                        <div class="status-pesanan">
+                            <h4><i class="fas fa-info-circle"></i> Informasi Pesanan</h4>
+                            <p>Pesanan Anda akan diproses setelah konfirmasi melalui WhatsApp. Untuk delivery, minimal
+                                pesanan Rp 50.000. Silakan tambahkan alamat lengkap untuk pengantaran.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Pondok Es Teller ZR</h2>
+                    <p class="footer-slogan">"Rajanya Es Kota Padang"</p>
+                    <p>Segarkan harimu dengan es teller terbaik di Kota Padang. Rasa yang tak terlupakan sejak 2010.</p>
+                    <p>Menggunakan bahan segar, porsi melimpah, dan rasa khas yang bikin ketagihan.</p>
+                </div>
+                <div class="footer-social">
+                    <h3>Ikuti Kami di Media Sosial</h3>
+                    <div class="social-icons">
+                        <a href="https://instagram.com/esteller_zr" target="_blank" title="Instagram"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="https://tiktok.com/@rannmlbb" target="_blank" title="TikTok"><i
+                                class="fab fa-tiktok"></i></a>
+                        <a href="https://facebook.com/pondokestellerzr" target="_blank" title="Facebook"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="https://youtube.com/@pondokestellerzr" target="_blank" title="YouTube"><i
+                                class="fab fa-youtube"></i></a>
+                    </div>
+                    <p style="margin-top: 20px; color: rgba(255, 255, 255, 0.8);">Tetap terhubung untuk info promo, menu
+                        baru, dan acara spesial!</p>
+                    <p style="color: rgba(255, 255, 255, 0.8); margin-top: 10px;">Email: info@pondokestellerzr.com</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; <strong>2026 Pondok Es Teller ZR</strong>. Hak Cipta Dilindungi. Website dibuat dengan
+                    &hearts; untuk para pecinta es teller di Kota Padang.</p>
+                <p style="margin-top: 10px;">UMKM Kuliner Unggulan Kota Padang</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Pilih Menu -->
+    <div class="modal-pilih-menu" id="modalPilihMenu">
+        <div class="modal-pilih-menu-content">
+            <div class="modal-pilih-menu-header">
+                <h2>Pilih Menu Es Teller</h2>
+                <button class="btn-close-modal" id="btnCloseModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="menu-pilihan-grid" id="menuPilihanGrid">
+                <!-- Menu items akan diisi oleh JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi -->
+    <div class="modal" id="modalKonfirmasi">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-check-circle"></i>
+                <h2>Konfirmasi Pesanan</h2>
+                <p>Periksa kembali detail pesanan Anda sebelum mengirim ke WhatsApp</p>
+            </div>
+
+            <div class="modal-body">
+                <h3>Rincian Pesanan</h3>
+                <div class="modal-detail" id="modal-detail">
+                    <!-- Detail akan diisi oleh JavaScript -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="modal-btn modal-btn-secondary" id="btnEditPesanan">
+                    <i class="fas fa-edit"></i> Edit Pesanan
+                </button>
+                <button type="button" class="modal-btn modal-btn-primary" id="btnKirimWA">
+                    <i class="fab fa-whatsapp"></i> Kirim ke WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Elements -->
+    <div class="floating-whatsapp">
+        <a href="https://wa.me/6281374110444?text=Halo%20Pondok%20Es%20Teller%20ZR,%20saya%20mau%20pesan"
+            target="_blank">
+            <i class="fab fa-whatsapp"></i>
+            <span>Pesan via WA</span>
+        </a>
+    </div>
+
+    <button class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

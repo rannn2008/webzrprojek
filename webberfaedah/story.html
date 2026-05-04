@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Baca cerita lengkap dan berikan dukunganmu di Ruang Curhat Anonim.">
+  <title>Detail Cerita — Ruang Curhat Anonim</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+</head>
+<body data-page="story">
+  <div class="bg-decoration bg-blob-1"></div>
+  <div class="bg-decoration bg-blob-2"></div>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><div class="logo-icon">💜</div><span>RuangCurhat</span></a>
+      <nav class="nav-desktop">
+        <a href="index.html" class="nav-link">Beranda</a>
+        <a href="post.html" class="nav-link">Tulis Cerita</a>
+        <a href="guidelines.html" class="nav-link">Pedoman</a>
+        <a href="about.html" class="nav-link">Tentang</a>
+      </nav>
+      <a href="post.html" class="btn-write">✍️ Tulis Cerita</a>
+      <button class="mobile-menu-btn" aria-label="Menu"><div class="hamburger"><span></span><span></span><span></span></div></button>
+    </div>
+  </header>
+  <nav class="mobile-nav">
+    <a href="index.html">🏠 Beranda</a>
+    <a href="post.html">✍️ Tulis Cerita</a>
+    <a href="guidelines.html">📜 Pedoman</a>
+    <a href="about.html">💡 Tentang</a>
+  </nav>
+
+  <main class="story-detail">
+    <a href="index.html" class="back-link">← Kembali ke Beranda</a>
+
+    <div class="story-detail-card" id="storyDetail">
+      <!-- Rendered by JS -->
+    </div>
+
+    <!-- AI Supportive Response -->
+    <div class="ai-response" id="aiResponse">
+      <div class="ai-response-header">
+        <div class="ai-icon">🤖</div>
+        <span>Pesan Dukungan dari AI</span>
+      </div>
+      <p class="ai-text">Memuat pesan dukungan...</p>
+    </div>
+
+    <!-- Comments -->
+    <div class="comments-section">
+      <div class="comments-header">
+        <h3>💬 Komentar (<span id="commentCount">0</span>)</h3>
+      </div>
+
+      <form class="comment-form" id="commentForm">
+        <div class="comment-input-wrapper">
+          <div class="comment-avatar">🙂</div>
+          <div class="comment-input-area">
+            <textarea id="commentText" placeholder="Tulis komentar dukunganmu... Ingat, kata-kata baikmu bisa mengubah hari seseorang 💜" rows="3"></textarea>
+            <div class="comment-actions">
+              <button type="submit" class="btn btn-primary btn-sm">Kirim Komentar</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="comment-list" id="commentList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 RuangCurhat Anonim. Dibuat dengan 💜</p>
+        <div class="footer-bottom-links"><a href="guidelines.html">Privasi</a><a href="guidelines.html">Ketentuan</a></div>
+      </div>
+    </div>
+  </footer>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{
+  "products": [
+    {
+      "id": "prod1",
+      "nama": "Es Teller Special",
+      "harga": 25000,
+      "kategori": "es teller",
+      "gambar": "🍧",
+      "deskripsi": "Es teller dengan topping lengkap"
+    },
+    {
+      "id": "prod2",
+      "nama": "Es Campur",
+      "harga": 20000,
+      "kategori": "es campur",
+      "gambar": "🥥",
+      "deskripsi": "Es campur buah segar"
+    },
+    {
+      "id": "prod3",
+      "nama": "Es Teller Jumbo",
+      "harga": 30000,
+      "kategori": "es teller",
+      "gambar": "🍨",
+      "deskripsi": "Porsi jumbo untuk 2 orang"
+    },
+    {
+      "id": "prod4",
+      "nama": "Es Cincau",
+      "harga": 15000,
+      "kategori": "es cincau",
+      "gambar": "🧋",
+      "deskripsi": "Es cincau segar"
+    }
+  ],
+  
+  "orders": [
+    {
+      "id": "order1",
+      "nama": "Budi Santoso",
+      "whatsapp": "081234567890",
+      "items": [
+        { "id": "prod1", "nama": "Es Teller Special", "harga": 25000, "qty": 2 },
+        { "id": "prod2", "nama": "Es Campur", "harga": 20000, "qty": 1 }
+      ],
+      "total": 70000,
+      "status": "new",
+      "tanggal": "2024-01-25 10:30"
+    }
+  ],
+  
+  "settings": {
+    "nama_toko": "Pondok Es Teller ZR",
+    "whatsapp": "6281234567890",
+    "alamat": "Jl. Mangga No. 123, Jakarta",
+    "buka": "10:00",
+    "tutup": "22:00"
+  }
+}

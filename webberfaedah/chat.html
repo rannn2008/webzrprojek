@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ruang Chat Privat Anonim — Ngobrol secara pribadi dengan sesama anonim di Ruang Curhat.">
+  <title>Chat Privat Anonim — Ruang Curhat Anonim</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+</head>
+<body data-page="chat">
+  <div class="bg-decoration bg-blob-1"></div>
+  <div class="bg-decoration bg-blob-2"></div>
+
+  <!-- Loading Screen -->
+  <div class="chat-loading" id="chatLoading">
+    <div class="chat-loading-inner">
+      <div class="chat-loading-icon">💬</div>
+      <h3>Menyiapkan ruang chat...</h3>
+      <p>Sebentar ya, koneksi sedang dibuat</p>
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <!-- Error Screen -->
+  <div class="chat-error" id="chatError" style="display:none">
+    <div class="chat-error-inner">
+      <div style="font-size:3rem;margin-bottom:1rem;">😕</div>
+      <h3>Room tidak ditemukan</h3>
+      <p id="chatErrorMsg">Link chat mungkin sudah kadaluarsa atau tidak valid.</p>
+      <a href="index.html" class="btn btn-primary mt-md">← Kembali ke Beranda</a>
+    </div>
+  </div>
+
+  <!-- Main Chat UI -->
+  <div class="chat-app" id="chatApp" style="display:none">
+
+    <!-- Chat Header -->
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <a href="index.html" class="chat-back-btn" aria-label="Kembali">←</a>
+        <div class="chat-room-info">
+          <div class="chat-room-avatar" id="chatRoomAvatar">💬</div>
+          <div class="chat-room-details">
+            <div class="chat-room-name" id="chatRoomName">Chat Privat</div>
+            <div class="chat-room-status" id="chatRoomStatus">
+              <span class="status-dot"></span> Aktif
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-header-right">
+        <button class="chat-action-btn" id="copyLinkBtn" title="Salin Link Chat">🔗</button>
+        <button class="chat-action-btn chat-action-danger" id="closeChatBtn" title="Tutup Chat">✕</button>
+      </div>
+    </div>
+
+    <!-- My Persona Bar -->
+    <div class="chat-persona-bar">
+      <div class="chat-persona-avatar" id="myPersonaAvatar">🙂</div>
+      <div class="chat-persona-text">
+        Kamu sedang chat sebagai <strong id="myPersonaName">Anonim</strong>
+        <span class="persona-badge">Anonim</span>
+      </div>
+      <button class="persona-info-btn" id="personaInfoBtn" title="Tentang privasi chat">🔒</button>
+    </div>
+
+    <!-- Invite Banner (only shown to room creator) -->
+    <div class="chat-invite-banner" id="inviteBanner" style="display:none">
+      <div class="invite-banner-content">
+        <span>📤 Bagikan link ini ke <strong id="inviteTargetName">teman</strong>:</span>
+        <div class="invite-link-box">
+          <span class="invite-link-text" id="inviteLinkText"></span>
+          <button class="btn-copy-invite" id="copyInviteBtn">Salin</button>
+        </div>
+      </div>
+      <button class="invite-close-btn" id="closeInviteBtn" aria-label="Tutup">×</button>
+    </div>
+
+    <!-- Messages Area -->
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-day-label">
+        <span>Hari ini</span>
+      </div>
+      <div class="chat-welcome-msg">
+        <div class="chat-welcome-icon">🔒</div>
+        <p>Chat ini bersifat <strong>privat dan anonim</strong>. Hanya orang dengan link yang bisa bergabung. Identitasmu tidak akan pernah terungkap.</p>
+      </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div class="chat-typing" id="chatTyping" style="display:none">
+      <div class="typing-avatar" id="typingAvatar">🐰</div>
+      <div class="typing-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input-area">
+      <div class="chat-input-wrapper">
+        <textarea
+          id="chatInput"
+          class="chat-input"
+          placeholder="Tulis pesan... (Enter untuk kirim)"
+          rows="1"
+          maxlength="1000"
+        ></textarea>
+        <button class="chat-send-btn" id="chatSendBtn" aria-label="Kirim">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      <div class="chat-input-hint">
+        <span id="chatCharCount">0/1000</span>
+        <span>Tekan Enter ↵ untuk kirim, Shift+Enter untuk baris baru</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Modal -->
+  <div class="modal-overlay" id="privacyModal" style="display:none">
+    <div class="modal-box">
+      <h3>🔒 Privasi Chat Anonim</h3>
+      <ul class="privacy-list">
+        <li>✅ Identitas aslimu tidak pernah tersimpan</li>
+        <li>✅ Persona anonim diberikan secara acak</li>
+        <li>✅ Hanya orang dengan link yang bisa bergabung</li>
+        <li>✅ Pesan otomatis hilang setelah 24 jam</li>
+        <li>⚠️ Jangan bagikan informasi pribadi di sini</li>
+        <li>⚠️ Chat untuk saling mendukung, bukan menyakiti</li>
+      </ul>
+      <button class="btn btn-primary" id="closePrivacyModal" style="width:100%;margin-top:1rem">Mengerti 👍</button>
+    </div>
+  </div>
+
+  <script src="js/chat.js"></script>
+</body>
+</html>

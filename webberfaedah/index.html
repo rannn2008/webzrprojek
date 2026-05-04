@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ruang Curhat Anonim — Tempat aman untuk berbagi cerita, curhat, dan mendapat dukungan secara anonim.">
+  <title>Ruang Curhat Anonim — Ceritakan Tanpa Takut</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+</head>
+<body data-page="home">
+  <div class="bg-decoration bg-blob-1"></div>
+  <div class="bg-decoration bg-blob-2"></div>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><div class="logo-icon">💜</div><span>RuangCurhat</span></a>
+      <nav class="nav-desktop">
+        <a href="index.html" class="nav-link active">Beranda</a>
+        <a href="post.html" class="nav-link">Tulis Cerita</a>
+        <a href="guidelines.html" class="nav-link">Pedoman</a>
+        <a href="about.html" class="nav-link">Tentang</a>
+      </nav>
+      <a href="post.html" class="btn-write">✍️ Tulis Cerita</a>
+      <button class="mobile-menu-btn" aria-label="Menu"><div class="hamburger"><span></span><span></span><span></span></div></button>
+    </div>
+  </header>
+
+  <nav class="mobile-nav">
+    <a href="index.html" class="active">🏠 Beranda</a>
+    <a href="post.html">✍️ Tulis Cerita</a>
+    <a href="guidelines.html">📜 Pedoman</a>
+    <a href="about.html">💡 Tentang</a>
+    <a href="post.html" class="btn-write-mobile">✍️ Tulis Cerita Sekarang</a>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge"><span class="dot"></span> Ruang Aman untuk Bercerita</div>
+        <h1>Ceritakan <span class="gradient-text">Tanpa Takut</span>, Kamu Tidak Sendiri</h1>
+        <p class="hero-description">Tempat aman untuk berbagi cerita, curhat, dan mendapat dukungan dari komunitas yang peduli — semuanya secara anonim.</p>
+        <div class="hero-actions">
+          <a href="post.html" class="btn btn-primary btn-lg">✍️ Mulai Bercerita</a>
+          <a href="#stories" class="btn btn-secondary btn-lg">📖 Baca Cerita</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item"><span class="stat-number">0</span><span class="stat-label">Cerita</span></div>
+          <div class="stat-item"><span class="stat-number">0</span><span class="stat-label">Dukungan</span></div>
+          <div class="stat-item"><span class="stat-number">0</span><span class="stat-label">Komentar</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title"><span class="icon">🔥</span> Cerita Trending</h2>
+          <a href="#stories" class="btn btn-ghost btn-sm">Lihat Semua →</a>
+        </div>
+        <div class="trending-card"><div class="trending-list" id="trendingList"></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="stories">
+      <div class="container">
+        <div class="section-header"><h2 class="section-title"><span class="icon">📖</span> Semua Cerita</h2></div>
+        <div class="categories-bar" id="categoryBar"></div>
+        <div class="stories-grid mt-lg" id="storiesGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="fab-random" id="fabRandom" aria-label="Cerita Random">🎲<span class="tooltip">Cerita Random</span></button>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="logo"><div class="logo-icon">💜</div><span>RuangCurhat</span></a>
+          <p>Tempat aman untuk berbagi cerita dan mendapat dukungan secara anonim.</p>
+        </div>
+        <div class="footer-links"><h4>Navigasi</h4><a href="index.html">Beranda</a><a href="post.html">Tulis Cerita</a><a href="about.html">Tentang</a></div>
+        <div class="footer-links"><h4>Bantuan</h4><a href="guidelines.html">Pedoman</a><a href="about.html">FAQ</a></div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 RuangCurhat Anonim. Dibuat dengan 💜</p>
+        <div class="footer-bottom-links"><a href="guidelines.html">Privasi</a><a href="guidelines.html">Ketentuan</a></div>
+      </div>
+    </div>
+  </footer>
+  <script src="js/app.js"></script>
+</body>
+</html>
