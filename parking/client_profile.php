@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_profile"])) {
     $gender = $_POST["gender"] ?? "";
     $dob = $_POST["dob"] ?? "";
     $pass = $_POST["password"];
-    
+
     // Avatar upload is now handled via AJAX and api_upload_avatar.php for better UX
 
     if (!empty($pass)) {
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_profile"])) {
         $stmt = $conn->prepare("UPDATE users SET name=?, plate_number=?, email=?, phone=?, address=?, gender=?, dob=? WHERE id=?");
         $stmt->bind_param("sssssssi", $name, $plate, $email, $phone, $address, $gender, $dob, $client_id);
     }
-    
+
     if ($stmt->execute()) {
         $msg .= "<div class='badge bg-success' style='width:100%'>Profile Updated Successfully!</div>";
         $_SESSION["client_name"] = $name;
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_profile"])) {
 $avatar_path = !empty($user['avatar']) ? $user['avatar'] . "?t=" . time() : "assets/img/default-avatar.png";
 
 // Stats for profile
-$visit_count = (int)($conn->query("SELECT COUNT(*) as c FROM parking_history WHERE user_id = $client_id AND action='IN'")->fetch_assoc()["c"] ?? 0);
+$visit_count = (int) ($conn->query("SELECT COUNT(*) as c FROM parking_history WHERE user_id = $client_id AND action='IN'")->fetch_assoc()["c"] ?? 0);
 $total_fees = $conn->query("SELECT SUM(fee) as total FROM parking_history WHERE user_id = $client_id AND action='OUT'")->fetch_assoc()["total"] ?? 0;
 $member_since = $user["created_at"] ?? date("Y-m-d");
 $user_points = $user["points"] ?? 0;
@@ -72,7 +72,7 @@ $user_points = $user["points"] ?? 0;
             align-items: center;
             gap: 30px;
             padding: 30px;
-            background: linear-gradient(135deg, rgba(0,229,255,0.08), rgba(99,102,241,0.08));
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), rgba(99, 102, 241, 0.08));
             border-radius: 24px;
             border: 1px solid var(--glass-border);
             margin-bottom: 25px;
@@ -238,9 +238,11 @@ $user_points = $user["points"] ?? 0;
                 flex-direction: column;
                 text-align: center;
             }
+
             .hero-stats {
                 justify-content: center;
             }
+
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -251,7 +253,7 @@ $user_points = $user["points"] ?? 0;
 <body>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <div class="container">
-<?php include 'global_ai_assistant.php'; ?>
+        <?php include 'global_ai_assistant.php'; ?>
         <header>
             <div class="header-top">
                 <div>
@@ -259,7 +261,8 @@ $user_points = $user["points"] ?? 0;
                     <p class="tagline">Manage your account and personalize your profile</p>
                 </div>
                 <div style="display:flex; align-items:center; gap:15px;">
-                    <img src="<?= $avatar_path ?>" class="header-avatar" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid var(--accent-primary);">
+                    <img src="<?= $avatar_path ?>" class="header-avatar"
+                        style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid var(--accent-primary);">
                     <div style="text-align: right;">
                         <a href="logout.php" class="btn btn-danger" style="padding: 8px 15px;"><i
                                 class="fas fa-sign-out-alt"></i> Logout</a>
@@ -288,12 +291,18 @@ $user_points = $user["points"] ?? 0;
                     <label class="avatar-edit-btn" for="avatar-input" title="Change Photo">
                         <i class="fas fa-camera"></i>
                     </label>
-                    <input type="file" name="avatar" accept="image/*" id="avatar-input" style="display:none;" onchange="handleAvatarSelection(this)">
-                    
+                    <input type="file" name="avatar" accept="image/*" id="avatar-input" style="display:none;"
+                        onchange="handleAvatarSelection(this)">
+
                     <!-- NEW: CONFIRMATION OVERLAY -->
-                    <div id="avatar-confirm-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); border-radius:50%; flex-direction:column; align-items:center; justify-content:center; gap:8px; z-index:10; border:2px solid var(--accent-primary);">
-                        <button type="button" onclick="uploadAvatar()" class="btn btn-success" style="width:34px; height:34px; border-radius:50%; padding:0; display:flex; align-items:center; justify-content:center;" title="Confirm Change"><i class="fas fa-check"></i></button>
-                        <button type="button" onclick="cancelAvatar()" class="btn btn-danger" style="width:34px; height:34px; border-radius:50%; padding:0; display:flex; align-items:center; justify-content:center;" title="Cancel"><i class="fas fa-times"></i></button>
+                    <div id="avatar-confirm-overlay"
+                        style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); border-radius:50%; flex-direction:column; align-items:center; justify-content:center; gap:8px; z-index:10; border:2px solid var(--accent-primary);">
+                        <button type="button" onclick="uploadAvatar()" class="btn btn-success"
+                            style="width:34px; height:34px; border-radius:50%; padding:0; display:flex; align-items:center; justify-content:center;"
+                            title="Confirm Change"><i class="fas fa-check"></i></button>
+                        <button type="button" onclick="cancelAvatar()" class="btn btn-danger"
+                            style="width:34px; height:34px; border-radius:50%; padding:0; display:flex; align-items:center; justify-content:center;"
+                            title="Cancel"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
                 <div class="hero-info">
@@ -305,15 +314,18 @@ $user_points = $user["points"] ?? 0;
                             <div class="hero-stat-label">Visits</div>
                         </div>
                         <div class="hero-stat-item">
-                            <div class="hero-stat-val" style="color:#f87171;">Rp <?= number_format($total_fees, 0, ',', '.') ?></div>
+                            <div class="hero-stat-val" style="color:#f87171;">Rp
+                                <?= number_format($total_fees, 0, ',', '.') ?></div>
                             <div class="hero-stat-label">Total Spent</div>
                         </div>
                         <div class="hero-stat-item">
-                            <div class="hero-stat-val" style="color:#f59e0b;"><i class="fas fa-crown"></i> <?= number_format($user_points, 0, ',', '.') ?></div>
+                            <div class="hero-stat-val" style="color:#f59e0b;"><i class="fas fa-crown"></i>
+                                <?= number_format($user_points, 0, ',', '.') ?></div>
                             <div class="hero-stat-label">Loyalty Points</div>
                         </div>
                         <div class="hero-stat-item">
-                            <div class="hero-stat-val" style="color:#60a5fa;"><?= date("d M Y", strtotime($member_since)) ?></div>
+                            <div class="hero-stat-val" style="color:#60a5fa;">
+                                <?= date("d M Y", strtotime($member_since)) ?></div>
                             <div class="hero-stat-label">Member Since</div>
                         </div>
                     </div>
@@ -326,22 +338,26 @@ $user_points = $user["points"] ?? 0;
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Full Name</label>
-                        <input type="text" name="name" value="<?= htmlspecialchars($user["name"]) ?>" class="form-control" required>
+                        <input type="text" name="name" value="<?= htmlspecialchars($user["name"]) ?>"
+                            class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input type="email" name="email" value="<?= htmlspecialchars($user["email"] ?? '') ?>" class="form-control" placeholder="you@example.com">
+                        <input type="email" name="email" value="<?= htmlspecialchars($user["email"] ?? '') ?>"
+                            class="form-control" placeholder="you@example.com">
                     </div>
                     <div class="form-group">
                         <label>Phone Number</label>
-                        <input type="tel" name="phone" value="<?= htmlspecialchars($user["phone"] ?? '') ?>" class="form-control" placeholder="+62 812 xxxx xxxx">
+                        <input type="tel" name="phone" value="<?= htmlspecialchars($user["phone"] ?? '') ?>"
+                            class="form-control" placeholder="+62 812 xxxx xxxx">
                     </div>
                     <div class="form-group">
                         <label>Gender</label>
                         <select name="gender" class="form-control">
                             <option value="" <?= empty($user["gender"]) ? 'selected' : '' ?>>-- Select --</option>
                             <option value="Male" <?= ($user["gender"] ?? '') === 'Male' ? 'selected' : '' ?>>Male</option>
-                            <option value="Female" <?= ($user["gender"] ?? '') === 'Female' ? 'selected' : '' ?>>Female</option>
+                            <option value="Female" <?= ($user["gender"] ?? '') === 'Female' ? 'selected' : '' ?>>Female
+                            </option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -350,11 +366,14 @@ $user_points = $user["points"] ?? 0;
                     </div>
                     <div class="form-group">
                         <label>Plate Number</label>
-                        <input type="text" name="plate_number" value="<?= htmlspecialchars($user["plate_number"]) ?>" class="form-control" required style="text-transform:uppercase; letter-spacing:2px; font-weight:700;">
+                        <input type="text" name="plate_number" value="<?= htmlspecialchars($user["plate_number"]) ?>"
+                            class="form-control" required
+                            style="text-transform:uppercase; letter-spacing:2px; font-weight:700;">
                     </div>
                     <div class="form-group form-full">
                         <label>Address</label>
-                        <textarea name="address" class="form-control" rows="2" placeholder="Your home address" style="resize:vertical; min-height:60px;"><?= htmlspecialchars($user["address"] ?? '') ?></textarea>
+                        <textarea name="address" class="form-control" rows="2" placeholder="Your home address"
+                            style="resize:vertical; min-height:60px;"><?= htmlspecialchars($user["address"] ?? '') ?></textarea>
                     </div>
                 </div>
             </div>
@@ -365,11 +384,13 @@ $user_points = $user["points"] ?? 0;
                 <div class="form-grid">
                     <div class="form-group">
                         <label>RFID UID (Read-only)</label>
-                        <input type="text" value="<?= $user["rfid_uid"] ?>" class="form-control" disabled style="opacity:0.5; font-family:monospace; letter-spacing:2px;">
+                        <input type="text" value="<?= $user["rfid_uid"] ?>" class="form-control" disabled
+                            style="opacity:0.5; font-family:monospace; letter-spacing:2px;">
                     </div>
                     <div class="form-group">
                         <label>New Password</label>
-                        <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current">
+                        <input type="password" name="password" class="form-control"
+                            placeholder="Leave blank to keep current">
                     </div>
                 </div>
             </div>
@@ -393,7 +414,7 @@ $user_points = $user["points"] ?? 0;
                     return;
                 }
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     document.getElementById('avatar-img').src = e.target.result;
                     document.getElementById('avatar-confirm-overlay').style.display = 'flex';
                 }
@@ -427,15 +448,15 @@ $user_points = $user["points"] ?? 0;
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         const newUrl = response.avatar_url + "?t=" + new Date().getTime();
                         originalAvatar = newUrl;
-                        
+
                         // Update all avatars on page
                         $(".avatar-preview, .header-avatar").attr("src", newUrl);
                         document.getElementById('avatar-confirm-overlay').style.display = 'none';
-                        
+
                         // Show success notification (Toast style if possible, or alert)
                         alert("Profile picture updated successfully!");
                     } else {
@@ -443,11 +464,11 @@ $user_points = $user["points"] ?? 0;
                         cancelAvatar();
                     }
                 },
-                error: function() {
+                error: function () {
                     alert("Error connecting to server.");
                     cancelAvatar();
                 },
-                complete: function() {
+                complete: function () {
                     btn.innerHTML = oldHtml;
                     btn.disabled = false;
                 }
