@@ -166,10 +166,23 @@
             display: grid;
             align-items: center;
             overflow: hidden;
+            color: var(--white);
+            background: var(--green-dark);
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
             background:
                 linear-gradient(90deg, rgba(13, 79, 48, 0.94) 0%, rgba(20, 122, 63, 0.82) 42%, rgba(20, 122, 63, 0.15) 100%),
                 url("foto2/herobackground.jpg") center/cover;
-            color: var(--white);
+            animation: kenBurns 25s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes kenBurns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.12); }
         }
 
         .hero::after {
@@ -178,6 +191,7 @@
             inset: auto 0 0;
             height: 90px;
             background: linear-gradient(180deg, rgba(255, 248, 223, 0), var(--cream));
+            z-index: 2;
         }
 
         .hero-grid {
@@ -250,6 +264,16 @@
             background: rgba(255, 255, 255, 0.16);
             backdrop-filter: blur(18px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .fresh-card:nth-child(2) {
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .fresh-card strong {
@@ -903,6 +927,7 @@
 
     <main>
         <section class="hero" id="beranda">
+            <div class="hero-bg"></div>
             <div class="container hero-grid">
                 <div class="hero-copy">
                     <p class="eyebrow">Segar dari Kota Padang</p>
