@@ -989,6 +989,38 @@
 
         .show-ai { display: flex; }
 
+        .cart-badge {
+            position: fixed;
+            right: 18px;
+            bottom: 154px; /* Di atas tombol AI */
+            z-index: 30;
+            width: 56px;
+            height: 56px;
+            border-radius: 999px;
+            background: #f5a400;
+            color: white;
+            display: none;
+            place-items: center;
+            box-shadow: 0 14px 30px rgba(245, 164, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cart-badge:hover { transform: scale(1.1); }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 2px solid white;
+        }
+
         /* 📱 RESPONSIVE MOBILE FIXES */
         @media (max-width: 900px) {
             .nav {
@@ -1495,13 +1527,15 @@
         </div>
         <div class="ai-content" id="aiContent">
             <div class="ai-msg bot">Halo! Saya asisten Pondok Es Teller ZR. Ada yang bisa saya bantu?</div>
-            <div class="ai-options">
-                <button class="ai-opt" data-ans="Buka setiap hari jam 10.00 - 22.00 WIB. Mampir ya!">Jam Buka?</button>
-                <button class="ai-opt" data-ans="Favorit kami adalah Es Teller Alpukat Spesial dan Durian. Sudah coba?">Menu Favorit?</button>
-                <button class="ai-opt" data-ans="Bisa! Ongkir menyesuaikan jarak (Gojek/Grab). Silakan lanjut pesan di WhatsApp ya.">Bisa Delivery?</button>
-                <button class="ai-opt" data-ans="Kami di Kota Padang. Klik menu 'Lokasi' untuk rute Google Maps lengkapnya.">Lokasi Dimana?</button>
+            <div class="ai-options" id="aiOptions">
+                <!-- Opsi akan diisi dinamis oleh JS -->
             </div>
         </div>
+    </div>
+
+    <div class="cart-badge" id="cartBadge" onclick="document.getElementById('pesan').scrollIntoView({behavior:'smooth'})">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="cart-count" id="badgeCount">0</span>
     </div>
 
     <a class="floating-wa" href="https://wa.me/6281374110444" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
@@ -1620,6 +1654,8 @@
             };
         }
 
+        let currentMenus = []; // Simpan data menu global untuk AI
+
         async function getMenus() {
             if (supabaseClient) {
                 const { data, error } = await supabaseClient
@@ -1643,6 +1679,8 @@
 
         async function renderMenuCatalog() {
             const menus = await getMenus();
+            currentMenus = menus; // Update data global
+            updateAiOptions(); // Update opsi AI
             const menuGrid = document.getElementById("menuGrid");
 
             menuGrid.innerHTML = menus.map((menu) => {
@@ -1726,6 +1764,16 @@
             document.getElementById("summaryQty").textContent = qty;
             document.getElementById("summaryMenuCount").textContent = cart.length;
             document.getElementById("summaryTotal").textContent = formatRupiah.format(total);
+
+            // Update Badge Keranjang
+            const badge = document.getElementById("cartBadge");
+            const count = document.getElementById("badgeCount");
+            if (qty > 0) {
+                badge.style.display = "grid";
+                count.textContent = qty;
+            } else {
+                badge.style.display = "none";
+            }
 
             // Simpan keranjang ke memori HP (Persistence)
             localStorage.setItem(cartStorageKey, JSON.stringify(cart));
@@ -1842,6 +1890,18 @@
                 }, 400);
             }
         });
+
+        function updateAiOptions() {
+            const aiOptions = document.getElementById("aiOptions");
+            const favorites = currentMenus.filter(m => m.status !== 'Habis').slice(0, 2).map(m => m.name).join(" dan ");
+            
+            aiOptions.innerHTML = `
+                <button class="ai-opt" data-ans="Buka setiap hari jam 10.00 - 22.00 WIB. Mampir ya!">Jam Buka?</button>
+                <button class="ai-opt" data-ans="Menu favorit saat ini adalah ${favorites || 'Es Teller Original'}. Mau coba yang mana?">Menu Favorit?</button>
+                <button class="ai-opt" data-ans="Bisa! Ongkir menyesuaikan jarak (Gojek/Grab). Silakan lanjut pesan di WhatsApp ya.">Bisa Delivery?</button>
+                <button class="ai-opt" data-ans="Kami di Kota Padang. Klik menu 'Lokasi' untuk rute Google Maps lengkapnya.">Lokasi Dimana?</button>
+            `;
+        }
 
         // Load Saved Cart on Startup
         try {
