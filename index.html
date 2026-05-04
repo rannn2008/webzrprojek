@@ -148,21 +148,19 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-size: 20px;
             font-weight: 800;
-            letter-spacing: 0;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -0.5px;
         }
 
-        .brand-mark {
-            width: 44px;
-            height: 44px;
-            display: grid;
-            place-items: center;
-            border-radius: 8px;
-            background: var(--yellow);
-            color: var(--green-dark);
-            box-shadow: inset 0 -4px 0 rgba(13, 79, 48, 0.14);
-            font-size: 22px;
+        .brand-logo {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
         .nav-links {
@@ -1132,7 +1130,7 @@
     <header class="topbar">
         <nav class="container nav" aria-label="Navigasi utama">
             <a class="brand" href="#beranda">
-                <span class="brand-mark">ZR</span>
+                <img src="foto2/logo.png" alt="Logo Pondok Es Teller ZR" class="brand-logo">
                 <span>Pondok Es Teller ZR</span>
                 <span id="dataSourceBadge" class="data-badge" style="display: none;">Data Lokal</span>
             </a>
