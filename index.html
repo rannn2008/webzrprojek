@@ -66,6 +66,19 @@
             color: var(--white);
         }
 
+        .data-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            margin-left: 12px;
+        }
+
         .nav {
             min-height: 72px;
             display: flex;
@@ -875,6 +888,7 @@
             <a class="brand" href="#beranda">
                 <span class="brand-mark">ZR</span>
                 <span>Pondok Es Teller ZR</span>
+                <span id="dataSourceBadge" class="data-badge" style="display: none;">Data Lokal</span>
             </a>
             <div class="nav-links">
                 <a href="#beranda">Beranda</a>
@@ -1415,6 +1429,14 @@
                     </article>
                 `;
             }).join("");
+
+            // Update data source badge
+            const badge = document.getElementById("dataSourceBadge");
+            if (badge) {
+                badge.style.display = "inline-flex";
+                badge.textContent = supabaseClient ? "Cloud Sync" : "Data Lokal";
+                badge.style.background = supabaseClient ? "rgba(183, 224, 68, 0.25)" : "rgba(255, 143, 63, 0.25)";
+            }
 
             const availableMenus = menus.filter((menu) => menu.status !== "Habis");
             menuSelect.innerHTML = availableMenus.map((menu) => {
