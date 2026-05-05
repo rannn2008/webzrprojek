@@ -1,0 +1,21 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/webzrpromosi/index.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/webzrpromosi/adminpunyazr1.html"
+    },
+    {
+      "source": "/adminpunyazr1",
+      "destination": "/webzrpromosi/adminpunyazr1.html"
+    },
+    {
+      "source": "/foto2/:path*",
+      "destination": "/webzrpromosi/foto2/:path*"
+    }
+  ],
+  "cleanUrls": true
+}
