@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/admin",
-      "destination": "/webzrpromosi/adminpunyazr1.html"
+      "destination": "/adminpunyazr1.html"
     },
     {
       "source": "/adminpunyazr1",
-      "destination": "/webzrpromosi/adminpunyazr1.html"
+      "destination": "/adminpunyazr1.html"
     }
   ],
   "cleanUrls": true
