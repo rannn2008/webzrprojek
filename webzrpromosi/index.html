@@ -1640,7 +1640,9 @@
             // Selalu cek memori lokal dulu karena editan Anda ada di sana
             try {
                 const savedMenus = JSON.parse(localStorage.getItem(menuStorageKey));
-                if (Array.isArray(savedMenus) && savedMenus.length > 0) {
+                // PERBAIKAN: Jika editan lokal hanya ada 1 atau 2 (mungkin error), 
+                // tampilkan 6 menu asli agar web tidak kosong.
+                if (Array.isArray(savedMenus) && savedMenus.length >= 3) {
                     console.log("Menggunakan data editan Anda dari Memori Lokal");
                     return savedMenus;
                 }
@@ -1656,7 +1658,7 @@
                         .order("sort_order", { ascending: true })
                         .order("created_at", { ascending: true });
 
-                    if (!error && Array.isArray(data) && data.length) {
+                    if (!error && Array.isArray(data) && data.length >= 3) {
                         return data.map(normalizeMenu);
                     }
                 } catch (e) {
@@ -1664,6 +1666,8 @@
                 }
             }
 
+            // Jika semua gagal atau data terlalu sedikit, pakai 6 menu asli
+            console.log("Menampilkan 6 menu favorit standar");
             return defaultMenus;
         }
 
