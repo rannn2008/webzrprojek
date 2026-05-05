@@ -1755,20 +1755,28 @@
 
         async function getMenus() {
             if (supabaseClient) {
-                const { data, error } = await supabaseClient
-                    .from("menus")
-                    .select("*")
-                    .order("sort_order", { ascending: true })
-                    .order("created_at", { ascending: true });
+                try {
+                    const { data, error } = await supabaseClient
+                        .from("menus")
+                        .select("*")
+                        .order("sort_order", { ascending: true })
+                        .order("created_at", { ascending: true });
 
-                if (!error && Array.isArray(data) && data.length) {
-                    return data.map(normalizeMenu);
+                    if (!error && Array.isArray(data) && data.length) {
+                        return data.map(normalizeMenu);
+                    }
+                } catch (e) {
+                    console.log("Supabase fetch failed, falling back...");
                 }
             }
 
             try {
                 const savedMenus = JSON.parse(localStorage.getItem(menuStorageKey));
-                return Array.isArray(savedMenus) && savedMenus.length ? savedMenus : defaultMenus;
+                // Jika data lokal cuma 1 atau kosong, pakai default agar web tidak terlihat sepi
+                if (Array.isArray(savedMenus) && savedMenus.length > 1) {
+                    return savedMenus;
+                }
+                return defaultMenus;
             } catch (error) {
                 return defaultMenus;
             }
