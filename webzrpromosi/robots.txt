@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://estellerzrpadang.vercel.app/sitemap.xml
