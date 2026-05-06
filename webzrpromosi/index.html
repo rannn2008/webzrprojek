@@ -1722,43 +1722,7 @@
             ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
             : null;
 
-        // Smooth/inertia scrolling (desktop + mobile). Auto-off on reduced motion.
-        const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        let lenis = null;
-        if (!prefersReducedMotion) {
-            try {
-                const mod = await import("https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/+esm");
-                const Lenis = mod.default;
-                const isTouchDevice = ("ontouchstart" in window) || (navigator.maxTouchPoints || 0) > 0;
-                lenis = new Lenis({
-                    // Lebih responsif (tidak berat/ketahan), tapi tetap licin.
-                    duration: 0.75,
-                    easing: (t) => 1 - Math.pow(1 - t, 3),
-                    smoothWheel: true,
-                    // Touch biasanya sudah nyaman secara native; smoothing touch sering terasa berat.
-                    smoothTouch: !isTouchDevice,
-                    touchMultiplier: 1.0
-                });
-
-                const raf = (time) => {
-                    lenis.raf(time);
-                    requestAnimationFrame(raf);
-                };
-                requestAnimationFrame(raf);
-            } catch (e) {
-                lenis = null;
-            }
-        }
-
-        function scrollToTarget(target, options = {}) {
-            if (!target) return;
-            if (lenis) {
-                lenis.scrollTo(target, { offset: -8, duration: 0.8, ...options });
-                return;
-            }
-            const el = typeof target === "string" ? document.querySelector(target) : target;
-            el?.scrollIntoView?.({ behavior: "smooth", block: "start" });
-        }
+        // Catatan: scroll native dibiarkan default agar ringan & mudah.
 
         function escapeHtml(value) {
             return String(value)
@@ -1968,25 +1932,13 @@
 
         await renderMenuCatalog();
 
-        // Smooth scroll for all in-page anchor links.
-        document.querySelectorAll('a[href^="#"]').forEach((a) => {
-            a.addEventListener("click", (e) => {
-                const href = a.getAttribute("href");
-                if (!href || href === "#") return;
-                const target = document.querySelector(href);
-                if (!target) return;
-                e.preventDefault();
-                scrollToTarget(target);
-            });
-        });
-
         // Gunakan Event Delegation agar tombol tetap berfungsi setelah render ulang
         document.getElementById("menuGrid").addEventListener("click", (event) => {
             const button = event.target.closest(".choose-menu");
             if (button) {
                 menuSelect.value = button.dataset.menu;
                 addSelectedMenu();
-                scrollToTarget("#pesan", { lock: true });
+                document.getElementById("pesan").scrollIntoView({ behavior: "smooth", block: "start" });
                 setTimeout(() => mainOrderForm.elements.nama.focus(), 450);
             }
         });
@@ -2007,11 +1959,6 @@
         metodeSelect.addEventListener("change", toggleDeliveryAddress);
         toggleDeliveryAddress();
         renderCart();
-
-        const cartBadge = document.getElementById("cartBadge");
-        if (cartBadge) {
-            cartBadge.addEventListener("click", () => scrollToTarget("#pesan", { lock: true }));
-        }
 
         mainOrderForm.addEventListener("submit", (event) => {
             event.preventDefault();
