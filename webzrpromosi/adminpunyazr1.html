@@ -583,10 +583,18 @@
                 </div>
             </aside>
 
-            <section class="panel">
-                <h2>Daftar Menu</h2>
-                <div class="menu-list" id="menuList"></div>
-            </section>
+            <div style="display: flex; flex-direction: column; gap: 28px;">
+                <section class="panel">
+                    <h2>Daftar Menu</h2>
+                    <div class="menu-list" id="menuList"></div>
+                </section>
+
+                <section class="panel hidden" id="reviewPanel">
+                    <h2>Kelola Testimoni</h2>
+                    <div class="note" style="margin-bottom: 12px;">Sistem akan otomatis memilih 3 ulasan bintang 5 terbaik untuk dipajang di halaman depan. Anda bisa menghapus ulasan yang spam atau tidak pantas.</div>
+                    <div class="menu-list" id="reviewList">Memuat testimoni...</div>
+                </section>
+            </div>
         </section>
     </main>
 
@@ -1023,6 +1031,8 @@
                 loginOverlay.classList.toggle("hidden", isLocalLoggedIn);
                 logoutButton.classList.toggle("hidden", !isLocalLoggedIn);
                 menuForm.closest(".panel").classList.toggle("hidden", !isLocalLoggedIn);
+                const reviewPanel = document.getElementById("reviewPanel");
+                if (reviewPanel) reviewPanel.classList.toggle("hidden", !isLocalLoggedIn);
                 adminStatus.textContent = isLocalLoggedIn
                     ? "Mode lokal aktif. Admin sudah login (Sesi Sementara)."
                     : "Mode lokal aktif. Silakan login (Email: zahranalsyafitdei@gmail.com, Pass: z4hr4aiwa).";
@@ -1036,6 +1046,9 @@
             loginOverlay.classList.toggle("hidden", isLoggedIn);
             logoutButton.classList.toggle("hidden", !isLoggedIn);
             menuForm.closest(".panel").classList.toggle("hidden", !isLoggedIn);
+            const reviewPanel = document.getElementById("reviewPanel");
+            if (reviewPanel) reviewPanel.classList.toggle("hidden", !isLoggedIn);
+            await renderReviews();
             adminStatus.textContent = isLoggedIn
                 ? "Supabase aktif. Admin sudah login, perubahan tersimpan online."
                 : "Supabase aktif. Login dulu untuk mengubah menu online.";
@@ -1096,6 +1109,54 @@
             }
             await refreshAuthState();
         });
+
+        async function renderReviews() {
+            const reviewList = document.getElementById("reviewList");
+            if (!reviewList) return;
+
+            if (!supabaseClient) {
+                reviewList.innerHTML = '<div class="note" style="background:#ffe1d4;color:#a73717;">Supabase belum terhubung. Kelola testimoni membutuhkan koneksi cloud.</div>';
+                return;
+            }
+
+            const { data, error } = await supabaseClient
+                .from("reviews")
+                .select("*")
+                .order("created_at", { ascending: false });
+
+            if (error || !data || data.length === 0) {
+                reviewList.innerHTML = "<p>Belum ada ulasan yang masuk dari pelanggan.</p>";
+                return;
+            }
+
+            // Fallback escape html jika fungsi global tidak terjangkau
+            const escHtml = (val) => String(val).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            reviewList.innerHTML = data.map(review => `
+                <div class="menu-item" style="grid-template-columns: minmax(0, 1fr) auto;">
+                    <div>
+                        <h3 style="margin-bottom:4px; font-size:16px;">${escHtml(review.name)} <span style="color:#ffd447; font-size:14px; margin-left:8px;">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span></h3>
+                        <p style="margin: 0 0 8px; font-size: 14px; color: var(--ink);">"${escHtml(review.comment)}"</p>
+                        <span class="pill" style="font-size:11px; background: rgba(20, 122, 63, 0.1);">${new Date(review.created_at).toLocaleDateString('id-ID')}</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-danger" type="button" onclick="deleteReview('${review.id}')" style="min-height: 32px; padding: 6px 12px; font-size: 13px;">Hapus</button>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        window.deleteReview = async function(id) {
+            if (!confirm("Hapus ulasan ini secara permanen?")) return;
+            if (!supabaseClient) return;
+
+            const { error } = await supabaseClient.from("reviews").delete().eq("id", id);
+            if (error) {
+                alert("Gagal menghapus ulasan: " + error.message);
+            } else {
+                await renderReviews();
+            }
+        };
 
         await refreshAuthState();
     </script>

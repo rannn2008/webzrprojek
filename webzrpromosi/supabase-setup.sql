@@ -52,3 +52,37 @@ values
 ('Es Teller Campur', 15000, 'Campuran buah pilihan dengan rasa manis segar yang cocok untuk semua orang.', 'https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=800&q=85', '4.7', array['Buah campur', 'Tersedia'], 'Tersedia', 5),
 ('Paket Keluarga', 55000, 'Paket ramai-ramai untuk keluarga, teman kantor, atau kumpul santai.', 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=85', '4.9', array['Untuk ramai', 'Tersedia'], 'Tersedia', 6)
 on conflict do nothing;
+
+-- ==========================================
+-- TABEL REVIEWS (ULASAN PELANGGAN)
+-- ==========================================
+create table if not exists public.reviews (
+    id uuid primary key default gen_random_uuid(),
+    name text not null,
+    rating integer not null check (rating >= 1 and rating <= 5),
+    comment text not null,
+    created_at timestamptz not null default now()
+);
+
+alter table public.reviews enable row level security;
+
+drop policy if exists "Public can insert reviews" on public.reviews;
+create policy "Public can insert reviews"
+on public.reviews
+for insert
+to anon, authenticated
+with check (true);
+
+drop policy if exists "Public can read reviews" on public.reviews;
+create policy "Public can read reviews"
+on public.reviews
+for select
+to anon, authenticated
+using (true);
+
+drop policy if exists "Authenticated admins can delete reviews" on public.reviews;
+create policy "Authenticated admins can delete reviews"
+on public.reviews
+for delete
+to authenticated
+using (true);
