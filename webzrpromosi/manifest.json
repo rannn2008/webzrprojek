@@ -1,0 +1,20 @@
+{
+  "name": "Pondok Es Teller ZR",
+  "short_name": "Es Teller ZR",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff8df",
+  "theme_color": "#147a3f",
+  "icons": [
+    {
+      "src": "foto2/logo_zr.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "foto2/logo_zr.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
