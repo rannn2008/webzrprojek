@@ -4,33 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0ZD1WLP8SR"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-0ZD1WLP8SR');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-0ZD1WLP8SR');
     </script>
     <title>Pondok Es Teller ZR | Segar, Creamy, Bikin Nagih</title>
     <meta name="description"
         content="Nikmati Es Teller paling segar dan creamy di Kota Padang! Dengan alpukat melimpah, buah pilihan, dan gula asli. Pesan mudah via WhatsApp sekarang.">
     <link rel="icon" type="image/png" href="foto2/logo_v3.png">
     <link rel="apple-touch-icon" href="foto2/logo_v3.png">
-    
+
     <!-- Site Identity for Google -->
     <meta name="application-name" content="Pondok Es Teller ZR">
     <meta name="apple-mobile-web-app-title" content="Pondok Es Teller ZR">
     <meta property="og:site_name" content="Pondok Es Teller ZR">
     <link rel="preconnect" href="https://images.unsplash.com">
     <link rel="preconnect" href="https://images.pexels.com">
-    
+
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://estellerzrpadang.vercel.app/">
     <meta property="og:title" content="Pondok Es Teller ZR | Segar, Creamy, Bikin Nagih">
-    <meta property="og:description" content="Es teller segar Kota Padang dengan buah pilihan, gula asli, dan alpukat melimpah. Pesan sekarang!">
+    <meta property="og:description"
+        content="Es teller segar Kota Padang dengan buah pilihan, gula asli, dan alpukat melimpah. Pesan sekarang!">
     <meta property="og:image" content="https://estellerzrpadang.vercel.app/foto2/herobackground.jpg">
 
     <!-- Schema.org JSON-LD (SEO) -->
@@ -167,7 +168,7 @@
             height: 48px;
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
         }
 
         .nav-links {
@@ -244,8 +245,13 @@
         }
 
         @keyframes kenBurns {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.12); }
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.12);
+            }
         }
 
         .hero::after {
@@ -335,8 +341,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .fresh-card strong {
@@ -923,12 +936,12 @@
             width: min(340px, 100vw - 36px);
             background: white;
             border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
             z-index: 31;
             overflow: hidden;
             display: none;
             flex-direction: column;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .ai-header {
@@ -992,12 +1005,15 @@
             color: var(--green);
         }
 
-        .show-ai { display: flex; }
+        .show-ai {
+            display: flex;
+        }
 
         .cart-badge {
             position: fixed;
             right: 18px;
-            bottom: 154px; /* Di atas tombol AI */
+            bottom: 154px;
+            /* Di atas tombol AI */
             z-index: 30;
             width: 56px;
             height: 56px;
@@ -1011,7 +1027,9 @@
             transition: all 0.3s ease;
         }
 
-        .cart-badge:hover { transform: scale(1.1); }
+        .cart-badge:hover {
+            transform: scale(1.1);
+        }
 
         .cart-count {
             position: absolute;
@@ -1080,71 +1098,6 @@
             }
         }
 
-        /* Loading Screen */
-        .loader-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--green-dark);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s;
-        }
-
-        .loader-wrapper.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-logo {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 20px;
-            animation: pulse-rotate 2s infinite ease-in-out;
-        }
-
-        @keyframes pulse-rotate {
-            0% { transform: scale(0.9) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(180deg); }
-            100% { transform: scale(0.9) rotate(360deg); }
-        }
-
-        .loader-text {
-            color: var(--yellow);
-            font-weight: 600;
-            letter-spacing: 2px;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            transition: all 0.3s ease;
-            color: var(--white);
-        }
-
-        .social-icon:hover {
-            background: var(--yellow);
-            color: var(--green-dark);
-            transform: translateY(-3px);
-        }
-
         @media (max-width: 640px) {
             .container {
                 width: min(100% - 22px, 1120px);
@@ -1199,11 +1152,6 @@
 </head>
 
 <body>
-    <!-- Loading Screen -->
-    <div class="loader-wrapper" id="loader">
-        <img src="foto2/logo_v3.png" alt="Logo ZR" class="loader-logo">
-        <div class="loader-text">Menyiapkan Kesegaran...</div>
-    </div>
     <header class="topbar">
         <nav class="container nav" aria-label="Navigasi utama">
             <a class="brand" href="#beranda">
@@ -1260,7 +1208,124 @@
                 </div>
 
                 <div class="menu-grid" id="menuGrid">
-                    <!-- Dinamis: Hasil editan Anda di Admin akan muncul di sini -->
+                    <article class="menu-card">
+                        <img class="menu-photo" src="foto2/estelleroriginal.jpg"
+                            alt="Es Teller Original Pondok Es Teller ZR">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Original</h3>
+                                <span class="price">Rp10.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.8</span>
+                                <span class="menu-pill">Best seller</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Racikan klasik berisi buah segar, kuah manis, dan sensasi dingin yang pas.</p>
+                            <button class="btn btn-green choose-menu" type="button"
+                                data-menu="Es Teller Original">Tambah ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=85"
+                            alt="Es teller alpukat spesial">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Alpukat Spesial</h3>
+                                <span class="price">Rp16.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.9</span>
+                                <span class="menu-pill">Alpukat favorit</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Menu unggulan dengan alpukat lebih banyak, creamy, dan bikin puas.</p>
+                            <button class="btn btn-green choose-menu" type="button"
+                                data-menu="Es Teller Alpukat Spesial">Tambah ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=85"
+                            alt="Es teller durian">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Durian</h3>
+                                <span class="price">Rp18.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.7</span>
+                                <span class="menu-pill">Aroma durian</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Tambahan aroma durian untuk rasa yang lebih tebal dan nikmat.</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="Es Teller Durian">Tambah
+                                ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=85"
+                            alt="Es teller jumbo">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Jumbo</h3>
+                                <span class="price">Rp20.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.8</span>
+                                <span class="menu-pill">Porsi besar</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Porsi lebih besar untuk yang lagi haus berat dan butuh segar maksimal.</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="Es Teller Jumbo">Tambah
+                                ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=800&q=85"
+                            alt="Es teller campur">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Es Teller Campur</h3>
+                                <span class="price">Rp15.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.7</span>
+                                <span class="menu-pill">Buah campur</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Campuran buah pilihan dengan rasa manis segar yang cocok untuk semua orang.</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="Es Teller Campur">Tambah
+                                ke Pesanan</button>
+                        </div>
+                    </article>
+
+                    <article class="menu-card">
+                        <img class="menu-photo"
+                            src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=85"
+                            alt="Paket es teller keluarga">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>Paket Keluarga</h3>
+                                <span class="price">Rp55.000</span>
+                            </div>
+                            <div class="menu-meta">
+                                <span class="menu-pill">Rating 4.9</span>
+                                <span class="menu-pill">Untuk ramai</span>
+                                <span class="menu-pill">Tersedia</span>
+                            </div>
+                            <p>Paket ramai-ramai untuk keluarga, teman kantor, atau kumpul santai.</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="Paket Keluarga">Tambah ke
+                                Pesanan</button>
+                        </div>
+                    </article>
                 </div>
                 <div class="price-note">Catatan: harga menu masih bisa disesuaikan dan dapat berubah sewaktu-waktu
                     sesuai stok bahan.</div>
@@ -1368,11 +1433,10 @@
                             href="https://www.google.com/maps/place/Pondok+Es+Teler+ZR+(Es+Teler+Kota+Padang)/data=!4m2!3m1!1s0x0:0x33d947a3e084bd9?sa=X&ved=1t:2428&ictx=111">Buka
                             Google Maps</a>
                     </div>
-                    <div class="map-frame" aria-label="Peta lokasi Pondok Es Teller ZR" style="border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 4px solid var(--white);">
+                    <div class="map-frame" aria-label="Peta lokasi Pondok Es Teller ZR">
                         <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.3101!2d100.3831!3d-0.9324!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2fd4b9a3e084bd9%3A0x33d947a3e084bd9!2sPondok%20Es%20Teler%20ZR!5e0!3m2!1sid!2sid!4v1714830000000!5m2!1sid!2sid"
-                            style="border:0; width:100%; height:100%; min-height: 350px;"
-                            allowfullscreen="" title="Peta Pondok Es Teller ZR"></iframe>
+                            src="https://www.google.com/maps?q=Pondok%20Es%20Teler%20ZR%20Kota%20Padang&output=embed"
+                            title="Peta Pondok Es Teller ZR"></iframe>
                     </div>
                 </div>
             </div>
@@ -1470,29 +1534,22 @@
 
     <footer class="footer">
         <div class="container footer-inner">
-            <div class="footer-brand-info">
-                <strong>Pondok Es Teller ZR</strong> - Kota Padang
-                <p style="font-size: 14px; opacity: 0.8; margin-top: 5px;">Rajanya Es Teller di Kota Padang.</p>
-            </div>
-            <div class="footer-hours">
-                <div>Buka Setiap Hari</div>
-                <div style="color: var(--yellow); font-weight: 600;">10.00 - 22.00</div>
-            </div>
-            <div class="footer-links">
-                <div class="footer-social">
-                    <a href="https://www.instagram.com/esteller_zr" target="_blank" rel="noopener" class="social-icon" aria-label="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-                    </a>
-                    <a href="https://wa.me/6281374110444" target="_blank" rel="noopener" class="social-icon" aria-label="WhatsApp">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    </a>
-                </div>
-            </div>
+            <div><strong>Pondok Es Teller ZR</strong> - Kota Padang</div>
+            <div>Buka 10.00 - 22.00</div>
+            <a href="https://wa.me/6281374110444" target="_blank" rel="noopener">WhatsApp Utama</a>
         </div>
     </footer>
 
     <div class="ai-assist-btn" id="aiBtn" aria-label="Tanya ZR Assistant">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 8V4H8" />
+            <rect width="16" height="12" x="4" y="8" rx="2" />
+            <path d="M2 14h2" />
+            <path d="M20 14h2" />
+            <path d="M15 13v2" />
+            <path d="M9 13v2" />
+        </svg>
     </div>
 
     <div class="ai-window" id="aiWindow">
@@ -1507,26 +1564,27 @@
         </div>
     </div>
 
-    <div class="cart-badge" id="cartBadge" onclick="document.getElementById('pesan').scrollIntoView({behavior:'smooth'})">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+    <div class="cart-badge" id="cartBadge"
+        onclick="document.getElementById('pesan').scrollIntoView({behavior:'smooth'})">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="21" r="1" />
+            <circle cx="19" cy="21" r="1" />
+            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+        </svg>
         <span class="cart-count" id="badgeCount">0</span>
     </div>
 
     <a class="floating-wa" href="https://wa.me/6281374110444" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.06 3.973L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+            <path
+                d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.06 3.973L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
         </svg>
     </a>
 
+    <script src="supabase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module">
-        // Loading Screen Handler
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            setTimeout(() => {
-                loader.classList.add('hidden');
-            }, 800); // Memberikan jeda sedikit agar animasi logo terlihat
-        });
-
         const whatsappMain = "6281374110444";
         const whatsappSecond = "6281363489111";
         const menuStorageKey = "pondokEsTellerZrMenus";
@@ -1637,37 +1695,29 @@
         let currentMenus = []; // Simpan data menu global untuk AI
 
         async function getMenus() {
-            // Selalu cek memori lokal dulu karena editan Anda ada di sana
+            if (supabaseClient) {
+                const { data, error } = await supabaseClient
+                    .from("menus")
+                    .select("*")
+                    .order("sort_order", { ascending: true })
+                    .order("created_at", { ascending: true });
+
+                if (!error && Array.isArray(data) && data.length) {
+                    const cloudMenus = data.map(normalizeMenu);
+                    // Simpan ke local sebagai cadangan jika nanti offline
+                    localStorage.setItem(menuStorageKey, JSON.stringify(cloudMenus));
+                    return cloudMenus;
+                }
+            }
+
             try {
                 const savedMenus = JSON.parse(localStorage.getItem(menuStorageKey));
-                // PERBAIKAN: Jika editan lokal hanya ada 1 atau 2 (mungkin error), 
-                // tampilkan 6 menu asli agar web tidak kosong.
                 if (Array.isArray(savedMenus) && savedMenus.length >= 3) {
-                    console.log("Menggunakan data editan Anda dari Memori Lokal");
                     return savedMenus;
                 }
             } catch (error) {
-                console.log("Gagal membaca memori lokal");
             }
 
-            if (supabaseClient) {
-                try {
-                    const { data, error } = await supabaseClient
-                        .from("menus")
-                        .select("*")
-                        .order("sort_order", { ascending: true })
-                        .order("created_at", { ascending: true });
-
-                    if (!error && Array.isArray(data) && data.length >= 3) {
-                        return data.map(normalizeMenu);
-                    }
-                } catch (e) {
-                    console.log("Supabase fetch failed");
-                }
-            }
-
-            // Jika semua gagal atau data terlalu sedikit, pakai 6 menu asli
-            console.log("Menampilkan 6 menu favorit standar");
             return defaultMenus;
         }
 
@@ -1812,8 +1862,7 @@
 
         await renderMenuCatalog();
 
-        // Event Delegation untuk tombol "Tambah ke Pesanan"
-        // Agar tetap jalan meskipun menu baru saja diedit/dirender ulang
+        // Gunakan Event Delegation agar tombol tetap berfungsi setelah render ulang
         document.getElementById("menuGrid").addEventListener("click", (event) => {
             const button = event.target.closest(".choose-menu");
             if (button) {
@@ -1891,7 +1940,7 @@
         function updateAiOptions() {
             const aiOptions = document.getElementById("aiOptions");
             const favorites = currentMenus.filter(m => m.status !== 'Habis').slice(0, 2).map(m => m.name).join(" dan ");
-            
+
             aiOptions.innerHTML = `
                 <button class="ai-opt" data-ans="Buka setiap hari jam 10.00 - 22.00 WIB. Mampir ya!">Jam Buka?</button>
                 <button class="ai-opt" data-ans="Menu favorit saat ini adalah ${favorites || 'Es Teller Original'}. Mau coba yang mana?">Menu Favorit?</button>
@@ -1911,6 +1960,12 @@
                 }
             }
         } catch (e) { console.error("Gagal memuat keranjang lama", e); }
+
+        // Sembunyikan loader setelah halaman siap
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => loader.classList.add('hidden'), 800);
+        });
     </script>
 </body>
 
