@@ -1627,8 +1627,7 @@
         </div>
     </div>
 
-    <div class="cart-badge" id="cartBadge"
-        onclick="document.getElementById('pesan').scrollIntoView({behavior:'smooth'})">
+    <div class="cart-badge" id="cartBadge">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="8" cy="21" r="1" />
@@ -1732,6 +1731,41 @@
         const supabaseClient = hasSupabaseConfig
             ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
             : null;
+
+        // Smooth/inertia scrolling (desktop + mobile). Auto-off on reduced motion.
+        const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        let lenis = null;
+        if (!prefersReducedMotion) {
+            try {
+                const mod = await import("https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/+esm");
+                const Lenis = mod.default;
+                lenis = new Lenis({
+                    duration: 1.15,
+                    easing: (t) => 1 - Math.pow(1 - t, 3),
+                    smoothWheel: true,
+                    smoothTouch: true,
+                    touchMultiplier: 1.4
+                });
+
+                const raf = (time) => {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                };
+                requestAnimationFrame(raf);
+            } catch (e) {
+                lenis = null;
+            }
+        }
+
+        function scrollToTarget(target, options = {}) {
+            if (!target) return;
+            if (lenis) {
+                lenis.scrollTo(target, { offset: -8, duration: 1.1, ...options });
+                return;
+            }
+            const el = typeof target === "string" ? document.querySelector(target) : target;
+            el?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+        }
 
         function escapeHtml(value) {
             return String(value)
@@ -1941,13 +1975,25 @@
 
         await renderMenuCatalog();
 
+        // Smooth scroll for all in-page anchor links.
+        document.querySelectorAll('a[href^="#"]').forEach((a) => {
+            a.addEventListener("click", (e) => {
+                const href = a.getAttribute("href");
+                if (!href || href === "#") return;
+                const target = document.querySelector(href);
+                if (!target) return;
+                e.preventDefault();
+                scrollToTarget(target);
+            });
+        });
+
         // Gunakan Event Delegation agar tombol tetap berfungsi setelah render ulang
         document.getElementById("menuGrid").addEventListener("click", (event) => {
             const button = event.target.closest(".choose-menu");
             if (button) {
                 menuSelect.value = button.dataset.menu;
                 addSelectedMenu();
-                document.getElementById("pesan").scrollIntoView({ behavior: "smooth", block: "start" });
+                scrollToTarget("#pesan", { lock: true });
                 setTimeout(() => mainOrderForm.elements.nama.focus(), 450);
             }
         });
@@ -1968,6 +2014,11 @@
         metodeSelect.addEventListener("change", toggleDeliveryAddress);
         toggleDeliveryAddress();
         renderCart();
+
+        const cartBadge = document.getElementById("cartBadge");
+        if (cartBadge) {
+            cartBadge.addEventListener("click", () => scrollToTarget("#pesan", { lock: true }));
+        }
 
         mainOrderForm.addEventListener("submit", (event) => {
             event.preventDefault();
