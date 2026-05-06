@@ -1148,6 +1148,31 @@
                 gap: 12px;
             }
         }
+
+        /* --- 1. Animasi Scroll (Scroll Reveal) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.9s cubic-bezier(0.25, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- 4. Efek Shimmer (Skeleton Loading) --- */
+        .skeleton {
+            background: #e2e8e4;
+            background: linear-gradient(110deg, #ecefec 8%, #fbfcfb 18%, #ecefec 33%);
+            background-size: 200% 100%;
+            animation: 1.5s shimmer linear infinite;
+            border-radius: 6px;
+        }
+
+        @keyframes shimmer {
+            to { background-position: -200% 0; }
+        }
     </style>
 </head>
 
@@ -1750,10 +1775,26 @@
         }
 
         async function renderMenuCatalog() {
+            const menuGrid = document.getElementById("menuGrid");
+            if (menuGrid) {
+                // Tampilkan Skeleton Loading sebelum mengambil data
+                menuGrid.innerHTML = Array(6).fill(`
+                    <article class="menu-card" style="box-shadow: none; border: 1px solid var(--line);">
+                        <div class="skeleton" style="width: 100%; aspect-ratio: 1/1; border-radius: 16px 16px 0 0;"></div>
+                        <div class="menu-body">
+                            <div class="skeleton" style="height: 24px; width: 70%; margin-bottom: 8px;"></div>
+                            <div class="skeleton" style="height: 16px; width: 40%; margin-bottom: 16px;"></div>
+                            <div class="skeleton" style="height: 12px; width: 100%; margin-bottom: 6px;"></div>
+                            <div class="skeleton" style="height: 12px; width: 80%; margin-bottom: 24px;"></div>
+                            <div class="skeleton" style="height: 44px; width: 100%; border-radius: 8px;"></div>
+                        </div>
+                    </article>
+                `).join("");
+            }
+
             const menus = await getMenus();
             currentMenus = menus; // Update data global
             updateAiOptions(); // Update opsi AI
-            const menuGrid = document.getElementById("menuGrid");
 
             menuGrid.innerHTML = menus.map((menu) => {
                 const isAvailable = menu.status !== "Habis";
@@ -2002,6 +2043,16 @@
             const testimonialGrid = document.getElementById("testimonialGrid");
             if (!supabaseClient || !testimonialGrid) return;
 
+            // Skeleton Loading untuk Testimoni
+            testimonialGrid.innerHTML = Array(3).fill(`
+                <article class="testimonial-card">
+                    <div class="skeleton" style="height: 20px; width: 80px; margin-bottom: 12px;"></div>
+                    <div class="skeleton" style="height: 16px; width: 100%; margin-bottom: 8px;"></div>
+                    <div class="skeleton" style="height: 16px; width: 90%; margin-bottom: 16px;"></div>
+                    <div class="skeleton" style="height: 14px; width: 50%;"></div>
+                </article>
+            `).join("");
+
             try {
                 const { data, error } = await supabaseClient
                     .from("reviews")
@@ -2088,6 +2139,44 @@
             // Panggil saat pertama kali dimuat
             fetchAndRenderTestimonials();
         }
+
+        // ==========================================
+        // SCROLL REVEAL ANIMATION
+        // ==========================================
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                rootMargin: "0px 0px -50px 0px",
+                threshold: 0.1
+            });
+            
+            reveals.forEach(reveal => revealObserver.observe(reveal));
+            
+            // Auto-tambahkan class .reveal ke section utama jika belum ada
+            document.querySelectorAll('.section-head, .feature-grid, .testimonial-grid, .location-wrap, .order-box, .wide-form, .review-form-wrapper, #menuGrid').forEach(el => {
+                el.classList.add('reveal');
+                revealObserver.observe(el);
+            });
+            
+            // Trigger langsung untuk elemen yang ada di viewport saat awal loading
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if(rect.top < window.innerHeight) {
+                        el.classList.add('active');
+                    }
+                });
+            }, 100);
+        }
+        
+        window.addEventListener('DOMContentLoaded', initScrollReveal);
     </script>
 </body>
 
