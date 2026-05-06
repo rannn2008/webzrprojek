@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://estellerzrpadang.vercel.app/sitemap.xml
+Sitemap: https://estellerzrpadang.vercel.app/sitemap.txt
