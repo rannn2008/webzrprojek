@@ -2198,36 +2198,39 @@
         // SCROLL REVEAL ANIMATION
         // ==========================================
         function initScrollReveal() {
-            const reveals = document.querySelectorAll('.reveal');
-            
-            const revealObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, {
-                rootMargin: "0px 0px -50px 0px",
-                threshold: 0.1
-            });
-            
-            reveals.forEach(reveal => revealObserver.observe(reveal));
-            
-            // Auto-tambahkan class .reveal ke section utama jika belum ada
-            document.querySelectorAll('.section-head, .feature-grid, .testimonial-grid, .location-wrap, .order-box, .wide-form, .review-form-wrapper, #menuGrid').forEach(el => {
-                el.classList.add('reveal');
-                revealObserver.observe(el);
-            });
-            
-            // Trigger langsung untuk elemen yang ada di viewport saat awal loading
-            setTimeout(() => {
-                document.querySelectorAll('.reveal').forEach(el => {
-                    const rect = el.getBoundingClientRect();
-                    if(rect.top < window.innerHeight) {
-                        el.classList.add('active');
-                    }
-                });
-            }, 100);
+            // Targetkan elemen-elemen yang user lihat (gambar/menu, tulisan, testimoni) biar terasa “hidup”.
+            const autoTargets = [
+                ".hero-copy > *",
+                ".fresh-card",
+                "#menuGrid .menu-card",
+                ".feature-grid .feature",
+                "#testimonialGrid .testimonial-card",
+                ".section-head > *",
+                ".location-wrap > *",
+                ".order-box > *",
+                ".wide-form",
+                ".review-form-wrapper"
+            ];
+
+            document.querySelectorAll(autoTargets.join(",")).forEach((el) => el.classList.add("reveal"));
+
+            const reveals = document.querySelectorAll(".reveal");
+
+            const revealObserver = new IntersectionObserver(
+                (entries, observer) => {
+                    entries.forEach((entry) => {
+                        if (!entry.isIntersecting) return;
+                        entry.target.classList.add("active");
+                        observer.unobserve(entry.target);
+                    });
+                },
+                {
+                    rootMargin: "0px 0px -50px 0px",
+                    threshold: 0.1
+                }
+            );
+
+            reveals.forEach((reveal) => revealObserver.observe(reveal));
         }
         
         window.addEventListener('DOMContentLoaded', initScrollReveal);
