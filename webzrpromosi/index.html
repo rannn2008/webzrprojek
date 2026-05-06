@@ -1154,11 +1154,21 @@
             opacity: 0;
             transform: translateY(40px);
             transition: all 0.9s cubic-bezier(0.25, 1, 0.3, 1);
+            transition-delay: var(--reveal-delay, 0ms);
+            will-change: opacity, transform;
         }
 
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                transition: none;
+                transform: none;
+                opacity: 1;
+            }
         }
 
         /* --- 4. Efek Shimmer (Skeleton Loading) --- */
@@ -1780,7 +1790,7 @@
                 // Tampilkan Skeleton Loading sebelum mengambil data
                 menuGrid.innerHTML = Array(6).fill(`
                     <article class="menu-card" style="box-shadow: none; border: 1px solid var(--line);">
-                        <div class="skeleton" style="width: 100%; aspect-ratio: 1/1; border-radius: 16px 16px 0 0;"></div>
+                        <div class="skeleton" style="width: 100%; aspect-ratio: 4/3; border-radius: 8px 8px 0 0;"></div>
                         <div class="menu-body">
                             <div class="skeleton" style="height: 24px; width: 70%; margin-bottom: 8px;"></div>
                             <div class="skeleton" style="height: 16px; width: 40%; margin-bottom: 16px;"></div>
@@ -2144,36 +2154,62 @@
         // SCROLL REVEAL ANIMATION
         // ==========================================
         function initScrollReveal() {
-            const reveals = document.querySelectorAll('.reveal');
-            
-            const revealObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
+            if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                return;
+            }
+
+            const targets = [
+                ".hero-copy > *",
+                ".fresh-card",
+                ".section-head > *",
+                ".menu-card",
+                ".feature",
+                ".testimonial-card",
+                ".review-form-wrapper",
+                ".location-info",
+                ".map-frame",
+                ".order-copy > *",
+                ".wide-form"
+            ];
+
+            const elements = Array.from(document.querySelectorAll(targets.join(",")));
+            elements.forEach((el) => el.classList.add("reveal"));
+
+            if (!("IntersectionObserver" in window)) {
+                elements.forEach((el) => el.classList.add("active"));
+                return;
+            }
+
+            const revealObserver = new IntersectionObserver(
+                (entries, observer) => {
+                    entries.forEach((entry) => {
+                        if (!entry.isIntersecting) return;
+                        entry.target.classList.add("active");
+                        observer.unobserve(entry.target);
+                    });
+                },
+                {
+                    rootMargin: "0px 0px -10% 0px",
+                    threshold: 0.12
+                }
+            );
+
+            const applyStagger = (containerSelector, itemSelector, stepMs = 70, maxMs = 420) => {
+                document.querySelectorAll(containerSelector).forEach((container) => {
+                    const kids = Array.from(container.querySelectorAll(itemSelector));
+                    kids.forEach((kid, i) => {
+                        kid.style.setProperty("--reveal-delay", `${Math.min(i * stepMs, maxMs)}ms`);
+                    });
                 });
-            }, {
-                rootMargin: "0px 0px -50px 0px",
-                threshold: 0.1
-            });
-            
-            reveals.forEach(reveal => revealObserver.observe(reveal));
-            
-            // Auto-tambahkan class .reveal ke section utama jika belum ada
-            document.querySelectorAll('.section-head, .feature-grid, .testimonial-grid, .location-wrap, .order-box, .wide-form, .review-form-wrapper, #menuGrid').forEach(el => {
-                el.classList.add('reveal');
-                revealObserver.observe(el);
-            });
-            
-            // Trigger langsung untuk elemen yang ada di viewport saat awal loading
-            setTimeout(() => {
-                document.querySelectorAll('.reveal').forEach(el => {
-                    const rect = el.getBoundingClientRect();
-                    if(rect.top < window.innerHeight) {
-                        el.classList.add('active');
-                    }
-                });
-            }, 100);
+            };
+
+            applyStagger(".hero-copy", ":scope > *", 80, 480);
+            applyStagger(".hero-panel", ".fresh-card", 90, 420);
+            applyStagger("#menuGrid", ".menu-card", 70, 420);
+            applyStagger(".feature-grid", ".feature", 70, 420);
+            applyStagger("#testimonialGrid", ".testimonial-card", 90, 420);
+
+            elements.forEach((el) => revealObserver.observe(el));
         }
         
         window.addEventListener('DOMContentLoaded', initScrollReveal);

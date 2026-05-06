@@ -591,7 +591,9 @@
 
                 <section class="panel hidden" id="reviewPanel">
                     <h2>Kelola Testimoni</h2>
-                    <div class="note" style="margin-bottom: 12px;">Sistem akan otomatis memilih 3 ulasan bintang 5 terbaik untuk dipajang di halaman depan. Anda bisa menghapus ulasan yang spam atau tidak pantas.</div>
+                    <div class="note" style="margin-bottom: 12px;">Sistem akan otomatis memilih 3 ulasan bintang 5
+                        terbaik untuk dipajang di halaman depan. Anda bisa menghapus ulasan yang spam atau tidak pantas.
+                    </div>
                     <div class="menu-list" id="reviewList">Memuat testimoni...</div>
                 </section>
             </div>
@@ -851,6 +853,10 @@
                 return `
                     <article class="menu-item">
                         <img src="${escapeHtml(menu.image || "")}" alt="${escapeHtml(menu.name)}">
+                        <picture>
+                            <source srcset="${escapeHtml(menu.image.replace(/\.(jpg|jpeg|png)$/i, '.webp') || "")}" type="image/webp">
+                            <img src="${escapeHtml(menu.image || "")}" alt="${escapeHtml(menu.name)}">
+                        </picture>
                         <div>
                             <h3>${escapeHtml(menu.name)}</h3>
                             <p>${escapeHtml(menu.description)}</p>
@@ -1146,7 +1152,7 @@
             `).join("");
         }
 
-        window.deleteReview = async function(id) {
+        window.deleteReview = async function (id) {
             if (!confirm("Hapus ulasan ini secara permanen?")) return;
             if (!supabaseClient) return;
 
