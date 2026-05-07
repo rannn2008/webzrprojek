@@ -1175,6 +1175,219 @@
         @keyframes shimmer {
             to { background-position: -200% 0; }
         }
+
+        /* ==========================================
+           DARK MODE STYLES
+           ========================================== */
+        body.dark-mode {
+            --cream: #1a1a1a;
+            --white: #2d2d2d;
+            --ink: #e8e8e8;
+            --muted: #b0b0b0;
+            --line: rgba(255, 255, 255, 0.1);
+            --green-soft: #1a3d2a;
+            background: #1a1a1a;
+            color: #e8e8e8;
+        }
+
+        body.dark-mode .topbar {
+            background: rgba(13, 79, 48, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .hero {
+            background: #0d1f17;
+        }
+
+        body.dark-mode .hero-bg {
+            background:
+                linear-gradient(90deg, rgba(13, 79, 48, 0.96) 0%, rgba(20, 122, 63, 0.88) 42%, rgba(20, 122, 63, 0.25) 100%),
+                url("foto2/herobackground.jpg") center/cover;
+        }
+
+        body.dark-mode .menu-card,
+        body.dark-mode .location-info,
+        body.dark-mode .order-box,
+        body.dark-mode .testimonial-card {
+            background: #2d2d2d;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .feature-band {
+            background: #0d1f17;
+        }
+
+        body.dark-mode .testimonials {
+            background: linear-gradient(180deg, #1a1a1a, #1a2d1f);
+        }
+
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea {
+            background: #1a1a1a;
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #e8e8e8;
+        }
+
+        body.dark-mode .cart-empty,
+        body.dark-mode .cart-item {
+            background: #1a1a1a;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .order-summary {
+            background: linear-gradient(135deg, rgba(20, 122, 63, 0.15), rgba(183, 224, 68, 0.1));
+        }
+
+        body.dark-mode .skeleton {
+            background: #2d2d2d;
+            background: linear-gradient(110deg, #2d2d2d 8%, #3a3a3a 18%, #2d2d2d 33%);
+            background-size: 200% 100%;
+        }
+
+        body.dark-mode .ai-window {
+            background: #2d2d2d;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .ai-content {
+            background: #1a1a1a;
+        }
+
+        body.dark-mode .ai-msg.bot {
+            background: #3a3a3a;
+            color: #e8e8e8;
+        }
+
+        body.dark-mode .ai-opt {
+            background: #2d2d2d;
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #e8e8e8;
+        }
+
+        body.dark-mode .ai-opt:hover {
+            background: #3a3a3a;
+        }
+
+        /* Dark Mode Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            left: 18px;
+            bottom: 18px;
+            z-index: 30;
+            width: 56px;
+            height: 56px;
+            border-radius: 999px;
+            background: var(--yellow);
+            color: var(--green-dark);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 14px 30px rgba(255, 212, 71, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 0;
+            font-size: 24px;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        body.dark-mode .theme-toggle {
+            background: #ffd447;
+            color: #0d4f30;
+        }
+
+        /* Delivery Time Picker Styles */
+        .time-picker-group {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .delivery-estimate {
+            grid-column: 1 / -1;
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: rgba(183, 224, 68, 0.15);
+            border: 1px solid rgba(20, 122, 63, 0.2);
+            color: var(--green-dark);
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            display: none;
+        }
+
+        body.dark-mode .delivery-estimate {
+            background: rgba(20, 122, 63, 0.2);
+            border-color: rgba(183, 224, 68, 0.3);
+            color: var(--lime);
+        }
+
+        .delivery-estimate.show {
+            display: block;
+        }
+
+        /* Enhanced AI Chat Input */
+        .ai-input-wrapper {
+            padding: 12px;
+            background: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 8px;
+        }
+
+        body.dark-mode .ai-input-wrapper {
+            background: #2d2d2d;
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        body.dark-mode .ai-input {
+            background: #1a1a1a;
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #e8e8e8;
+        }
+
+        .ai-send-btn {
+            padding: 10px 16px;
+            background: var(--green);
+            color: white;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .ai-send-btn:hover {
+            background: var(--green-dark);
+        }
+
+        .ai-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .ai-typing {
+            padding: 12px;
+            color: var(--muted);
+            font-size: 13px;
+            font-style: italic;
+            display: none;
+        }
+
+        .ai-typing.show {
+            display: block;
+        }
     </style>
 </head>
 
@@ -1196,6 +1409,11 @@
             </div>
         </nav>
     </header>
+
+    <!-- Dark Mode Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode" title="Ganti Tema">
+        <span id="themeIcon">🌙</span>
+    </button>
 
     <main>
         <section class="hero" id="beranda">
@@ -1449,6 +1667,32 @@
                                 <option value="6281363489111">WA Kedua - 0813-6348-9111</option>
                             </select>
                         </label>
+                        <div class="time-picker-group full">
+                            <label>Tanggal
+                                <input type="date" name="tanggal" id="deliveryDate" required>
+                            </label>
+                            <label>Jam Pengambilan/Pengantaran
+                                <select name="waktu" id="deliveryTime" required>
+                                    <option value="">Pilih Jam</option>
+                                    <option value="10:00">10:00 WIB</option>
+                                    <option value="11:00">11:00 WIB</option>
+                                    <option value="12:00">12:00 WIB</option>
+                                    <option value="13:00">13:00 WIB</option>
+                                    <option value="14:00">14:00 WIB</option>
+                                    <option value="15:00">15:00 WIB</option>
+                                    <option value="16:00">16:00 WIB</option>
+                                    <option value="17:00">17:00 WIB</option>
+                                    <option value="18:00">18:00 WIB</option>
+                                    <option value="19:00">19:00 WIB</option>
+                                    <option value="20:00">20:00 WIB</option>
+                                    <option value="21:00">21:00 WIB</option>
+                                    <option value="22:00">22:00 WIB</option>
+                                </select>
+                            </label>
+                            <div class="delivery-estimate" id="deliveryEstimate">
+                                ⏱️ Estimasi waktu persiapan: <strong>15-30 menit</strong>
+                            </div>
+                        </div>
                         <label class="full">Menu
                             <select name="menu" required>
                                 <option value="" disabled selected>Memuat menu...</option>
@@ -1521,6 +1765,11 @@
             <div class="ai-options" id="aiOptions">
                 <!-- Opsi akan diisi dinamis oleh JS -->
             </div>
+            <div class="ai-typing" id="aiTyping">Mengetik...</div>
+        </div>
+        <div class="ai-input-wrapper">
+            <input type="text" class="ai-input" id="aiInput" placeholder="Ketik pertanyaan Anda..." />
+            <button class="ai-send-btn" id="aiSendBtn">Kirim</button>
         </div>
     </div>
 
@@ -1811,12 +2060,15 @@
             }
         }
 
-        function openWhatsapp({ items, metode, phone, nama = "", alamat = "", catatan = "" }) {
+        function openWhatsapp({ items, metode, phone, nama = "", alamat = "", catatan = "", tanggal = "", waktu = "" }) {
             const total = items.reduce((sum, item) => sum + item.harga * item.jumlah, 0);
             const orderLines = items.map((item, index) => {
                 const subtotal = item.harga * item.jumlah;
                 return `${index + 1}. ${item.menu} - ${item.jumlah} x ${formatRupiah.format(item.harga)} = ${formatRupiah.format(subtotal)}`;
             });
+
+            const dateObj = tanggal ? new Date(tanggal) : new Date();
+            const dateStr = dateObj.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
             const lines = [
                 "Halo Pondok Es Teller ZR, saya mau pesan:",
@@ -1826,6 +2078,7 @@
                 `Total item: ${items.reduce((sum, item) => sum + item.jumlah, 0)}`,
                 `Total estimasi: ${formatRupiah.format(total)}`,
                 `Metode: ${metode}`,
+                tanggal && waktu ? `Waktu: ${dateStr}, Jam ${waktu} WIB` : "",
                 nama ? `Nama: ${nama}` : "",
                 alamat ? `Alamat delivery: ${alamat}` : "",
                 catatan ? `Catatan: ${catatan}` : "",
@@ -1875,13 +2128,19 @@
                 addSelectedMenu();
             }
 
+            const tanggal = data.get("tanggal");
+            const waktu = data.get("waktu");
+            const metode = data.get("metode");
+
             openWhatsapp({
                 nama: data.get("nama"),
                 items: cart,
-                metode: data.get("metode"),
+                metode: metode,
                 phone: data.get("kontak") || whatsappMain,
                 alamat: data.get("alamat"),
-                catatan: data.get("catatan")
+                catatan: data.get("catatan"),
+                tanggal: tanggal,
+                waktu: waktu
             });
         });
 
@@ -1889,11 +2148,128 @@
         const aiBtn = document.getElementById("aiBtn");
         const aiWindow = document.getElementById("aiWindow");
         const aiContent = document.getElementById("aiContent");
+        const aiInput = document.getElementById("aiInput");
+        const aiSendBtn = document.getElementById("aiSendBtn");
+        const aiTyping = document.getElementById("aiTyping");
 
         aiBtn.addEventListener("click", () => {
             aiWindow.classList.toggle("show-ai");
+            if (aiWindow.classList.contains("show-ai")) {
+                aiInput.focus();
+            }
         });
 
+        // Smart AI Response System
+        function getSmartResponse(question) {
+            const q = question.toLowerCase();
+            
+            // Menu-related questions
+            if (q.includes("menu") || q.includes("harga") || q.includes("berapa")) {
+                const menuList = currentMenus.filter(m => m.status !== 'Habis')
+                    .map(m => `${m.name} (${formatRupiah.format(m.price)})`)
+                    .join(", ");
+                return `Menu kami yang tersedia: ${menuList}. Mau pesan yang mana?`;
+            }
+            
+            // Time-related questions
+            if (q.includes("jam") || q.includes("buka") || q.includes("tutup") || q.includes("kapan")) {
+                return "Kami buka setiap hari jam 10.00 - 22.00 WIB. Mampir kapan aja ya! 😊";
+            }
+            
+            // Location questions
+            if (q.includes("lokasi") || q.includes("alamat") || q.includes("dimana") || q.includes("di mana")) {
+                return "Kami ada di Jl. Kalumbuk No21, Kota Padang. Klik menu 'Lokasi' untuk buka Google Maps ya!";
+            }
+            
+            // Delivery questions
+            if (q.includes("delivery") || q.includes("antar") || q.includes("kirim") || q.includes("ongkir")) {
+                return "Bisa delivery! Ongkir menyesuaikan jarak (via Gojek/Grab). Estimasi waktu persiapan 15-30 menit. Pesan via WhatsApp ya! 📦";
+            }
+            
+            // Payment questions
+            if (q.includes("bayar") || q.includes("pembayaran") || q.includes("transfer") || q.includes("cash")) {
+                return "Pembayaran bisa cash saat ambil/terima pesanan, atau transfer dulu. Nanti dikonfirmasi via WhatsApp ya! 💳";
+            }
+            
+            // Recommendation questions
+            if (q.includes("rekomendasi") || q.includes("enak") || q.includes("favorit") || q.includes("best")) {
+                const topMenu = currentMenus.filter(m => m.status !== 'Habis' && parseFloat(m.rating) >= 4.8)[0];
+                if (topMenu) {
+                    return `Rekomendasi saya: ${topMenu.name}! Rating ${topMenu.rating} ⭐ dan harganya ${formatRupiah.format(topMenu.price)}. Alpukatnya melimpah!`;
+                }
+                return "Es Teller Alpukat Spesial adalah favorit pelanggan! Alpukatnya melimpah dan creamy banget. 🥑";
+            }
+            
+            // Promo questions
+            if (q.includes("promo") || q.includes("diskon") || q.includes("murah")) {
+                return "Untuk info promo terbaru, langsung chat WhatsApp kami ya! Kadang ada promo khusus untuk pembelian ramai-ramai. 🎉";
+            }
+            
+            // Ingredient questions
+            if (q.includes("bahan") || q.includes("isi") || q.includes("alpukat") || q.includes("buah")) {
+                return "Kami pakai buah segar pilihan, alpukat premium, gula asli (bukan pemanis buatan), dan kuah creamy yang bikin nagih! 🍓🥑";
+            }
+            
+            // Order process
+            if (q.includes("pesan") || q.includes("order") || q.includes("cara")) {
+                return "Cara pesan gampang: 1) Pilih menu di bawah, 2) Isi form pesanan, 3) Klik 'Kirim ke WhatsApp'. Praktis! 📱";
+            }
+            
+            // Greeting
+            if (q.includes("halo") || q.includes("hai") || q.includes("hi") || q.includes("hello")) {
+                return "Halo juga! Senang bisa bantu kamu. Mau tanya apa tentang Es Teller ZR? 😊";
+            }
+            
+            // Thanks
+            if (q.includes("terima kasih") || q.includes("makasih") || q.includes("thanks")) {
+                return "Sama-sama! Jangan lupa pesan Es Teller ZR ya. Dijamin segar! 🧊";
+            }
+            
+            // Default response
+            return "Maaf, saya belum paham pertanyaan itu. Coba tanya tentang menu, harga, lokasi, jam buka, atau cara pesan ya! 🤔";
+        }
+
+        // Handle AI chat input
+        function sendAiMessage() {
+            const message = aiInput.value.trim();
+            if (!message) return;
+            
+            // Show user message
+            const userMsg = document.createElement("div");
+            userMsg.className = "ai-msg user";
+            userMsg.textContent = message;
+            
+            // Remove options if exists
+            const options = document.getElementById("aiOptions");
+            if (options) options.style.display = "none";
+            
+            aiContent.appendChild(userMsg);
+            aiInput.value = "";
+            
+            // Show typing indicator
+            aiTyping.classList.add("show");
+            aiContent.scrollTop = aiContent.scrollHeight;
+            
+            // Simulate thinking time
+            setTimeout(() => {
+                aiTyping.classList.remove("show");
+                
+                const botMsg = document.createElement("div");
+                botMsg.className = "ai-msg bot";
+                botMsg.textContent = getSmartResponse(message);
+                aiContent.appendChild(botMsg);
+                aiContent.scrollTop = aiContent.scrollHeight;
+            }, 800 + Math.random() * 700); // Random delay 800-1500ms
+        }
+
+        aiSendBtn.addEventListener("click", sendAiMessage);
+        aiInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                sendAiMessage();
+            }
+        });
+
+        // Keep old click handler for quick options
         aiContent.addEventListener("click", (e) => {
             if (e.target.classList.contains("ai-opt")) {
                 const question = e.target.textContent;
@@ -1903,6 +2279,9 @@
                 userMsg.className = "ai-msg user";
                 userMsg.textContent = question;
                 aiContent.appendChild(userMsg);
+
+                // Hide options after click
+                document.getElementById("aiOptions").style.display = "none";
 
                 setTimeout(() => {
                     const botMsg = document.createElement("div");
@@ -1921,10 +2300,111 @@
             aiOptions.innerHTML = `
                 <button class="ai-opt" data-ans="Buka setiap hari jam 10.00 - 22.00 WIB. Mampir ya!">Jam Buka?</button>
                 <button class="ai-opt" data-ans="Menu favorit saat ini adalah ${favorites || 'Es Teller Original'}. Mau coba yang mana?">Menu Favorit?</button>
-                <button class="ai-opt" data-ans="Bisa! Ongkir menyesuaikan jarak (Gojek/Grab). Silakan lanjut pesan di WhatsApp ya.">Bisa Delivery?</button>
-                <button class="ai-opt" data-ans="Kami di Kota Padang. Klik menu 'Lokasi' untuk rute Google Maps lengkapnya.">Lokasi Dimana?</button>
+                <button class="ai-opt" data-ans="Bisa! Ongkir menyesuaikan jarak (Gojek/Grab). Estimasi persiapan 15-30 menit. Silakan lanjut pesan di WhatsApp ya.">Bisa Delivery?</button>
+                <button class="ai-opt" data-ans="Kami di Jl. Kalumbuk No21, Kota Padang. Klik menu 'Lokasi' untuk rute Google Maps lengkapnya.">Lokasi Dimana?</button>
             `;
         }
+
+        // ==========================================
+        // DARK MODE FUNCTIONALITY
+        // ==========================================
+        const themeToggle = document.getElementById("themeToggle");
+        const themeIcon = document.getElementById("themeIcon");
+        const THEME_KEY = "zr-theme-preference";
+
+        function setTheme(theme) {
+            if (theme === "dark") {
+                document.body.classList.add("dark-mode");
+                themeIcon.textContent = "☀️";
+                localStorage.setItem(THEME_KEY, "dark");
+            } else {
+                document.body.classList.remove("dark-mode");
+                themeIcon.textContent = "🌙";
+                localStorage.setItem(THEME_KEY, "light");
+            }
+        }
+
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem(THEME_KEY);
+        if (savedTheme === "dark") {
+            setTheme("dark");
+        } else if (!savedTheme) {
+            // Auto-detect system preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setTheme("dark");
+            }
+        }
+
+        themeToggle.addEventListener("click", () => {
+            const isDark = document.body.classList.contains("dark-mode");
+            setTheme(isDark ? "light" : "dark");
+        });
+
+        // Listen for system theme changes
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!localStorage.getItem(THEME_KEY)) {
+                    setTheme(e.matches ? "dark" : "light");
+                }
+            });
+        }
+
+        // ==========================================
+        // DELIVERY TIME & ESTIMATION
+        // ==========================================
+        const deliveryDate = document.getElementById("deliveryDate");
+        const deliveryTime = document.getElementById("deliveryTime");
+        const deliveryEstimate = document.getElementById("deliveryEstimate");
+
+        // Set minimum date to today
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        deliveryDate.min = today.toISOString().split('T')[0];
+        deliveryDate.max = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7).toISOString().split('T')[0];
+        deliveryDate.value = today.toISOString().split('T')[0];
+
+        function updateDeliveryEstimate() {
+            const selectedDate = deliveryDate.value;
+            const selectedTime = deliveryTime.value;
+            
+            if (selectedDate && selectedTime) {
+                const orderDate = new Date(selectedDate);
+                const isToday = orderDate.toDateString() === today.toDateString();
+                const currentHour = today.getHours();
+                const selectedHour = parseInt(selectedTime.split(':')[0]);
+                
+                let estimateText = "⏱️ Estimasi waktu persiapan: <strong>15-30 menit</strong>";
+                
+                if (isToday && selectedHour <= currentHour) {
+                    estimateText = "⚠️ Jam yang dipilih sudah lewat. Pilih jam yang lebih lama atau besok.";
+                    deliveryEstimate.style.background = "rgba(255, 143, 63, 0.15)";
+                    deliveryEstimate.style.borderColor = "rgba(255, 143, 63, 0.3)";
+                    deliveryEstimate.style.color = "#8b2d12";
+                } else if (isToday && selectedHour - currentHour < 2) {
+                    estimateText = "⚡ Pesanan mendesak! Mohon konfirmasi ketersediaan via WhatsApp dulu ya.";
+                    deliveryEstimate.style.background = "rgba(255, 212, 71, 0.15)";
+                    deliveryEstimate.style.borderColor = "rgba(255, 212, 71, 0.3)";
+                } else {
+                    estimateText = `✅ Pesanan untuk ${isToday ? 'hari ini' : 'besok'} jam ${selectedTime} WIB. Estimasi persiapan: <strong>15-30 menit</strong>`;
+                    deliveryEstimate.style.background = "rgba(183, 224, 68, 0.15)";
+                    deliveryEstimate.style.borderColor = "rgba(20, 122, 63, 0.2)";
+                    deliveryEstimate.style.color = "var(--green-dark)";
+                }
+                
+                deliveryEstimate.innerHTML = estimateText;
+                deliveryEstimate.classList.add("show");
+            } else {
+                deliveryEstimate.classList.remove("show");
+            }
+        }
+
+        deliveryDate.addEventListener("change", updateDeliveryEstimate);
+        deliveryTime.addEventListener("change", updateDeliveryEstimate);
+
+        // Initial check
+        updateDeliveryEstimate();
 
         // Load Saved Cart on Startup
         try {
