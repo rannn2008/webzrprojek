@@ -1790,6 +1790,7 @@
         </svg>
     </a>
 
+    <script src="smart-ai-chatbot.js"></script>
     <script src="supabase-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module">
@@ -1988,6 +1989,12 @@
             menuSelect.innerHTML = availableMenus.map((menu) => {
                 return `<option value="${escapeHtml(menu.name)}" data-price="${Number(menu.price || 0)}">${escapeHtml(menu.name)} - ${formatRupiah.format(Number(menu.price || 0))}</option>`;
             }).join("");
+            
+            // Update Smart Chatbot with new menu data
+            if (smartBot) {
+                smartBot.updateMenuData(menus);
+                console.log('✅ Smart Chatbot updated with latest menu data');
+            }
         }
 
         function getSelectedPrice() {
@@ -2092,6 +2099,9 @@
 
         await renderMenuCatalog();
 
+        // Initialize Smart Chatbot after menu is loaded
+        initSmartChatbot();
+
         // Gunakan Event Delegation agar tombol tetap berfungsi setelah render ulang
         document.getElementById("menuGrid").addEventListener("click", (event) => {
             const button = event.target.closest(".choose-menu");
@@ -2159,74 +2169,15 @@
             }
         });
 
-        // Smart AI Response System
-        function getSmartResponse(question) {
-            const q = question.toLowerCase();
-            
-            // Menu-related questions
-            if (q.includes("menu") || q.includes("harga") || q.includes("berapa")) {
-                const menuList = currentMenus.filter(m => m.status !== 'Habis')
-                    .map(m => `${m.name} (${formatRupiah.format(m.price)})`)
-                    .join(", ");
-                return `Menu kami yang tersedia: ${menuList}. Mau pesan yang mana?`;
-            }
-            
-            // Time-related questions
-            if (q.includes("jam") || q.includes("buka") || q.includes("tutup") || q.includes("kapan")) {
-                return "Kami buka setiap hari jam 10.00 - 22.00 WIB. Mampir kapan aja ya! 😊";
-            }
-            
-            // Location questions
-            if (q.includes("lokasi") || q.includes("alamat") || q.includes("dimana") || q.includes("di mana")) {
-                return "Kami ada di Jl. Kalumbuk No21, Kota Padang. Klik menu 'Lokasi' untuk buka Google Maps ya!";
-            }
-            
-            // Delivery questions
-            if (q.includes("delivery") || q.includes("antar") || q.includes("kirim") || q.includes("ongkir")) {
-                return "Bisa delivery! Ongkir menyesuaikan jarak (via Gojek/Grab). Estimasi waktu persiapan 15-30 menit. Pesan via WhatsApp ya! 📦";
-            }
-            
-            // Payment questions
-            if (q.includes("bayar") || q.includes("pembayaran") || q.includes("transfer") || q.includes("cash")) {
-                return "Pembayaran bisa cash saat ambil/terima pesanan, atau transfer dulu. Nanti dikonfirmasi via WhatsApp ya! 💳";
-            }
-            
-            // Recommendation questions
-            if (q.includes("rekomendasi") || q.includes("enak") || q.includes("favorit") || q.includes("best")) {
-                const topMenu = currentMenus.filter(m => m.status !== 'Habis' && parseFloat(m.rating) >= 4.8)[0];
-                if (topMenu) {
-                    return `Rekomendasi saya: ${topMenu.name}! Rating ${topMenu.rating} ⭐ dan harganya ${formatRupiah.format(topMenu.price)}. Alpukatnya melimpah!`;
-                }
-                return "Es Teller Alpukat Spesial adalah favorit pelanggan! Alpukatnya melimpah dan creamy banget. 🥑";
-            }
-            
-            // Promo questions
-            if (q.includes("promo") || q.includes("diskon") || q.includes("murah")) {
-                return "Untuk info promo terbaru, langsung chat WhatsApp kami ya! Kadang ada promo khusus untuk pembelian ramai-ramai. 🎉";
-            }
-            
-            // Ingredient questions
-            if (q.includes("bahan") || q.includes("isi") || q.includes("alpukat") || q.includes("buah")) {
-                return "Kami pakai buah segar pilihan, alpukat premium, gula asli (bukan pemanis buatan), dan kuah creamy yang bikin nagih! 🍓🥑";
-            }
-            
-            // Order process
-            if (q.includes("pesan") || q.includes("order") || q.includes("cara")) {
-                return "Cara pesan gampang: 1) Pilih menu di bawah, 2) Isi form pesanan, 3) Klik 'Kirim ke WhatsApp'. Praktis! 📱";
-            }
-            
-            // Greeting
-            if (q.includes("halo") || q.includes("hai") || q.includes("hi") || q.includes("hello")) {
-                return "Halo juga! Senang bisa bantu kamu. Mau tanya apa tentang Es Teller ZR? 😊";
-            }
-            
-            // Thanks
-            if (q.includes("terima kasih") || q.includes("makasih") || q.includes("thanks")) {
-                return "Sama-sama! Jangan lupa pesan Es Teller ZR ya. Dijamin segar! 🧊";
-            }
-            
-            // Default response
-            return "Maaf, saya belum paham pertanyaan itu. Coba tanya tentang menu, harga, lokasi, jam buka, atau cara pesan ya! 🤔";
+        // ==========================================
+        // SMART AI CHATBOT INTEGRATION
+        // ==========================================
+        let smartBot = null;
+
+        // Initialize Smart Chatbot
+        function initSmartChatbot() {
+            smartBot = new SmartChatbot(currentMenus);
+            console.log('✅ Smart AI Chatbot initialized with', currentMenus.length, 'menus');
         }
 
         // Handle AI chat input
@@ -2250,13 +2201,21 @@
             aiTyping.classList.add("show");
             aiContent.scrollTop = aiContent.scrollHeight;
             
-            // Simulate thinking time
+            // Get response from Smart Chatbot
             setTimeout(() => {
                 aiTyping.classList.remove("show");
                 
                 const botMsg = document.createElement("div");
                 botMsg.className = "ai-msg bot";
-                botMsg.textContent = getSmartResponse(message);
+                botMsg.style.whiteSpace = "pre-line"; // Preserve line breaks
+                
+                // Use smart chatbot if initialized, otherwise fallback
+                if (smartBot) {
+                    botMsg.textContent = smartBot.chat(message);
+                } else {
+                    botMsg.textContent = "Maaf, chatbot sedang loading. Coba lagi sebentar ya! 😊";
+                }
+                
                 aiContent.appendChild(botMsg);
                 aiContent.scrollTop = aiContent.scrollHeight;
             }, 800 + Math.random() * 700); // Random delay 800-1500ms
