@@ -1,6 +1,6 @@
 {
-  "name": "Pondok Es Teller ZR",
-  "short_name": "Es Teller ZR",
+  "name": "EsTellerZR",
+  "short_name": "EsTellerZR",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#fff8df",
