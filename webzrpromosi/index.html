@@ -13,7 +13,7 @@
         gtag('js', new Date());
         gtag('config', 'G-0ZD1WLP8SR');
     </script>
-    <title>Pondok Es Teller ZR | Segar, Creamy, Bikin Nagih</title>
+    <title>Es Teller ZR | Segar, Creamy, Bikin Nagih</title>
     <meta name="description"
         content="Es Teller creamy di Kota Padang — buah segar, gula asli, alpukat juara. Menu & harga di halaman ini selalu mengikuti data terbaru. Pesan via WhatsApp. Buka 10.00–22.00.">
     <link rel="canonical" href="https://estellerzrpadang.vercel.app/">
@@ -1183,7 +1183,9 @@
         }
 
         @keyframes shimmer {
-            to { background-position: -200% 0; }
+            to {
+                background-position: -200% 0;
+            }
         }
 
         /* ==========================================
@@ -1570,10 +1572,15 @@
                 </div>
 
                 <!-- Form Ulasan Pelanggan -->
-                <div class="review-form-wrapper" style="margin-top: 40px; padding-top: 36px; border-top: 1px solid rgba(20, 122, 63, 0.1);">
-                    <div style="max-width: 620px; margin: 0 auto; background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 16px 36px rgba(13, 79, 48, 0.08); border: 1px solid rgba(20, 122, 63, 0.08);">
-                        <h3 style="margin-bottom: 8px; color: var(--green-dark); text-align: center; font-size: 22px;">Pernah Coba Es Teller ZR?</h3>
-                        <p style="text-align: center; color: var(--muted); margin-bottom: 24px; font-size: 14px;">Beri ulasan Anda! Sistem Cerdas kami akan memilih 3 ulasan bintang 5 terbaik untuk dipajang secara otomatis di halaman ini.</p>
+                <div class="review-form-wrapper"
+                    style="margin-top: 40px; padding-top: 36px; border-top: 1px solid rgba(20, 122, 63, 0.1);">
+                    <div
+                        style="max-width: 620px; margin: 0 auto; background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 16px 36px rgba(13, 79, 48, 0.08); border: 1px solid rgba(20, 122, 63, 0.08);">
+                        <h3 style="margin-bottom: 8px; color: var(--green-dark); text-align: center; font-size: 22px;">
+                            Pernah Coba Es Teller ZR?</h3>
+                        <p style="text-align: center; color: var(--muted); margin-bottom: 24px; font-size: 14px;">Beri
+                            ulasan Anda! Sistem Cerdas kami akan memilih 3 ulasan bintang 5 terbaik untuk dipajang
+                            secara otomatis di halaman ini.</p>
                         <form id="reviewForm" style="display: grid; gap: 14px;">
                             <label>Nama Anda
                                 <input type="text" name="name" placeholder="Contoh: Budi, Padang" required>
@@ -1588,10 +1595,16 @@
                                 </select>
                             </label>
                             <label>Komentar Anda
-                                <textarea name="comment" placeholder="Ceritakan pengalaman segar Anda setelah memesan Es Teller ZR..." required style="min-height: 85px;"></textarea>
+                                <textarea name="comment"
+                                    placeholder="Ceritakan pengalaman segar Anda setelah memesan Es Teller ZR..."
+                                    required style="min-height: 85px;"></textarea>
                             </label>
-                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; min-height: 48px; box-shadow: 0 12px 24px rgba(255, 143, 63, 0.22);">Kirim Ulasan</button>
-                            <div id="reviewStatus" style="display: none; text-align: center; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 14px;"></div>
+                            <button type="submit" class="btn btn-primary"
+                                style="width: 100%; margin-top: 10px; min-height: 48px; box-shadow: 0 12px 24px rgba(255, 143, 63, 0.22);">Kirim
+                                Ulasan</button>
+                            <div id="reviewStatus"
+                                style="display: none; text-align: center; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 14px;">
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -1999,7 +2012,7 @@
             menuSelect.innerHTML = availableMenus.map((menu) => {
                 return `<option value="${escapeHtml(menu.name)}" data-price="${Number(menu.price || 0)}">${escapeHtml(menu.name)} - ${formatRupiah.format(Number(menu.price || 0))}</option>`;
             }).join("");
-            
+
             // Update Smart Chatbot with new menu data (with error handling)
             try {
                 if (smartBot && typeof smartBot.updateMenuData === 'function') {
@@ -2209,7 +2222,7 @@
         // Fallback response function
         function getFallbackResponse(question) {
             const q = question.toLowerCase();
-            
+
             // Menu-related questions
             if (q.includes("menu") || q.includes("harga") || q.includes("berapa")) {
                 const menuList = currentMenus.filter(m => m.status !== 'Habis')
@@ -2217,27 +2230,27 @@
                     .join(", ");
                 return `Menu kami yang tersedia: ${menuList}. Mau pesan yang mana?`;
             }
-            
+
             // Time-related questions
             if (q.includes("jam") || q.includes("buka") || q.includes("tutup") || q.includes("kapan")) {
                 return "Kami buka setiap hari jam 10.00 - 22.00 WIB. Mampir kapan aja ya! 😊";
             }
-            
+
             // Location questions
             if (q.includes("lokasi") || q.includes("alamat") || q.includes("dimana") || q.includes("di mana")) {
                 return "Kami ada di Jl. Kalumbuk No21, Kota Padang. Klik menu 'Lokasi' untuk buka Google Maps ya!";
             }
-            
+
             // Delivery questions
             if (q.includes("delivery") || q.includes("antar") || q.includes("kirim") || q.includes("ongkir")) {
                 return "Bisa delivery! Ongkir menyesuaikan jarak (via Gojek/Grab). Estimasi waktu persiapan 15-30 menit. Pesan via WhatsApp ya! 📦";
             }
-            
+
             // Payment questions
             if (q.includes("bayar") || q.includes("pembayaran") || q.includes("transfer") || q.includes("cash")) {
                 return "Pembayaran bisa cash saat ambil/terima pesanan, atau transfer dulu. Nanti dikonfirmasi via WhatsApp ya! 💳";
             }
-            
+
             // Recommendation questions
             if (q.includes("rekomendasi") || q.includes("enak") || q.includes("favorit") || q.includes("best")) {
                 const topMenu = currentMenus.filter(m => m.status !== 'Habis' && parseFloat(m.rating) >= 4.8)[0];
@@ -2246,32 +2259,32 @@
                 }
                 return "Es Teller Alpukat Spesial adalah favorit pelanggan! Alpukatnya melimpah dan creamy banget. 🥑";
             }
-            
+
             // Promo questions
             if (q.includes("promo") || q.includes("diskon") || q.includes("murah")) {
                 return "Untuk info promo terbaru, langsung chat WhatsApp kami ya! Kadang ada promo khusus untuk pembelian ramai-ramai. 🎉";
             }
-            
+
             // Ingredient questions
             if (q.includes("bahan") || q.includes("isi") || q.includes("alpukat") || q.includes("buah")) {
                 return "Kami pakai buah segar pilihan, alpukat premium, gula asli (bukan pemanis buatan), dan kuah creamy yang bikin nagih! 🍓🥑";
             }
-            
+
             // Order process
             if (q.includes("pesan") || q.includes("order") || q.includes("cara")) {
                 return "Cara pesan gampang: 1) Pilih menu di bawah, 2) Isi form pesanan, 3) Klik 'Kirim ke WhatsApp'. Praktis! 📱";
             }
-            
+
             // Greeting
             if (q.includes("halo") || q.includes("hai") || q.includes("hi") || q.includes("hello")) {
                 return "Halo juga! Senang bisa bantu kamu. Mau tanya apa tentang Es Teller ZR? 😊";
             }
-            
+
             // Thanks
             if (q.includes("terima kasih") || q.includes("makasih") || q.includes("thanks")) {
                 return "Sama-sama! Jangan lupa pesan Es Teller ZR ya. Dijamin segar! 🧊";
             }
-            
+
             // Default response
             return "Maaf, saya belum paham pertanyaan itu. Coba tanya tentang menu, harga, lokasi, jam buka, atau cara pesan ya! 🤔";
         }
@@ -2280,31 +2293,31 @@
         function sendAiMessage() {
             const message = aiInput.value.trim();
             if (!message) return;
-            
+
             // Show user message
             const userMsg = document.createElement("div");
             userMsg.className = "ai-msg user";
             userMsg.textContent = message;
-            
+
             // Remove options if exists
             const options = document.getElementById("aiOptions");
             if (options) options.style.display = "none";
-            
+
             aiContent.appendChild(userMsg);
             aiInput.value = "";
-            
+
             // Show typing indicator
             aiTyping.classList.add("show");
             aiContent.scrollTop = aiContent.scrollHeight;
-            
+
             // Get response from Smart Chatbot or fallback
             setTimeout(() => {
                 aiTyping.classList.remove("show");
-                
+
                 const botMsg = document.createElement("div");
                 botMsg.className = "ai-msg bot";
                 botMsg.style.whiteSpace = "pre-line"; // Preserve line breaks
-                
+
                 // Use smart chatbot if initialized, otherwise fallback
                 try {
                     if (smartBot && typeof smartBot.chat === 'function') {
@@ -2316,7 +2329,7 @@
                     console.error('Error getting chatbot response:', error);
                     botMsg.textContent = getFallbackResponse(message);
                 }
-                
+
                 aiContent.appendChild(botMsg);
                 aiContent.scrollTop = aiContent.scrollHeight;
             }, 800 + Math.random() * 700); // Random delay 800-1500ms
@@ -2420,7 +2433,7 @@
         const today = new Date();
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        
+
         deliveryDate.min = today.toISOString().split('T')[0];
         deliveryDate.max = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7).toISOString().split('T')[0];
         deliveryDate.value = today.toISOString().split('T')[0];
@@ -2428,15 +2441,15 @@
         function updateDeliveryEstimate() {
             const selectedDate = deliveryDate.value;
             const selectedTime = deliveryTime.value;
-            
+
             if (selectedDate && selectedTime) {
                 const orderDate = new Date(selectedDate);
                 const isToday = orderDate.toDateString() === today.toDateString();
                 const currentHour = today.getHours();
                 const selectedHour = parseInt(selectedTime.split(':')[0]);
-                
+
                 let estimateText = "⏱️ Estimasi waktu persiapan: <strong>15-30 menit</strong>";
-                
+
                 if (isToday && selectedHour <= currentHour) {
                     estimateText = "⚠️ Jam yang dipilih sudah lewat. Pilih jam yang lebih lama atau besok.";
                     deliveryEstimate.style.background = "rgba(255, 143, 63, 0.15)";
@@ -2452,7 +2465,7 @@
                     deliveryEstimate.style.borderColor = "rgba(20, 122, 63, 0.2)";
                     deliveryEstimate.style.color = "var(--green-dark)";
                 }
-                
+
                 deliveryEstimate.innerHTML = estimateText;
                 deliveryEstimate.classList.add("show");
             } else {
@@ -2512,20 +2525,20 @@
                 // SMART ALGORITHM: Penilaian Komentar
                 // Kriteria: Bintang 5 > Kata Positif > Panjang Komentar > Terbaru
                 const positiveWords = ["enak", "segar", "mantap", "murah", "ramah", "puas", "banyak", "melimpah", "langganan", "favorit", "recommended", "terbaik", "pas", "nagih"];
-                
+
                 const scoredReviews = data.map(review => {
                     let score = 0;
                     if (review.rating === 5) score += 50;
                     if (review.rating === 4) score += 20;
-                    
+
                     const commentLower = review.comment.toLowerCase();
                     positiveWords.forEach(word => {
                         if (commentLower.includes(word)) score += 10;
                     });
-                    
+
                     // Bonus untuk komentar deskriptif (min 30 max 120 kar)
                     if (review.comment.length > 30 && review.comment.length < 150) score += 15;
-                    
+
                     return { ...review, score };
                 });
 
@@ -2555,7 +2568,7 @@
                 statusEl.style.background = "#fffdf5";
                 statusEl.style.color = "var(--muted)";
                 statusEl.textContent = "Mengirim ulasan...";
-                
+
                 const formData = new FormData(reviewForm);
                 const payload = {
                     name: formData.get("name"),
@@ -2578,12 +2591,12 @@
                     // Refresh tampilan testimoni langsung
                     fetchAndRenderTestimonials();
                 }
-                
+
                 setTimeout(() => {
-                    if(!error) statusEl.style.display = "none";
+                    if (!error) statusEl.style.display = "none";
                 }, 5000);
             });
-            
+
             // Panggil saat pertama kali dimuat
             fetchAndRenderTestimonials();
         }
@@ -2626,7 +2639,7 @@
 
             reveals.forEach((reveal) => revealObserver.observe(reveal));
         }
-        
+
         window.addEventListener('DOMContentLoaded', initScrollReveal);
     </script>
 </body>
