@@ -491,8 +491,8 @@ $isClient = isClientLoggedIn();
 
         // ========== AI VOICE ASSISTANT ==========
         function speakStatus() {
-            if (!('speechSynthesis' in window)) {
-                alert("Maaf, browser Anda tidak mendukung fitur suara.");
+            if (typeof playAiVoiceTts !== 'function') {
+                alert("Maaf, fitur suara AI tidak tersedia.");
                 return;
             }
 
@@ -509,18 +509,10 @@ $isClient = isClientLoggedIn();
                     `Total pendapatan sistem saat ini adalah ${revenue}. ` +
                     `Semua sistem berjalan normal.`;
 
-                const msg = new SpeechSynthesisUtterance();
-                msg.text = text;
-                msg.lang = 'id-ID';
-                msg.rate = 1.0;
-                msg.pitch = 1.1;
-                
-                // Animasi button saat bicara
                 $(".btn-voice i").addClass("fa-beat");
-                msg.onend = () => $(".btn-voice i").removeClass("fa-beat");
-
-                window.speechSynthesis.cancel(); // Stop current speech
-                window.speechSynthesis.speak(msg);
+                playAiVoiceTts(text).then(() => {
+                    $(".btn-voice i").removeClass("fa-beat");
+                });
             }, "json");
         }
         
@@ -537,37 +529,23 @@ $isClient = isClientLoggedIn();
         }
 
         function speakText(txt) {
-            if (!('speechSynthesis' in window)) return;
-            const msg = new SpeechSynthesisUtterance(txt);
-            const voices = window.speechSynthesis.getVoices();
-            const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
-            msg.voice = idVoice ? idVoice : null;
-            msg.lang = 'id-ID';
-            msg.rate = 1.0;
-            msg.pitch = 1.1;
+            if (typeof playAiVoiceTts !== 'function') {
+                return;
+            }
             
             $(".ai-orb-ring").addClass("ai-speaking");
-            msg.onend = () => $(".ai-orb-ring").removeClass("ai-speaking");
-
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(msg);
+            playAiVoiceTts(txt).then(() => {
+                $(".ai-orb-ring").removeClass("ai-speaking");
+            });
         }
 
         function unlockAudio() {
-            const dummy = new SpeechSynthesisUtterance("");
-            window.speechSynthesis.speak(dummy);
             console.log("Admin Audio Unlocked.");
             document.removeEventListener('click', unlockAudio);
             document.removeEventListener('touchstart', unlockAudio);
         }
         document.addEventListener('click', unlockAudio);
         document.addEventListener('touchstart', unlockAudio);
-
-        // Force voices to load
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
-        }
-        window.speechSynthesis.getVoices();
 
         $(document).ready(function () {
 

@@ -78,4 +78,19 @@ function calculateParkingFee($totalMinutes, $rate, $minFee, $gracePeriod, $billi
 // Keep constant for backward compatibility, but read from DB
 $db_rate = getSetting($conn, 'parking_rate', '3000');
 define('PARKING_RATE_PER_HOUR', intval($db_rate));
+
+// ElevenLabs TTS configuration for a clearer custom male voice.
+// Prefer setting ELEVENLABS_API_KEY in your system environment.
+if (!defined('ELEVENLABS_API_KEY')) {
+    define('ELEVENLABS_API_KEY', 'sk_efa5fd674e50eccfeba1bcb3a508c7112d2eaa754cd7e7c5');
+}
+if (!defined('ELEVENLABS_VOICE_ID')) {
+    define('ELEVENLABS_VOICE_ID', '9zOaLLJKBwYOwr8bOPDj');
+}
+if (!defined('ELEVENLABS_TTS_MODEL')) {
+    define('ELEVENLABS_TTS_MODEL', 'eleven_multilingual_v2');
+}
+if (!defined('ELEVENLABS_OUTPUT_FORMAT')) {
+    define('ELEVENLABS_OUTPUT_FORMAT', 'mp3_44100_128');
+}
 ?>

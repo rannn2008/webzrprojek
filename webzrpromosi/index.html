@@ -13,7 +13,7 @@
         gtag('js', new Date());
         gtag('config', 'G-0ZD1WLP8SR');
     </script>
-    <title>Es Teller ZR | Segar, Creamy, Bikin Nagih</title>
+    <title>Pondok Es Teller ZR | Segar, Creamy, Bikin Nagih</title>
     <meta name="description"
         content="Es Teller creamy di Kota Padang — buah segar, gula asli, alpukat juara. Menu & harga di halaman ini selalu mengikuti data terbaru. Pesan via WhatsApp. Buka 10.00–22.00.">
     <link rel="canonical" href="https://estellerzrpadang.vercel.app/">
@@ -1400,6 +1400,335 @@
         .ai-typing.show {
             display: block;
         }
+
+        /* ==========================================
+           GALLERY SECTION STYLES
+           ========================================== */
+        .gallery-section {
+            background: linear-gradient(180deg, #f4ffe9, #fff8df);
+            padding: 78px 0;
+        }
+
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 36px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            border: 2px solid var(--green);
+            border-radius: 999px;
+            background: var(--white);
+            color: var(--green-dark);
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: var(--green-soft);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--green);
+            color: var(--white);
+            box-shadow: 0 8px 20px rgba(20, 122, 63, 0.3);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 10px 28px rgba(13, 79, 48, 0.12);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.3, 1);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(13, 79, 48, 0.2);
+        }
+
+        .gallery-item.hidden {
+            display: none;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(13, 79, 48, 0.85) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-title {
+            color: var(--white);
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .gallery-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: var(--yellow);
+            color: var(--green-dark);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .gallery-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 60px;
+            height: 60px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.95);
+            display: grid;
+            place-items: center;
+            font-size: 28px;
+            color: var(--green-dark);
+            transition: transform 0.3s ease;
+            pointer-events: none;
+        }
+
+        .gallery-item:hover .gallery-icon {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Lightbox Styles */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: var(--white);
+            color: var(--ink);
+            border: 0;
+            font-size: 24px;
+            font-weight: 800;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            background: var(--yellow);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--green-dark);
+            border: 0;
+            font-size: 24px;
+            font-weight: 800;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-nav:hover {
+            background: var(--yellow);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .lightbox-prev {
+            left: -70px;
+        }
+
+        .lightbox-next {
+            right: -70px;
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        body.dark-mode .gallery-section {
+            background: linear-gradient(180deg, #1a2d1f, #1a1a1a);
+        }
+
+        body.dark-mode .filter-btn {
+            background: #2d2d2d;
+            border-color: var(--green);
+            color: #e8e8e8;
+        }
+
+        body.dark-mode .filter-btn:hover {
+            background: rgba(20, 122, 63, 0.2);
+        }
+
+        body.dark-mode .filter-btn.active {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        body.dark-mode .gallery-item {
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 12px;
+            }
+
+            .gallery-img {
+                height: 220px;
+            }
+
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .lightbox-prev {
+                left: 10px;
+            }
+
+            .lightbox-next {
+                right: 10px;
+            }
+
+            .lightbox-close {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-img {
+                height: 260px;
+            }
+
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 
@@ -1415,6 +1744,7 @@
                 <a href="#beranda">Beranda</a>
                 <a href="#menu">Menu</a>
                 <a href="#keunggulan">Keunggulan</a>
+                <a href="#galeri">Galeri</a>
                 <a href="#testimoni">Testimoni</a>
                 <a href="#lokasi">Lokasi</a>
                 <a class="btn btn-primary" href="#pesan">Pesan</a>
@@ -1543,6 +1873,163 @@
                 </div>
             </div>
         </section>
+
+        <section class="gallery-section" id="galeri">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <h2>Galeri Pondok Es Teller ZR</h2>
+                        <p>Lihat suasana kedai, produk segar, dan kebahagiaan pelanggan kami</p>
+                    </div>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="gallery-filters">
+                    <button class="filter-btn active" data-filter="all">Semua</button>
+                    <button class="filter-btn" data-filter="kedai">Kedai</button>
+                    <button class="filter-btn" data-filter="produk">Produk</button>
+                    <button class="filter-btn" data-filter="suasana">Suasana</button>
+                    <button class="filter-btn" data-filter="bahan">Bahan Segar</button>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Foto 1: Tampak Depan Kedai -->
+                    <div class="gallery-item" data-category="kedai">
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=85" 
+                             alt="Tampak Depan Pondok Es Teller ZR" 
+                             class="gallery-img"
+                             loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-title">Tampak Depan Kedai</div>
+                            <span class="gallery-category">Kedai</span>
+                        </div>
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+
+                    <!-- Foto 2: Buah-buahan Segar -->
+                    <div class="gallery-item" data-category="bahan">
+                        <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=85" 
+                             alt="Buah-buahan Segar Colorful" 
+                             class="gallery-img"
+                             loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-title">Buah Segar Pilihan</div>
+                            <span class="gallery-category">Bahan Segar</span>
+                        </div>
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+
+                    <!-- Foto 3: Suasana Dalam Kedai -->
+                    <div class="gallery-item" data-category="suasana">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=85" 
+                             alt="Suasana Dalam Kedai dengan Pelanggan" 
+                             class="gallery-img"
+                             loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-title">Suasana Nyaman</div>
+                            <span class="gallery-category">Suasana</span>
+                        </div>
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+
+                    <!-- Foto 4: Display Es Teller -->
+                    <div class="gallery-item" data-category="produk">
+                        <img src="foto2/estelleroriginal.jpg" 
+                             alt="Display Es Teller yang Menggugah Selera" 
+                             class="gallery-img"
+                             loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-title">Es Teller Segar</div>
+                            <span class="gallery-category">Produk</span>
+                        </div>
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+
+                    <!-- Foto 5: Booth di Mall -->
+                    <div class="gallery-item" data-category="kedai">
+                        <img src="https://images.unsplash.com/photo-1567521464027-f127ff144326?auto=format&fit=crop&w=800&q=85" 
+                             alt="Booth Es Teller ZR di Mall" 
+                             class="gallery-img"
+                             loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-title">Booth di Mall</div>
+                            <span class="gallery-category">Kedai</span>
+                        </div>
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+
+                    <!-- Foto 6: Alpukat Segar -->
+                    <div class="gallery-item" data-category="bahan">
+                        <img src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=85" 
+                             alt="Alpukat Segar Melimpah" 
+                             class="gallery-img"
+                             loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-title">Alpukat Premium</div>
+                            <span class="gallery-category">Bahan Segar</span>
+                        </div>
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+
+                    <!-- Foto 7: Proses Pembuatan -->
+                    <div class="gallery-item" data-category="suasana">
+                        <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=85" 
+                             alt="Proses Pembuatan Es Teller" 
+                             class="gallery-img"
+                             loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-title">Proses Pembuatan</div>
+                            <span class="gallery-category">Suasana</span>
+                        </div>
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+
+                    <!-- Foto 8: Es Teller Siap Saji -->
+                    <div class="gallery-item" data-category="produk">
+                        <img src="https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=800&q=85" 
+                             alt="Es Teller Siap Saji" 
+                             class="gallery-img"
+                             loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-title">Siap Dinikmati</div>
+                            <span class="gallery-category">Produk</span>
+                        </div>
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+
+                    <!-- Foto 9: Pelanggan Happy -->
+                    <div class="gallery-item" data-category="suasana">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=85" 
+                             alt="Pelanggan Menikmati Es Teller" 
+                             class="gallery-img"
+                             loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-title">Pelanggan Puas</div>
+                            <span class="gallery-category">Suasana</span>
+                        </div>
+                        <div class="gallery-icon">🔍</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 32px;">
+                    <a class="btn btn-green" href="https://www.instagram.com/estellerzr" target="_blank" rel="noopener">
+                        📸 Lihat Lebih Banyak di Instagram
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox -->
+        <div class="lightbox" id="lightbox">
+            <div class="lightbox-content">
+                <button class="lightbox-close" id="lightboxClose">×</button>
+                <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
+                <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
+                <img src="" alt="" class="lightbox-img" id="lightboxImg">
+                <div class="lightbox-caption" id="lightboxCaption"></div>
+            </div>
+        </div>
 
         <section class="testimonials" id="testimoni">
             <div class="container">
@@ -2641,6 +3128,123 @@
         }
 
         window.addEventListener('DOMContentLoaded', initScrollReveal);
+
+        // ==========================================
+        // GALLERY FUNCTIONALITY
+        // ==========================================
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxPrev = document.getElementById('lightboxPrev');
+        const lightboxNext = document.getElementById('lightboxNext');
+        
+        let currentImageIndex = 0;
+        let currentFilter = 'all';
+        let visibleImages = [];
+
+        // Filter functionality
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Get filter value
+                const filter = btn.dataset.filter;
+                currentFilter = filter;
+                
+                // Filter gallery items
+                galleryItems.forEach((item, index) => {
+                    const category = item.dataset.category;
+                    
+                    if (filter === 'all' || category === filter) {
+                        item.classList.remove('hidden');
+                        // Re-trigger animation
+                        item.style.animation = 'none';
+                        setTimeout(() => {
+                            item.style.animation = `fadeInUp 0.6s ease forwards ${index * 0.1}s`;
+                        }, 10);
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+                
+                updateVisibleImages();
+            });
+        });
+
+        // Update visible images array
+        function updateVisibleImages() {
+            visibleImages = Array.from(galleryItems).filter(item => !item.classList.contains('hidden'));
+        }
+
+        // Open lightbox
+        galleryItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                updateVisibleImages();
+                currentImageIndex = visibleImages.indexOf(item);
+                showLightbox();
+            });
+        });
+
+        function showLightbox() {
+            const currentItem = visibleImages[currentImageIndex];
+            const img = currentItem.querySelector('.gallery-img');
+            const title = currentItem.querySelector('.gallery-title');
+            
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightboxCaption.textContent = title ? title.textContent : '';
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close lightbox
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Navigate lightbox
+        lightboxPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentImageIndex = (currentImageIndex - 1 + visibleImages.length) % visibleImages.length;
+            showLightbox();
+        });
+
+        lightboxNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentImageIndex = (currentImageIndex + 1) % visibleImages.length;
+            showLightbox();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                currentImageIndex = (currentImageIndex - 1 + visibleImages.length) % visibleImages.length;
+                showLightbox();
+            } else if (e.key === 'ArrowRight') {
+                currentImageIndex = (currentImageIndex + 1) % visibleImages.length;
+                showLightbox();
+            }
+        });
+
+        // Initialize visible images
+        updateVisibleImages();
     </script>
 </body>
 

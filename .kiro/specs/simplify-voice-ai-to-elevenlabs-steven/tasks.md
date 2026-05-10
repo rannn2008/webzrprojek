@@ -1,0 +1,166 @@
+# Implementation Plan
+
+- [x] 1. Write bug condition exploration test
+  - **Property 1: Bug Condition** - Multiple Voice Service Fallback Detection
+  - **CRITICAL**: This test MUST FAIL on unfixed code - failure confirms the bug exists
+  - **DO NOT attempt to fix the test or the code when it fails**
+  - **NOTE**: This test encodes the expected behavior - it will validate the fix when it passes after implementation
+  - **GOAL**: Surface counterexamples that demonstrate the bug exists (multiple fallback attempts)
+  - **Scoped PBT Approach**: Scope the property to concrete failing cases - voice playback requests that trigger multiple fallback attempts
+  - Test that voice playback attempts only ElevenLabs Steven voice (no Gemini TTS, no browser Speech Synthesis, no ElevenLabs Adam)
+  - Verify that `playGeminiTts()` function does NOT exist in `global_ai_assistant.php`
+  - Verify that `speakWithBrowserVoice()` function does NOT exist in `global_ai_assistant.php`
+  - Verify that `pickMaleVoice()` function does NOT exist in `global_ai_assistant.php` and `index.php`
+  - Verify that `api_gemini_tts.php` file does NOT exist
+  - Verify that Gemini TTS constants do NOT exist in `config.php` (GEMINI_API_KEY, GEMINI_TTS_MODEL, GEMINI_TTS_VOICE)
+  - Verify that ELEVENLABS_FALLBACK_VOICE_ID constant does NOT exist in `config.php`
+  - Run test on UNFIXED code
+  - **EXPECTED OUTCOME**: Test FAILS (this is correct - it proves the bug exists with multiple fallback mechanisms)
+  - Document counterexamples found (e.g., "playAiVoiceTts() attempts ElevenLabs Steven, then Adam, then Gemini TTS", "playGeminiTts() function exists", "api_gemini_tts.php file exists")
+  - Mark task complete when test is written, run, and failure is documented
+  - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8_
+
+- [x] 2. Write preservation property tests (BEFORE implementing fix)
+  - **Property 2: Preservation** - Voice Playback Functionality Preservation
+  - **IMPORTANT**: Follow observation-first methodology
+  - Observe behavior on UNFIXED code for successful ElevenLabs Steven voice playback
+  - Observe: ElevenLabs TTS API calls through `api_elevenlabs_tts.php` work correctly
+  - Observe: AI orb speaking animation displays when voice is playing
+  - Observe: Emoji animations trigger correctly based on message type
+  - Observe: Audio unlocking mechanism functions correctly
+  - Observe: Welcome/goodbye voice notifications play correctly
+  - Observe: Admin voice status reports work correctly
+  - Observe: Chat notification voice alerts function correctly
+  - Write property-based tests capturing observed behavior patterns:
+    - For all successful ElevenLabs Steven voice playback, audio output is produced correctly
+    - For all successful ElevenLabs Steven voice playback, AI orb animation displays
+    - For all successful ElevenLabs Steven voice playback, emoji animations trigger correctly
+    - For all successful ElevenLabs Steven voice playback, status text appears and disappears correctly
+  - Property-based testing generates many test cases for stronger guarantees
+  - Run tests on UNFIXED code
+  - **EXPECTED OUTCOME**: Tests PASS (this confirms baseline behavior to preserve)
+  - Mark task complete when tests are written, run, and passing on unfixed code
+  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8_
+
+- [x] 3. Simplify voice AI to use only ElevenLabs Steven
+
+  - [x] 3.1 Simplify playAiVoiceTts() function in global_ai_assistant.php
+    - Remove all fallback logic from `playAiVoiceTts()` function
+    - Keep only the single ElevenLabs Steven voice call
+    - Remove the second `playElevenLabsTts()` call with Adam voice ID
+    - Remove the `playGeminiTts()` call
+    - Change function to directly call `playElevenLabsTts()` with Steven voice ID and return the result
+    - _Bug_Condition: isBugCondition(voicePlaybackAttempt) where playAiVoiceTts attempts multiple voice services in sequence_
+    - _Expected_Behavior: playAiVoiceTts() uses only ElevenLabs Steven voice (9zOaLLJKBwYOwr8bOPDj) without attempting any fallback services_
+    - _Preservation: ElevenLabs TTS API calls, AI orb animation, emoji animations, audio unlocking, voice notifications must continue to work exactly as before_
+    - _Requirements: 1.1, 2.1, 3.1, 3.2, 3.3, 3.4, 3.5_
+
+  - [x] 3.2 Remove unnecessary functions from global_ai_assistant.php
+    - Delete `playGeminiTts()` function entirely (lines ~150-180)
+    - Delete `speakWithBrowserVoice()` function entirely (lines ~200-215)
+    - Delete `pickMaleVoice()` function entirely (lines ~135-150)
+    - _Bug_Condition: playGeminiTts function exists and is called OR speakWithBrowserVoice function exists and is called_
+    - _Expected_Behavior: These functions SHALL NOT exist in the codebase_
+    - _Preservation: All other functions in global_ai_assistant.php must continue to work correctly_
+    - _Requirements: 1.2, 1.3, 2.2, 2.3_
+
+  - [x] 3.3 Update speakText() function in global_ai_assistant.php
+    - Remove fallback to `speakWithBrowserVoice()` from `speakText()` function
+    - Keep the `playAiVoiceTts()` call
+    - Remove the `.then()` fallback that calls `speakWithBrowserVoice()`
+    - Simply call `stopSpeaking()` if playback fails
+    - _Bug_Condition: speakText() falls back to browser Speech Synthesis_
+    - _Expected_Behavior: speakText() SHALL NOT attempt browser Speech Synthesis fallback_
+    - _Preservation: Voice playback through ElevenLabs must continue to work correctly_
+    - _Requirements: 1.3, 2.3, 3.2_
+
+  - [x] 3.4 Remove Gemini TTS constants from config.php
+    - Delete `GEMINI_API_KEY` constant definition (lines ~85-87)
+    - Delete `GEMINI_TTS_MODEL` constant definition (lines ~88-90)
+    - Delete `GEMINI_TTS_VOICE` constant definition (lines ~91-93)
+    - Delete `ELEVENLABS_FALLBACK_VOICE_ID` constant definition (lines ~100-102)
+    - Keep all other ElevenLabs constants: ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID, ELEVENLABS_TTS_MODEL, ELEVENLABS_OUTPUT_FORMAT
+    - _Bug_Condition: config.php contains Gemini TTS constants OR config.php contains ELEVENLABS_FALLBACK_VOICE_ID constant_
+    - _Expected_Behavior: config.php SHALL NOT contain Gemini TTS configuration constants or fallback voice ID_
+    - _Preservation: All other configuration constants must remain unchanged_
+    - _Requirements: 1.4, 1.5, 2.4, 2.5, 3.4_
+
+  - [x] 3.5 Delete api_gemini_tts.php file
+    - Delete the entire `parking/api_gemini_tts.php` file from the codebase
+    - _Bug_Condition: api_gemini_tts.php file exists_
+    - _Expected_Behavior: api_gemini_tts.php file SHALL NOT exist_
+    - _Preservation: api_elevenlabs_tts.php must continue to work correctly_
+    - _Requirements: 1.6, 2.6, 3.1_
+
+  - [x] 3.6 Update speakStatus() function in index.php
+    - Remove browser Speech Synthesis fallback logic from `speakStatus()` function
+    - Keep the check for `playAiVoiceTts` function existence
+    - Remove the entire `SpeechSynthesisUtterance` fallback block (lines ~520-535)
+    - If `playAiVoiceTts` is not available, simply show an alert and return
+    - _Bug_Condition: index.php uses browser Speech Synthesis_
+    - _Expected_Behavior: index.php SHALL use only ElevenLabs TTS with Steven voice_
+    - _Preservation: Voice status reports must continue to work correctly with ElevenLabs_
+    - _Requirements: 1.8, 2.8, 3.7_
+
+  - [x] 3.7 Update speakText() function in index.php
+    - Remove browser Speech Synthesis fallback logic from `speakText()` function
+    - Keep the check for `playAiVoiceTts` function existence
+    - Remove the entire `SpeechSynthesisUtterance` fallback block (lines ~570-585)
+    - If `playAiVoiceTts` is not available, simply return without speaking
+    - _Bug_Condition: index.php uses browser Speech Synthesis_
+    - _Expected_Behavior: index.php SHALL use only ElevenLabs TTS with Steven voice_
+    - _Preservation: Voice notifications must continue to work correctly with ElevenLabs_
+    - _Requirements: 1.8, 2.8, 3.6_
+
+  - [x] 3.8 Remove pickMaleVoice() function from index.php
+    - Delete the entire `pickMaleVoice()` function definition (lines ~555-570)
+    - _Bug_Condition: pickMaleVoice() function exists in index.php_
+    - _Expected_Behavior: pickMaleVoice() function SHALL NOT exist_
+    - _Preservation: All other functions in index.php must continue to work correctly_
+    - _Requirements: 1.8, 2.8_
+
+  - [x] 3.9 Remove inline voice script from users.php
+    - Delete the `$voiceScript` variable and its inline JavaScript that uses browser Speech Synthesis (lines ~30-50)
+    - The global AI assistant will handle voice notifications through the unified event system
+    - No need for page-specific voice implementation
+    - _Bug_Condition: users.php uses browser Speech Synthesis_
+    - _Expected_Behavior: users.php SHALL use only ElevenLabs TTS with Steven voice through global AI assistant_
+    - _Preservation: Top-up approval voice notifications must continue to work correctly_
+    - _Requirements: 1.7, 2.7, 3.6_
+
+  - [x] 3.10 Verify bug condition exploration test now passes
+    - **Property 1: Expected Behavior** - Single Voice Service Implementation
+    - **IMPORTANT**: Re-run the SAME test from task 1 - do NOT write a new test
+    - The test from task 1 encodes the expected behavior
+    - When this test passes, it confirms the expected behavior is satisfied
+    - Run bug condition exploration test from step 1
+    - Verify that voice playback uses only ElevenLabs Steven voice
+    - Verify that no Gemini TTS, browser Speech Synthesis, or ElevenLabs Adam fallbacks occur
+    - Verify that removed functions and files no longer exist
+    - Verify that removed constants no longer exist in config.php
+    - **EXPECTED OUTCOME**: Test PASSES (confirms bug is fixed)
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8_
+
+  - [x] 3.11 Verify preservation tests still pass
+    - **Property 2: Preservation** - Voice Playback Functionality Preservation
+    - **IMPORTANT**: Re-run the SAME tests from task 2 - do NOT write new tests
+    - Run preservation property tests from step 2
+    - Verify that ElevenLabs TTS API calls still work correctly
+    - Verify that AI orb animation still displays correctly
+    - Verify that emoji animations still trigger correctly
+    - Verify that audio unlocking still functions correctly
+    - Verify that welcome/goodbye notifications still play correctly
+    - Verify that admin status reports still work correctly
+    - Verify that chat notifications still function correctly
+    - **EXPECTED OUTCOME**: Tests PASS (confirms no regressions)
+    - Confirm all tests still pass after fix (no regressions)
+    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8_
+
+- [x] 4. Checkpoint - Ensure all tests pass
+  - Run all bug condition exploration tests - should PASS
+  - Run all preservation property tests - should PASS
+  - Verify that voice playback works correctly with only ElevenLabs Steven voice
+  - Verify that no fallback mechanisms are triggered
+  - Verify that all voice features (welcome, goodbye, status, chat notifications) work correctly
+  - If any issues arise, investigate and resolve before marking complete
+  - Ask the user if questions arise

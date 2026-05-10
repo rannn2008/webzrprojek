@@ -38,23 +38,6 @@ if (isset($_GET["approve_topup"])) {
         $stmt_hist->execute();
 
         $msg = "<div class='badge bg-success' style='width:100%'>Top-up Approved! Balance updated & history logged.</div>";
-        
-        $usr = $conn->query("SELECT name FROM users WHERE id=$uid")->fetch_assoc();
-        $uName = $usr ? $usr['name'] : 'User';
-        $voiceScript = "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                if ('speechSynthesis' in window) {
-                    const txt = 'Top up untuk $uName telah berhasil disetujui.';
-                    console.log('Speaking:', txt);
-                    const msg = new SpeechSynthesisUtterance(txt);
-                    const voices = window.speechSynthesis.getVoices();
-                    const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
-                    msg.voice = idVoice ? idVoice : null;
-                    msg.lang = 'id-ID';
-                    window.speechSynthesis.speak(msg);
-                }
-            });
-        </script>";
     }
 }
 
@@ -219,10 +202,6 @@ if (isset($_POST["update_balance"])) {
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Force voices to load
-        if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-        }
 
         function escHtml(v) {
             return String(v ?? "").replace(/[&<>"']/g, function (c) {
@@ -297,7 +276,6 @@ if (isset($_POST["update_balance"])) {
             setInterval(pollUsersLive, 2000);
         });
     </script>
-    <?php if (isset($voiceScript)) echo $voiceScript; ?>
 </body>
 
 </html>

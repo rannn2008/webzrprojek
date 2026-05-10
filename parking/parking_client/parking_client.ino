@@ -39,12 +39,17 @@ Servo palang;
 
 // ============ SETTINGS ============
 const int SLOT_THRESHOLD = 15; // cm - car detected
+const int SLOT_EMPTY_THRESHOLD = 22; // cm - slot considered empty again
+const int SLOT_DETECT_THRESHOLD[2] = {SLOT_THRESHOLD, SLOT_THRESHOLD};
+const int SLOT_CLEAR_THRESHOLD[2] = {SLOT_EMPTY_THRESHOLD, SLOT_EMPTY_THRESHOLD};
 const int EXIT_THRESHOLD = 15; // cm - car at exit
 const unsigned long GATE_TIME = 2000; // Auto-close after 2 seconds
 const unsigned long PARK_TIMEOUT = 60000; // 60s to park
 const unsigned long DENIED_TIME = 3000;
 const unsigned long SENSOR_INTERVAL = 300;
+const unsigned long SLOT_LED_INTERVAL = 150;
 const unsigned long SLOT_CONFIRM_TIME = 900;
+const unsigned long SLOT_EMPTY_CONFIRM_TIME = 900;
 const unsigned long SENSOR_SYNC_INTERVAL = 1000;
 const unsigned long SENSOR_SYNC_HEARTBEAT = 3000; // 3s heartbeat for faster ONLINE detection
 const unsigned long EXIT_DEBOUNCE = 5000;
@@ -65,6 +70,7 @@ unsigned long gateOpenTime = 0;
 bool showDeniedScreen = false;
 unsigned long deniedStartTime = 0;
 unsigned long lastSensorCheck = 0;
+unsigned long lastSlotLedCheck = 0;
 unsigned long lastExitCheck = 0;
 unsigned long lastGatePoll = 0;
 unsigned long lastSensorSync = 0;
@@ -73,6 +79,12 @@ bool sensorDirty = true;
 bool pending_slot_state[2] = {false, false};
 unsigned long pending_slot_since[2] = {0, 0};
 bool wait_slot_armed[2] = {false, false};
+bool slot_present_live[2] = {false, false};
+bool slot_empty_pending[2] = {false, false};
+unsigned long slot_empty_since[2] = {0, 0};
+bool slot_departed_pending[2] = {false, false};
+unsigned long slot_departed_since[2] = {0, 0};
+long slot_last_distance[2] = {999, 999};
 const unsigned long GATE_POLL_INTERVAL = 3000;
 
 // ============ BUZZER ============
@@ -95,6 +107,41 @@ long readDist(int trig, int echo) {
   digitalWrite(trig, LOW);
   long d = pulseIn(echo, HIGH, 25000);
   return (d == 0) ? 999 : d * 0.034 / 2;
+}
+
+long readSlotDist(int idx) {
+  int trig = idx == 0 ? TRIG1 : TRIG2;
+  int echo = idx == 0 ? ECHO1 : ECHO2;
+  long a = readDist(trig, echo);
+  delay(12);
+  long b = readDist(trig, echo);
+  delay(12);
+  long c = readDist(trig, echo);
+
+  if (a > b) {
+    long t = a;
+    a = b;
+    b = t;
+  }
+  if (b > c) {
+    long t = b;
+    b = c;
+    c = t;
+  }
+  if (a > b) {
+    long t = a;
+    a = b;
+    b = t;
+  }
+  return b;
+}
+
+bool slotDetectsCar(int idx, long distance) {
+  return distance > 0 && distance <= SLOT_DETECT_THRESHOLD[idx];
+}
+
+bool slotReadsEmpty(int idx, long distance) {
+  return distance == 999 || distance >= SLOT_CLEAR_THRESHOLD[idx];
 }
 
 // ============ OLED SCREENS ============
@@ -295,8 +342,57 @@ void refreshParkedCount() {
 }
 
 void refreshSlotLeds() {
-  digitalWrite(LED_SLOT1, slot_occupied[0] ? HIGH : LOW);
-  digitalWrite(LED_SLOT2, slot_occupied[1] ? HIGH : LOW);
+  digitalWrite(LED_SLOT1, (slot_occupied[0] && !slot_departed_pending[0]) ? HIGH : LOW);
+  digitalWrite(LED_SLOT2, (slot_occupied[1] && !slot_departed_pending[1]) ? HIGH : LOW);
+}
+
+void refreshSlotLedsFromSensors() {
+  if (millis() - lastSlotLedCheck < SLOT_LED_INTERVAL)
+    return;
+  lastSlotLedCheck = millis();
+
+  long d1 = readSlotDist(0);
+  long d2 = readSlotDist(1);
+  slot_last_distance[0] = d1;
+  slot_last_distance[1] = d2;
+
+  for (int i = 0; i < 2; i++) {
+    bool detected = slotDetectsCar(i, slot_last_distance[i]);
+    bool empty = slotReadsEmpty(i, slot_last_distance[i]);
+    slot_present_live[i] = detected;
+
+    if (detected) {
+      slot_empty_pending[i] = false;
+      slot_departed_pending[i] = false;
+      continue;
+    }
+
+    if (!slot_occupied[i]) {
+      slot_empty_pending[i] = false;
+      slot_departed_pending[i] = false;
+      continue;
+    }
+
+    if (!empty) {
+      slot_empty_pending[i] = false;
+      continue;
+    }
+
+    if (!slot_empty_pending[i]) {
+      slot_empty_pending[i] = true;
+      slot_empty_since[i] = millis();
+      continue;
+    }
+
+    if (!slot_departed_pending[i] &&
+        millis() - slot_empty_since[i] >= SLOT_EMPTY_CONFIRM_TIME) {
+      slot_departed_pending[i] = true;
+      slot_departed_since[i] = slot_empty_since[i];
+      Serial.println("Slot " + String(i + 1) + " left parking spot");
+    }
+  }
+
+  refreshSlotLeds();
 }
 
 void setSlotState(int idx, bool occupied, const String &name = "",
@@ -309,6 +405,9 @@ void setSlotState(int idx, bool occupied, const String &name = "",
     slot_name[idx] = "";
     slot_plate[idx] = "";
   }
+  slot_present_live[idx] = occupied;
+  slot_empty_pending[idx] = false;
+  slot_departed_pending[idx] = false;
   refreshParkedCount();
   refreshSlotLeds();
   sensorDirty = true;
@@ -559,11 +658,14 @@ void closeGate() {
 // ============ SLOT MANAGEMENT ============
 void hydrateSlotsFromSensors() {
   for (int i = 0; i < 2; i++) {
-    long d = readDist(i == 0 ? TRIG1 : TRIG2, i == 0 ? ECHO1 : ECHO2);
-    bool occupied = (d > 0 && d <= SLOT_THRESHOLD);
+    long d = readSlotDist(i);
+    bool occupied = slotDetectsCar(i, d);
     slot_occupied[i] = occupied;
     slot_name[i] = occupied ? "UNKNOWN" : "";
     slot_plate[i] = occupied ? "-" : "";
+    slot_present_live[i] = occupied;
+    slot_empty_pending[i] = false;
+    slot_departed_pending[i] = false;
     pending_slot_state[i] = occupied;
     pending_slot_since[i] = millis();
   }
@@ -579,7 +681,8 @@ void armWaitingSlots() {
       wait_slot_armed[i] = false;
       continue;
     }
-    wait_slot_armed[i] = true;
+    long d = readSlotDist(i);
+    wait_slot_armed[i] = slotReadsEmpty(i, d);
     pending_slot_state[i] = false;
     pending_slot_since[i] = millis();
   }
@@ -594,11 +697,21 @@ void detectParkingSlotWhileWaiting() {
   lastSensorCheck = millis();
 
   for (int i = 0; i < 2; i++) {
-    if (!wait_slot_armed[i] || slot_occupied[i])
+    if (slot_occupied[i])
       continue;
 
-    long d = readDist(i == 0 ? TRIG1 : TRIG2, i == 0 ? ECHO1 : ECHO2);
-    bool sensedOccupied = (d > 0 && d <= SLOT_THRESHOLD);
+    long d = readSlotDist(i);
+    bool sensedOccupied = slotDetectsCar(i, d);
+    bool sensedEmpty = slotReadsEmpty(i, d);
+
+    if (!wait_slot_armed[i]) {
+      if (sensedEmpty) {
+        wait_slot_armed[i] = true;
+        pending_slot_state[i] = false;
+        pending_slot_since[i] = millis();
+      }
+      continue;
+    }
 
     if (!sensedOccupied) {
       pending_slot_state[i] = false;
@@ -652,12 +765,23 @@ void clearSlotForExit(const String &rawExitName) {
   exitName.trim();
 
   int target = -1;
+  int firstDeparted = -1;
   int physicallyEmptyLatched = -1;
+
+  for (int i = 0; i < 2; i++) {
+    if (!slot_occupied[i] || !slot_departed_pending[i])
+      continue;
+    if (firstDeparted < 0 ||
+        slot_departed_since[i] < slot_departed_since[firstDeparted]) {
+      firstDeparted = i;
+    }
+  }
+
   for (int i = 0; i < 2; i++) {
     if (!slot_occupied[i])
       continue;
-    long d = readDist(i == 0 ? TRIG1 : TRIG2, i == 0 ? ECHO1 : ECHO2);
-    if (d > SLOT_THRESHOLD) {
+    long d = readSlotDist(i);
+    if (slotReadsEmpty(i, d)) {
       physicallyEmptyLatched = i;
       break;
     }
@@ -669,6 +793,9 @@ void clearSlotForExit(const String &rawExitName) {
       target = i;
       break;
     }
+  }
+  if (target < 0 && firstDeparted >= 0) {
+    target = firstDeparted;
   }
   if (target < 0 && physicallyEmptyLatched >= 0) {
     target = physicallyEmptyLatched;
@@ -696,12 +823,28 @@ bool getLikelyExitIdentity(String &candidateName, String &candidatePlate) {
   candidateName = "";
   candidatePlate = "";
 
+  int firstDeparted = -1;
+  for (int i = 0; i < 2; i++) {
+    if (!slot_occupied[i] || !slot_departed_pending[i])
+      continue;
+    if (firstDeparted < 0 ||
+        slot_departed_since[i] < slot_departed_since[firstDeparted]) {
+      firstDeparted = i;
+    }
+  }
+
+  if (firstDeparted >= 0) {
+    candidateName = slot_name[firstDeparted];
+    candidatePlate = slot_plate[firstDeparted];
+    return true;
+  }
+
   for (int i = 0; i < 2; i++) {
     if (!slot_occupied[i])
       continue;
 
-    long d = readDist(i == 0 ? TRIG1 : TRIG2, i == 0 ? ECHO1 : ECHO2);
-    if (d > SLOT_THRESHOLD) {
+    long d = readSlotDist(i);
+    if (slotReadsEmpty(i, d)) {
       candidateName = slot_name[i];
       candidatePlate = slot_plate[i];
       return true;
@@ -791,6 +934,9 @@ void setup() {
 
 // ============ MAIN LOOP ============
 void loop() {
+
+  // --- 0. LIVE SLOT LEDS ---
+  refreshSlotLedsFromSensors();
 
   // --- 1. Auto-close gate ---
   if (gateOpen && millis() - gateOpenTime >= GATE_TIME) {
@@ -953,13 +1099,25 @@ void loop() {
   static unsigned long lastDebugTime = 0;
   if (millis() - lastDebugTime > 2000) {
     lastDebugTime = millis();
-    long d1 = readDist(TRIG1, ECHO1);
-    long d2 = readDist(TRIG2, ECHO2);
-    Serial.print("--- DEBUG SENSOR --- SLOT 1 (Pin 13,12): ");
+    long d1 = readSlotDist(0);
+    long d2 = readSlotDist(1);
+    Serial.print("--- DEBUG SENSOR --- SLOT 1 (Pin 13,34): ");
     Serial.print(d1);
-    Serial.print(" cm | SLOT 2: ");
+    Serial.print(" cm [occ=");
+    Serial.print(slot_occupied[0] ? "Y" : "N");
+    Serial.print(", armed=");
+    Serial.print(wait_slot_armed[0] ? "Y" : "N");
+    Serial.print(", left=");
+    Serial.print(slot_departed_pending[0] ? "Y" : "N");
+    Serial.print("] | SLOT 2: ");
     Serial.print(d2);
-    Serial.println(" cm");
+    Serial.print(" cm [occ=");
+    Serial.print(slot_occupied[1] ? "Y" : "N");
+    Serial.print(", armed=");
+    Serial.print(wait_slot_armed[1] ? "Y" : "N");
+    Serial.print(", left=");
+    Serial.print(slot_departed_pending[1] ? "Y" : "N");
+    Serial.println("]");
   }
 
   delay(10);

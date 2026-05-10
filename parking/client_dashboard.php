@@ -1437,12 +1437,37 @@ $billing_interval = getSetting($conn, 'billing_interval_minutes', '10');
             $("#digital-date").text(now.toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" }));
         }
 
+        function pickMaleVoice() {
+            const voices = window.speechSynthesis.getVoices();
+            const maleHints = ['male', 'pria', 'laki', 'ardi', 'david', 'mark', 'daniel', 'george', 'ryan', 'james', 'guy', 'fred', 'alex'];
+            const femaleHints = ['female', 'wanita', 'gadis', 'zira', 'hazel', 'susan', 'linda', 'helena'];
+            const idVoices = voices.filter(v => /id/i.test(v.lang) || /indonesia/i.test(v.name));
+            const maleIdVoice = idVoices.find(v => {
+                const name = v.name.toLowerCase();
+                return maleHints.some(h => name.includes(h)) && !femaleHints.some(h => name.includes(h));
+            });
+            const anyMaleVoice = voices.find(v => {
+                const name = v.name.toLowerCase();
+                return maleHints.some(h => name.includes(h)) && !femaleHints.some(h => name.includes(h));
+            });
+            const fallbackIdVoice = idVoices.find(v => !femaleHints.some(h => v.name.toLowerCase().includes(h)));
+            return maleIdVoice || anyMaleVoice || fallbackIdVoice || null;
+        }
+
         function speakText(txt) {
+            if (typeof playAiVoiceTts === 'function') {
+                playAiVoiceTts(txt).then((played) => {
+                    if (!played) speakWithBrowserVoice(txt);
+                });
+                return;
+            }
             if (!('speechSynthesis' in window)) return;
             const msg = new SpeechSynthesisUtterance(txt);
+            const maleVoice = pickMaleVoice();
+            if (maleVoice) msg.voice = maleVoice;
             msg.lang = 'id-ID';
-            msg.rate = 1.0;
-            msg.pitch = 1.1;
+            msg.rate = 0.9;
+            msg.pitch = 0.45;
             window.speechSynthesis.cancel();
             window.speechSynthesis.speak(msg);
         }

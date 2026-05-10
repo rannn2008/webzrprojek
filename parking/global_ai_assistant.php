@@ -162,8 +162,55 @@ $current_client_name = $_SESSION['client_name'] ?? $_SESSION['name'] ?? 'User';
         }
     }
 
+
+
+
+
+    async function playElevenLabsTts(text, voiceId = '9zOaLLJKBwYOwr8bOPDj') {
+        if (!text || text.trim() === "") return false;
+        try {
+            const response = await fetch('api_elevenlabs_tts.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, voice_id: voiceId })
+            });
+            if (!response.ok) {
+                console.warn('ElevenLabs TTS failed:', response.status, await response.text());
+                return false;
+            }
+
+            const audioBlob = await response.blob();
+            if (!audioBlob || audioBlob.size === 0) return false;
+
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            return await new Promise((resolve) => {
+                audio.onended = () => {
+                    URL.revokeObjectURL(audioUrl);
+                    resolve(true);
+                };
+                audio.onerror = () => {
+                    URL.revokeObjectURL(audioUrl);
+                    resolve(false);
+                };
+                audio.play().catch(() => {
+                    URL.revokeObjectURL(audioUrl);
+                    resolve(false);
+                });
+            });
+        } catch (e) {
+            console.warn('ElevenLabs TTS fallback:', e);
+            return false;
+        }
+    }
+
+    async function playAiVoiceTts(text) {
+        return await playElevenLabsTts(text, '9zOaLLJKBwYOwr8bOPDj');
+    }
+
+
+
     function speakText(text) {
-        if (!('speechSynthesis' in window)) return;
         if (!text || text.trim() === "") return;
         
         console.log("Global AI Speaking: " + text);
@@ -179,29 +226,25 @@ $current_client_name = $_SESSION['client_name'] ?? $_SESSION['name'] ?? 'User';
         
         triggerEmojiAnimation(type, type === 'welcome' || type === 'thanks');
 
-        const msg = new SpeechSynthesisUtterance(text);
-        const voices = window.speechSynthesis.getVoices();
-        const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
-        if (idVoice) { msg.voice = idVoice; msg.lang = 'id-ID'; } else { msg.lang = 'id-ID'; }
-        
-        msg.onstart = () => { 
+        const startSpeaking = () => {
             orb.classList.add('speaking'); 
             statusText.style.opacity = '1';
         };
-        msg.onend = () => { 
+        const stopSpeaking = () => {
             orb.classList.remove('speaking'); 
             statusText.style.opacity = '0';
         };
-        
-        window.speechSynthesis.speak(msg);
+
+        startSpeaking();
+        playAiVoiceTts(text).then((played) => {
+            stopSpeaking();
+        });
     }
 
     let G_AUDIO_CTX = null;
 
     function unlockAudio() {
         if (G_AUDIO_UNLOCKED) return;
-        const dummy = new SpeechSynthesisUtterance("");
-        window.speechSynthesis.speak(dummy);
         
         try {
             G_AUDIO_CTX = new (window.AudioContext || window.webkitAudioContext)();
@@ -306,14 +349,7 @@ $current_client_name = $_SESSION['client_name'] ?? $_SESSION['name'] ?? 'User';
     }
 
     function playChatNotificationSound() {
-        // Fallback to SpeechSynthesis since it's already unlocked and 100% reliable
-        if ('speechSynthesis' in window) {
-            const msg = new SpeechSynthesisUtterance("Ada pesan baru.");
-            msg.lang = 'id-ID';
-            msg.rate = 1.2; // Slightly faster for notifications
-            msg.pitch = 1.5; // Higher pitch to sound like a notification
-            window.speechSynthesis.speak(msg);
-        }
+        playAiVoiceTts("Ada pesan baru.");
     }
 
     let lastUnreadCount = 0;
