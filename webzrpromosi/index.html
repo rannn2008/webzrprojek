@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -850,18 +850,68 @@
                 linear-gradient(180deg, #fff8df, #f4ffe9);
         }
 
+        .testimonial-slider-wrapper {
+            position: relative;
+            margin-top: 24px;
+        }
+
         .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 16px;
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 10px 5px 30px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+
+        .testimonial-grid::-webkit-scrollbar {
+            display: none;
         }
 
         .testimonial-card {
+            flex: 0 0 calc(33.333% - 14px);
+            min-width: 280px;
+            scroll-snap-align: center;
             border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 24px;
             background: var(--white);
-            box-shadow: 0 12px 28px rgba(13, 79, 48, 0.08);
+            box-shadow: 0 10px 24px rgba(13, 79, 48, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .slider-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .slider-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 1px solid var(--line);
+            color: var(--green-dark);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .slider-btn:hover {
+            background: var(--green);
+            color: var(--white);
+            border-color: var(--green);
         }
 
         .stars {
@@ -1104,9 +1154,12 @@
             }
 
             .menu-grid,
-            .feature-grid,
-            .testimonial-grid {
+            .feature-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .testimonial-card {
+                flex: 0 0 calc(50% - 10px);
             }
         }
 
@@ -1136,10 +1189,13 @@
 
             .menu-grid,
             .feature-grid,
-            .testimonial-grid,
             .wide-form,
             .add-row {
                 grid-template-columns: 1fr;
+            }
+
+            .testimonial-card {
+                flex: 0 0 100%;
             }
 
             .hero-panel {
@@ -2055,7 +2111,8 @@
                         <p>Beberapa kesan singkat untuk membantu pembeli baru lebih yakin sebelum pesan.</p>
                     </div>
                 </div>
-                <div class="testimonial-grid" id="testimonialGrid">
+                <div class="testimonial-slider-wrapper">
+                    <div class="testimonial-grid" id="testimonialGrid">
                     <!-- Default fallback while loading -->
                     <article class="testimonial-card">
                         <div class="stars">★★★★★</div>
@@ -2072,6 +2129,12 @@
                         <p>Pesan lewat WhatsApp praktis, tinggal pilih menu dan totalnya langsung jelas.</p>
                         <strong>Maya, Mahasiswa</strong>
                     </article>
+                    </div>
+
+                    <div class="slider-nav">
+                        <button class="slider-btn" id="prevTesti" aria-label="Sebelumnya">&#8249;</button>
+                        <button class="slider-btn" id="nextTesti" aria-label="Selanjutnya">&#8250;</button>
+                    </div>
                 </div>
 
                 <!-- Form Ulasan Pelanggan -->
@@ -3258,6 +3321,20 @@
                 showLightbox();
             }
         });
+
+        // Testimonial Slider Navigation
+        const testiGrid = document.getElementById('testimonialGrid');
+        const prevTesti = document.getElementById('prevTesti');
+        const nextTesti = document.getElementById('nextTesti');
+
+        if (testiGrid && prevTesti && nextTesti) {
+            nextTesti.addEventListener('click', () => {
+                testiGrid.scrollBy({ left: testiGrid.clientWidth, behavior: 'smooth' });
+            });
+            prevTesti.addEventListener('click', () => {
+                testiGrid.scrollBy({ left: -testiGrid.clientWidth, behavior: 'smooth' });
+            });
+        }
 
         // Initialize visible images
         updateVisibleImages();
