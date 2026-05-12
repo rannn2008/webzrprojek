@@ -3352,26 +3352,29 @@
             }
         });
 
-        // Hero Background Video Fade-In
+        // Hero Background Video - Aggressive Load
         (function() {
             const video = document.getElementById('heroBgVideo');
             if (!video) return;
 
-            // Start loading video after page is interactive
-            video.addEventListener('canplaythrough', function() {
-                video.classList.add('loaded');
-            }, { once: true });
+            // Show video immediately
+            video.classList.add('loaded');
+            
+            // Try playing
+            const playVideo = () => {
+                video.play().catch(e => {
+                    console.log("Autoplay check:", e);
+                    // Try again on first interaction if needed
+                    document.addEventListener('click', () => video.play(), { once: true });
+                });
+            };
 
-            // Fallback: show after 3s even if not fully loaded
-            setTimeout(function() {
-                if (video.readyState >= 3) {
-                    video.classList.add('loaded');
-                } else {
-                    // Video couldn't load - fallback stays visible
-                    video.remove();
-                }
-            }, 3000);
-
+            if (video.readyState >= 1) {
+                playVideo();
+            } else {
+                video.addEventListener('loadedmetadata', playVideo, { once: true });
+            }
+            
             video.load();
         })();
 
