@@ -260,11 +260,19 @@
             height: 100%;
             object-fit: cover;
             opacity: 0;
-            transition: opacity 1.2s ease;
+            transition: opacity 1.5s ease;
+            will-change: transform;
+            transform: scale(1.05);
         }
 
         .hero-video.loaded {
             opacity: 1;
+            animation: slowZoomVideo 40s linear infinite alternate;
+        }
+
+        @keyframes slowZoomVideo {
+            from { transform: scale(1.05); }
+            to { transform: scale(1.18); }
         }
 
         .hero-video-fallback {
@@ -929,7 +937,7 @@
             place-items: center;
             font-size: 20px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .slider-btn:hover {
@@ -2143,22 +2151,22 @@
                 </div>
                 <div class="testimonial-slider-wrapper">
                     <div class="testimonial-grid" id="testimonialGrid">
-                    <!-- Default fallback while loading -->
-                    <article class="testimonial-card">
-                        <div class="stars">★★★★★</div>
-                        <p>Rasanya segar, manisnya pas, dan alpukatnya terasa banget. Cocok buat siang-siang.</p>
-                        <strong>Rani, Padang</strong>
-                    </article>
-                    <article class="testimonial-card">
-                        <div class="stars">★★★★★</div>
-                        <p>Porsinya puas dan isiannya ramai. Enak buat pesan bareng teman kantor.</p>
-                        <strong>Fajar, Karyawan</strong>
-                    </article>
-                    <article class="testimonial-card">
-                        <div class="stars">★★★★★</div>
-                        <p>Pesan lewat WhatsApp praktis, tinggal pilih menu dan totalnya langsung jelas.</p>
-                        <strong>Maya, Mahasiswa</strong>
-                    </article>
+                        <!-- Default fallback while loading -->
+                        <article class="testimonial-card">
+                            <div class="stars">★★★★★</div>
+                            <p>Rasanya segar, manisnya pas, dan alpukatnya terasa banget. Cocok buat siang-siang.</p>
+                            <strong>Rani, Padang</strong>
+                        </article>
+                        <article class="testimonial-card">
+                            <div class="stars">★★★★★</div>
+                            <p>Porsinya puas dan isiannya ramai. Enak buat pesan bareng teman kantor.</p>
+                            <strong>Fajar, Karyawan</strong>
+                        </article>
+                        <article class="testimonial-card">
+                            <div class="stars">★★★★★</div>
+                            <p>Pesan lewat WhatsApp praktis, tinggal pilih menu dan totalnya langsung jelas.</p>
+                            <strong>Maya, Mahasiswa</strong>
+                        </article>
                     </div>
 
                     <div class="slider-nav">
@@ -3353,19 +3361,22 @@
         });
 
         // Hero Background Video - Aggressive Load
-        (function() {
+        (function () {
             const video = document.getElementById('heroBgVideo');
             if (!video) return;
 
-            // Show video immediately
-            video.classList.add('loaded');
-            
-            // Try playing
+            // Show video and stop fallback animation to save resources
             const playVideo = () => {
+                video.classList.add('loaded');
+                const fallback = document.querySelector('.hero-video-fallback');
+                if (fallback) fallback.style.animation = 'none'; // Stop kenBurns to save CPU
+
                 video.play().catch(e => {
                     console.log("Autoplay check:", e);
-                    // Try again on first interaction if needed
-                    document.addEventListener('click', () => video.play(), { once: true });
+                    document.addEventListener('click', () => {
+                        video.play();
+                        if (fallback) fallback.style.animation = 'none';
+                    }, { once: true });
                 });
             };
 
@@ -3374,7 +3385,7 @@
             } else {
                 video.addEventListener('loadedmetadata', playVideo, { once: true });
             }
-            
+
             video.load();
         })();
 
@@ -3397,5 +3408,6 @@
     </script>
 </body>
 
-</html>   
+</html>  
+ 
  
