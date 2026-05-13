@@ -616,13 +616,25 @@
         .feature-icon {
             display: grid;
             place-items: center;
-            width: 42px;
-            height: 42px;
-            margin-bottom: 14px;
-            border-radius: 8px;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            border-radius: 12px;
             background: var(--yellow);
             color: var(--green-dark);
-            font-size: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2.5px;
+        }
+
+        .feature:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--green);
+            color: var(--white);
         }
 
         .feature h3 {
@@ -1987,33 +1999,45 @@
                     </div>
                 </div>
                 <div class="feature-grid">
-                    <div class="feature">
-                        <div class="feature-icon">A</div>
+                    <div class="feature reveal">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.4 19 2c1 2 1.2 5 0 11a7 7 0 0 1-8 7Z"/><circle cx="11" cy="13" r="3"/></svg>
+                        </div>
                         <h3>Alpukat Juara</h3>
                         <p>Alpukat jadi bahan unggulan dengan rasa lembut dan porsi yang terasa.</p>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">B</div>
+                    <div class="feature reveal">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z"/></svg>
+                        </div>
                         <h3>Buah Segar Pilihan</h3>
                         <p>Setiap sajian dibuat dengan buah pilihan agar rasa tetap segar.</p>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">G</div>
+                    <div class="feature reveal">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813L4.275 9l5.812 1.912L12 16.725l1.913-5.813L19.725 9l-5.813-1.912z"/></svg>
+                        </div>
                         <h3>Gula Asli</h3>
                         <p>Manisnya lebih mantap karena memakai gula asli, bukan asal manis.</p>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">C</div>
+                    <div class="feature reveal">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9m3 3V5m-5 9H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v4M8 21l4-4 4 4"/></svg>
+                        </div>
                         <h3>Creamy dan Dingin</h3>
                         <p>Kuah manis creamy dipadukan es dingin untuk rasa yang adem.</p>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">S</div>
+                    <div class="feature reveal">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
                         <h3>Cocok Semua Kalangan</h3>
                         <p>Rasanya ramah untuk anak-anak, anak muda, keluarga, dan pekerja.</p>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">R</div>
+                    <div class="feature reveal">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </div>
                         <h3>Bisa Pesan Ramai</h3>
                         <p>Cocok untuk pesanan pribadi, kumpul keluarga, atau traktiran kantor.</p>
                     </div>
