@@ -3216,6 +3216,7 @@
                 "#menuGrid .menu-card",
                 ".feature-grid .feature",
                 "#testimonialGrid .testimonial-card",
+                ".gallery-item",
                 ".section-head > *",
                 ".location-wrap > *",
                 ".order-box > *",
@@ -3223,7 +3224,20 @@
                 ".review-form-wrapper"
             ];
 
-            document.querySelectorAll(autoTargets.join(",")).forEach((el) => el.classList.add("reveal"));
+            document.querySelectorAll(autoTargets.join(",")).forEach((el) => {
+                el.classList.add("reveal");
+            });
+
+            // Add staggered delay for grid children to make it look premium
+            const gridContainers = document.querySelectorAll('.feature-grid, #menuGrid, #testimonialGrid, .gallery-grid');
+            gridContainers.forEach(container => {
+                const children = Array.from(container.children);
+                children.forEach((child, index) => {
+                    // Maximum delay 0.5s so it doesn't take too long
+                    const delay = Math.min(index * 0.15, 0.5);
+                    child.style.transitionDelay = `${delay}s`;
+                });
+            });
 
             const reveals = document.querySelectorAll(".reveal");
 
