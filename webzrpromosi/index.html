@@ -2694,27 +2694,11 @@
             menuSelect.innerHTML = availableMenus.map((menu) => {
                 return `<option value="${escapeHtml(menu.name)}" data-price="${Number(menu.price || 0)}">${escapeHtml(menu.name)} - ${formatRupiah.format(Number(menu.price || 0))}</option>`;
             }).join("");
-        }
-
-        // Event listener for category filters
-        document.getElementById('menuCategoryFilters')?.addEventListener('click', (e) => {
-            const btn = e.target.closest('.filter-btn');
-            if (!btn) return;
-
-            const category = btn.dataset.category;
-            
-            // UI Update
-            document.querySelectorAll('#menuCategoryFilters .filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            // Render
-            renderMenuCatalog(category);
-        });
 
             // Update Smart Chatbot with new menu data (with error handling)
             try {
-                if (smartBot && typeof smartBot.updateMenuData === 'function') {
-                    smartBot.updateMenuData(menus);
+                if (window.smartBot && typeof window.smartBot.updateMenuData === 'function') {
+                    window.smartBot.updateMenuData(menus);
                     console.log('✅ Smart Chatbot updated with latest menu data');
                 }
             } catch (error) {
@@ -2741,6 +2725,21 @@
             jumlahInput.value = 1;
             renderCart();
         }
+
+        // Event listener for category filters (moved outside)
+        document.getElementById('menuCategoryFilters')?.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+
+            const category = btn.dataset.category;
+            
+            // UI Update
+            document.querySelectorAll('#menuCategoryFilters .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Render
+            renderMenuCatalog(category);
+        });
 
         function renderCart() {
             if (!cart.length) {
