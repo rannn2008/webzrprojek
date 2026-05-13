@@ -1933,6 +1933,14 @@
                     </div>
                 </div>
 
+                <!-- Menu Category Filters -->
+                <div class="gallery-filters" style="margin-bottom: 30px;" id="menuCategoryFilters">
+                    <button class="filter-btn active" data-category="all">Semua</button>
+                    <button class="filter-btn" data-category="es teller">Es Teller</button>
+                    <button class="filter-btn" data-category="es rumput laut">Es Rumput Laut</button>
+                    <button class="filter-btn" data-category="sop buah">Sop Buah</button>
+                </div>
+
                 <div class="menu-grid" id="menuGrid" data-nosnippet>
                     <article class="menu-card" style="box-shadow: none; border: 1px solid var(--line);">
                         <div class="skeleton" style="width: 100%; aspect-ratio: 4/3; border-radius: 8px 8px 0 0;"></div>
@@ -2452,10 +2460,11 @@
                 name: "Es Teller Original",
                 price: 12000,
                 description: "Racikan klasik berisi buah segar, kuah manis, dan sensasi dingin yang pas.",
-                image: "foto2/estelleroriginal.jpg",
+                image: "foto2/estelleroriginal.webp",
                 rating: "4.8",
                 badges: ["Best seller", "Tersedia"],
-                status: "Tersedia"
+                status: "Tersedia",
+                category: "es teller"
             },
             {
                 name: "Es Teller Alpukat Spesial",
@@ -2464,7 +2473,8 @@
                 image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=85",
                 rating: "4.9",
                 badges: ["Alpukat favorit", "Tersedia"],
-                status: "Tersedia"
+                status: "Tersedia",
+                category: "es teller"
             },
             {
                 name: "Es Teller Durian",
@@ -2473,7 +2483,8 @@
                 image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=85",
                 rating: "4.7",
                 badges: ["Aroma durian", "Tersedia"],
-                status: "Tersedia"
+                status: "Tersedia",
+                category: "es teller"
             },
             {
                 name: "Es Teller Jumbo",
@@ -2482,7 +2493,8 @@
                 image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=85",
                 rating: "4.8",
                 badges: ["Porsi besar", "Tersedia"],
-                status: "Tersedia"
+                status: "Tersedia",
+                category: "es teller"
             },
             {
                 name: "Es Teller Campur",
@@ -2491,7 +2503,28 @@
                 image: "https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=800&q=85",
                 rating: "4.7",
                 badges: ["Buah campur", "Tersedia"],
-                status: "Tersedia"
+                status: "Tersedia",
+                category: "es teller"
+            },
+            {
+                name: "Sop Buah Segar",
+                price: 15000,
+                description: "Potongan buah-buahan segar dengan sirup dan susu yang nikmat.",
+                image: "https://images.unsplash.com/photo-1519996529931-28324d5a630e?auto=format&fit=crop&w=800&q=85",
+                rating: "4.8",
+                badges: ["Full Vitamin", "Tersedia"],
+                status: "Tersedia",
+                category: "sop buah"
+            },
+            {
+                name: "Es Rumput Laut Spesial",
+                price: 14000,
+                description: "Sensasi kenyal rumput laut pilihan dipadu dengan kuah manis segar.",
+                image: "https://images.unsplash.com/photo-1543648964-187252f8c51b?auto=format&fit=crop&w=800&q=85",
+                rating: "4.7",
+                badges: ["Serat tinggi", "Tersedia"],
+                status: "Tersedia",
+                category: "es rumput laut"
             },
             {
                 name: "Paket Keluarga",
@@ -2500,7 +2533,8 @@
                 image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=85",
                 rating: "4.9",
                 badges: ["Untuk ramai", "Tersedia"],
-                status: "Tersedia"
+                status: "Tersedia",
+                category: "paket"
             }
         ];
         const mainOrderForm = document.getElementById("mainOrderForm");
@@ -2548,7 +2582,8 @@
                 image: menu.image_url || menu.image || "",
                 rating: menu.rating || "4.8",
                 badges: Array.isArray(menu.badges) ? menu.badges : [],
-                status: menu.status || "Tersedia"
+                status: menu.status || "Tersedia",
+                category: menu.category || "es teller"
             };
         }
 
@@ -2581,11 +2616,11 @@
             return defaultMenus;
         }
 
-        async function renderMenuCatalog() {
+        async function renderMenuCatalog(filterCategory = "all") {
             const menuGrid = document.getElementById("menuGrid");
             if (menuGrid) {
                 // Tampilkan Skeleton Loading sebelum mengambil data
-                menuGrid.innerHTML = Array(6).fill(`
+                menuGrid.innerHTML = Array(3).fill(`
                     <article class="menu-card" style="box-shadow: none; border: 1px solid var(--line);">
                         <div class="skeleton" style="width: 100%; aspect-ratio: 4/3; border-radius: 8px 8px 0 0;"></div>
                         <div class="menu-body">
@@ -2603,7 +2638,16 @@
             currentMenus = menus; // Update data global
             updateAiOptions(); // Update opsi AI
 
-            menuGrid.innerHTML = menus.map((menu) => {
+            const filteredMenus = filterCategory === "all" 
+                ? menus 
+                : menus.filter(m => m.category === filterCategory);
+
+            if (filteredMenus.length === 0) {
+                menuGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">Belum ada menu di kategori ini.</div>`;
+                return;
+            }
+
+            menuGrid.innerHTML = filteredMenus.map((menu) => {
                 const isAvailable = menu.status !== "Habis";
                 const badges = [`Rating ${menu.rating || "4.8"}`, ...(menu.badges || []), menu.status || "Tersedia"];
                 const uniqueBadges = [...new Set(badges.filter(Boolean))];
@@ -2615,7 +2659,7 @@
                 }
 
                 return `
-                    <article class="menu-card">
+                    <article class="menu-card reveal">
                         ${bestSellerHTML}
                         <img class="menu-photo" src="${escapeHtml(menu.image)}" alt="${escapeHtml(menu.name)}">
                         <div class="menu-body">
@@ -2633,6 +2677,11 @@
                 `;
             }).join("");
 
+            // Re-init reveal animations
+            if (typeof initScrollReveal === "function") {
+                setTimeout(initScrollReveal, 100);
+            }
+
             // Update data source badge
             const badge = document.getElementById("dataSourceBadge");
             if (badge) {
@@ -2645,6 +2694,22 @@
             menuSelect.innerHTML = availableMenus.map((menu) => {
                 return `<option value="${escapeHtml(menu.name)}" data-price="${Number(menu.price || 0)}">${escapeHtml(menu.name)} - ${formatRupiah.format(Number(menu.price || 0))}</option>`;
             }).join("");
+        }
+
+        // Event listener for category filters
+        document.getElementById('menuCategoryFilters')?.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+
+            const category = btn.dataset.category;
+            
+            // UI Update
+            document.querySelectorAll('#menuCategoryFilters .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Render
+            renderMenuCatalog(category);
+        });
 
             // Update Smart Chatbot with new menu data (with error handling)
             try {
