@@ -271,8 +271,13 @@
         }
 
         @keyframes slowZoomVideo {
-            from { transform: scale(1.05); }
-            to { transform: scale(1.18); }
+            from {
+                transform: scale(1.05);
+            }
+
+            to {
+                transform: scale(1.18);
+            }
         }
 
         .hero-video-fallback {
@@ -440,6 +445,7 @@
         }
 
         .menu-card {
+            position: relative;
             display: flex;
             flex-direction: column;
             min-height: 100%;
@@ -448,6 +454,22 @@
             border-radius: 8px;
             background: var(--white);
             box-shadow: 0 10px 28px rgba(13, 79, 48, 0.08);
+        }
+
+        .best-seller-badge {
+            position: absolute;
+            top: 12px;
+            right: 0;
+            background: linear-gradient(135deg, #FF3B30, #FF9500);
+            color: #ffffff;
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 800;
+            border-radius: 20px 0 0 20px;
+            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4);
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .menu-photo {
@@ -2586,8 +2608,15 @@
                 const badges = [`Rating ${menu.rating || "4.8"}`, ...(menu.badges || []), menu.status || "Tersedia"];
                 const uniqueBadges = [...new Set(badges.filter(Boolean))];
 
+                let bestSellerHTML = "";
+                const menuNameLower = menu.name.toLowerCase();
+                if (menuNameLower.includes("es teller zr") || menuNameLower.includes("alpukat") || menuNameLower.includes("spesial")) {
+                    bestSellerHTML = `<div class="best-seller-badge">✨ Best Seller</div>`;
+                }
+
                 return `
                     <article class="menu-card">
+                        ${bestSellerHTML}
                         <img class="menu-photo" src="${escapeHtml(menu.image)}" alt="${escapeHtml(menu.name)}">
                         <div class="menu-body">
                             <div class="menu-title">
