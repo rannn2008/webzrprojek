@@ -454,6 +454,13 @@
             border-radius: 8px;
             background: var(--white);
             box-shadow: 0 10px 28px rgba(13, 79, 48, 0.08);
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(20, 122, 63, 0.28);
+            box-shadow: 0 18px 36px rgba(13, 79, 48, 0.14);
         }
 
         .best-seller-badge {
@@ -548,6 +555,7 @@
         .choose-menu {
             margin-top: auto;
             width: 100%;
+            min-height: 48px;
         }
 
         label {
@@ -848,10 +856,14 @@
         .cart-item {
             display: grid;
             grid-template-columns: minmax(0, 1fr) auto;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
             background: linear-gradient(180deg, #ffffff, #fffdf5);
             box-shadow: 0 8px 18px rgba(13, 79, 48, 0.06);
+        }
+
+        .cart-main {
+            min-width: 0;
         }
 
         .cart-name {
@@ -863,6 +875,46 @@
             color: var(--muted);
             font-size: 14px;
             font-weight: 700;
+        }
+
+        .cart-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qty-stepper {
+            display: inline-flex;
+            align-items: center;
+            overflow: hidden;
+            border: 1px solid rgba(20, 122, 63, 0.18);
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        .cart-qty {
+            display: grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            border: 0;
+            background: transparent;
+            color: var(--green-dark);
+            cursor: pointer;
+            font: inherit;
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .cart-qty:hover {
+            background: var(--green-soft);
+        }
+
+        .cart-qty-value {
+            min-width: 34px;
+            color: var(--green-dark);
+            text-align: center;
+            font-weight: 900;
         }
 
         .cart-remove {
@@ -878,6 +930,18 @@
 
         .cart-remove:hover {
             background: #ffd2bd;
+        }
+
+        .order-helper {
+            grid-column: 1 / -1;
+            margin: 0;
+            border: 1px dashed rgba(20, 122, 63, 0.25);
+            border-radius: 8px;
+            padding: 11px 13px;
+            background: rgba(244, 255, 233, 0.78);
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 800;
         }
 
         .order-summary {
@@ -1256,8 +1320,41 @@
             .menu-grid,
             .feature-grid,
             .wide-form,
-            .add-row {
+            .add-row,
+            .time-picker-group {
                 grid-template-columns: 1fr;
+            }
+
+            .quick-order {
+                padding: 62px 0;
+            }
+
+            .order-box {
+                gap: 12px;
+                padding: 12px;
+            }
+
+            .order-copy,
+            .wide-form {
+                padding: 18px;
+            }
+
+            .order-box h2 {
+                font-size: 30px;
+            }
+
+            .order-highlight {
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .cart-item {
+                grid-template-columns: 1fr;
+                align-items: stretch;
+            }
+
+            .cart-actions {
+                justify-content: space-between;
             }
 
             .testimonial-card {
@@ -1907,7 +2004,7 @@
             <div class="hero-bg">
                 <div class="hero-video-fallback"></div>
                 <video class="hero-video" id="heroBgVideo" autoplay muted loop playsinline preload="none">
-                    <source src="foto2/hero-video.mp4" type="video/mp4">
+                    <source src="foto2/hero-video-compressed.mp4" type="video/mp4">
                 </video>
                 <div class="hero-video-overlay"></div>
             </div>
@@ -2410,6 +2507,7 @@
                                 <strong id="summaryTotal">Rp0</strong>
                             </div>
                         </div>
+                        <p class="order-helper">Pesanan akan terbuka di WhatsApp. Total belum termasuk ongkir delivery.</p>
                         <button class="btn btn-green full" type="submit">Kirim Pesanan ke WhatsApp</button>
                     </form>
                 </div>
@@ -2738,6 +2836,11 @@
             const menu = menuSelect.value;
             const harga = getSelectedPrice();
             const jumlah = Math.max(1, Number(jumlahInput.value || 1));
+
+            if (!menu || !harga) {
+                return;
+            }
+
             const existing = cart.find((item) => item.menu === menu);
 
             if (existing) {
@@ -2747,6 +2850,18 @@
             }
 
             jumlahInput.value = 1;
+            renderCart();
+        }
+
+        function updateCartQty(index, delta) {
+            const item = cart[index];
+            if (!item) return;
+
+            item.jumlah += delta;
+            if (item.jumlah <= 0) {
+                cart.splice(index, 1);
+            }
+
             renderCart();
         }
 
@@ -2771,13 +2886,21 @@
             } else {
                 cartList.innerHTML = cart.map((item, index) => {
                     const subtotal = item.harga * item.jumlah;
+                    const safeMenu = escapeHtml(item.menu);
                     return `
                         <div class="cart-item">
-                            <div>
-                                <div class="cart-name">${item.menu}</div>
+                            <div class="cart-main">
+                                <div class="cart-name">${safeMenu}</div>
                                 <div class="cart-detail">${item.jumlah} x ${formatRupiah.format(item.harga)} = ${formatRupiah.format(subtotal)}</div>
                             </div>
-                            <button class="cart-remove" type="button" data-index="${index}" aria-label="Hapus ${item.menu}">X</button>
+                            <div class="cart-actions">
+                                <div class="qty-stepper" aria-label="Ubah jumlah ${safeMenu}">
+                                    <button class="cart-qty" type="button" data-action="decrease" data-index="${index}" aria-label="Kurangi ${safeMenu}">-</button>
+                                    <span class="cart-qty-value">${item.jumlah}</span>
+                                    <button class="cart-qty" type="button" data-action="increase" data-index="${index}" aria-label="Tambah ${safeMenu}">+</button>
+                                </div>
+                                <button class="cart-remove" type="button" data-index="${index}" aria-label="Hapus ${safeMenu}">X</button>
+                            </div>
                         </div>
                     `;
                 }).join("");
@@ -2868,6 +2991,14 @@
         document.getElementById("addMenuButton").addEventListener("click", addSelectedMenu);
 
         cartList.addEventListener("click", (event) => {
+            const qtyButton = event.target.closest(".cart-qty");
+            if (qtyButton) {
+                const index = Number(qtyButton.dataset.index);
+                const delta = qtyButton.dataset.action === "increase" ? 1 : -1;
+                updateCartQty(index, delta);
+                return;
+            }
+
             const removeButton = event.target.closest(".cart-remove");
 
             if (!removeButton) {
