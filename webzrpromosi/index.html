@@ -2671,6 +2671,14 @@
     <script src="supabase-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="smart-ai-chatbot.js"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("service-worker.js")
+                    .catch((error) => console.warn("Service worker gagal aktif:", error));
+            });
+        }
+    </script>
     <script type="module">
         const whatsappMain = "6281374110444";
         const whatsappSecond = "6281363489111";
@@ -2771,6 +2779,16 @@
             currency: "IDR",
             maximumFractionDigits: 0
         });
+
+        function trackEvent(action, params = {}) {
+            if (typeof gtag !== "function") return;
+
+            gtag("event", action, {
+                event_category: "webzrpromosi",
+                ...params
+            });
+        }
+
         const supabaseConfig = window.ZR_SUPABASE || {};
         const hasSupabaseConfig = Boolean(
             supabaseConfig.url &&
@@ -2950,6 +2968,11 @@
 
             jumlahInput.value = 1;
             renderCart();
+            trackEvent("add_to_cart", {
+                item_name: menu,
+                value: harga * jumlah,
+                currency: "IDR"
+            });
         }
 
         function updateCartQty(index, delta) {
@@ -2962,6 +2985,9 @@
             }
 
             renderCart();
+            trackEvent(delta > 0 ? "cart_quantity_increase" : "cart_quantity_decrease", {
+                item_name: item.menu
+            });
         }
 
         // Event listener for category filters (moved outside)
@@ -2970,10 +2996,13 @@
             if (!btn) return;
 
             const category = btn.dataset.category;
-            
+
             // UI Update
             document.querySelectorAll('#menuCategoryFilters .filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            trackEvent("menu_filter_click", {
+                filter_name: category
+            });
 
             // Render
             renderMenuCatalog(category);
@@ -3064,6 +3093,12 @@
             ].filter(Boolean);
 
             const message = encodeURIComponent(lines.join("\n"));
+            trackEvent("order_whatsapp_submit", {
+                method: metode,
+                value: total,
+                currency: "IDR",
+                items_count: items.reduce((sum, item) => sum + item.jumlah, 0)
+            });
             window.open(`https://wa.me/${phone}?text=${message}`, "_blank", "noopener");
         }
 
@@ -3111,6 +3146,22 @@
         metodeSelect.addEventListener("change", toggleDeliveryAddress);
         toggleDeliveryAddress();
         renderCart();
+
+        document.querySelectorAll('a[href*="wa.me"]').forEach((link) => {
+            link.addEventListener("click", () => {
+                trackEvent("whatsapp_link_click", {
+                    link_text: link.textContent.trim() || link.getAttribute("aria-label") || "WhatsApp"
+                });
+            });
+        });
+
+        document.querySelectorAll('a[href*="google.com/maps"]').forEach((link) => {
+            link.addEventListener("click", () => {
+                trackEvent("maps_open", {
+                    link_text: link.textContent.trim() || "Google Maps"
+                });
+            });
+        });
 
         mainOrderForm.addEventListener("submit", (event) => {
             event.preventDefault();

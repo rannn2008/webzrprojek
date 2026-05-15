@@ -498,10 +498,10 @@
             <div class="hidden" id="tabContentHelp">
                 <div class="note" style="background: rgba(20, 122, 63, 0.05); color: var(--ink);">
                     <p style="margin-top: 0;"><strong>Lupa Password?</strong></p>
-                    <p>Hubungi pengembang sistem atau cek file <code>supabase-setup.sql</code> untuk konfigurasi akun
-                        admin pertama kali.</p>
+                    <p>Gunakan akun admin Supabase Auth yang sudah dibuat untuk dashboard ini.</p>
                     <p style="margin-bottom: 0;">Pastikan Supabase Config sudah terisi dengan benar di
-                        <code>supabase-config.js</code>.
+                        <code>supabase-config.js</code>. Mode lokal hanya aktif jika hash password lokal disiapkan
+                        khusus untuk development.
                     </p>
                 </div>
             </div>
@@ -618,12 +618,13 @@
         const supabaseClient = hasSupabaseConfig
             ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
             : null;
+        const localAdminConfig = window.ZR_LOCAL_ADMIN || {};
         const defaultMenus = [
             {
                 name: "Es Teller Original",
                 price: 12000,
                 description: "Racikan klasik berisi buah segar, kuah manis, dan sensasi dingin yang pas.",
-                image: "foto2/estelleroriginal.jpg",
+                image: "foto2/estelleroriginal.webp",
                 rating: "4.8",
                 badges: ["Best seller", "Tersedia"],
                 status: "Tersedia"
@@ -926,7 +927,7 @@
                 const existingMenu = editIndex !== "" ? menus[Number(editIndex)] : null;
                 const uploadedPhoto = await uploadPhoto(menuForm.elements.photo.files[0]);
                 const existingImage = editIndex !== "" ? menus[Number(editIndex)]?.image : "";
-                const image = uploadedPhoto || formData.get("image").trim() || existingImage || "foto2/estelleroriginal.jpg";
+                const image = uploadedPhoto || formData.get("image").trim() || existingImage || "foto2/estelleroriginal.webp";
                 const badges = formData.get("badges")
                     .split(",")
                     .map((badge) => badge.trim())
@@ -1037,6 +1038,7 @@
         async function refreshAuthState() {
             if (!supabaseClient) {
                 const isLocalLoggedIn = sessionStorage.getItem("zrAdminLocalLogin") === "true";
+                const hasLocalAdmin = Boolean(localAdminConfig.email && localAdminConfig.passwordHash);
                 loginOverlay.classList.toggle("hidden", isLocalLoggedIn);
                 logoutButton.classList.toggle("hidden", !isLocalLoggedIn);
                 menuForm.closest(".panel").classList.toggle("hidden", !isLocalLoggedIn);
@@ -1044,7 +1046,9 @@
                 if (reviewPanel) reviewPanel.classList.toggle("hidden", !isLocalLoggedIn);
                 adminStatus.textContent = isLocalLoggedIn
                     ? "Mode lokal aktif. Admin sudah login (Sesi Sementara)."
-                    : "Mode lokal aktif. Silakan login (Email: zahranalsyafitdei@gmail.com, Pass: z4hr4aiwa).";
+                    : hasLocalAdmin
+                        ? "Mode lokal aktif. Login dengan akun lokal development."
+                        : "Mode lokal belum dikonfigurasi. Gunakan Supabase Auth untuk admin online.";
                 await renderMenus();
                 return;
             }
@@ -1078,15 +1082,20 @@
             submitBtn.disabled = true;
 
             if (!supabaseClient) {
-                // Simulated Login for Local Mode
                 setTimeout(async () => {
-                    if (email === "zahranalsyafitdei@gmail.com" && password === "z4hr4aiwa") {
+                    const passwordHash = await sha256(password);
+                    const isLocalAllowed = localAdminConfig.email &&
+                        localAdminConfig.passwordHash &&
+                        email === localAdminConfig.email &&
+                        passwordHash === localAdminConfig.passwordHash;
+
+                    if (isLocalAllowed) {
                         sessionStorage.setItem("zrAdminLocalLogin", "true");
                         adminStatus.textContent = "Login lokal berhasil.";
                         await refreshAuthState();
                     } else {
-                        adminStatus.textContent = "Login lokal gagal. Gunakan zahranalsyafitdei@gmail.com / z4hr4aiwa";
-                        alert("Login Gagal! Gunakan:\nEmail: zahranalsyafitdei@gmail.com\nPassword: z4hr4aiwa");
+                        adminStatus.textContent = "Login lokal gagal atau mode lokal belum dikonfigurasi.";
+                        alert("Login gagal. Gunakan Supabase Auth, atau siapkan ZR_LOCAL_ADMIN untuk development lokal.");
                         submitBtn.textContent = originalText;
                         submitBtn.disabled = false;
                     }
@@ -1109,6 +1118,14 @@
                 await refreshAuthState();
             }
         });
+
+        async function sha256(value) {
+            const data = new TextEncoder().encode(value);
+            const digest = await crypto.subtle.digest("SHA-256", data);
+            return Array.from(new Uint8Array(digest))
+                .map((byte) => byte.toString(16).padStart(2, "0"))
+                .join("");
+        }
 
         logoutButton.addEventListener("click", async () => {
             if (supabaseClient) {

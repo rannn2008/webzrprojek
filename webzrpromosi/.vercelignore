@@ -1,0 +1,11 @@
+# Local notes and deployment backups
+*.md
+vercel_index.html
+
+# Original heavy media kept locally as backup
+foto2/hero-video.mp4
+foto2/*.jpg.jpg
+foto2/logo.png
+
+# Local SQL/setup notes
+supabase-setup.sql
