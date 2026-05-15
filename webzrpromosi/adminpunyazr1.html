@@ -244,37 +244,62 @@
 
         .menu-list {
             display: grid;
-            gap: 14px;
+            gap: 16px;
         }
 
         .menu-item {
             display: grid;
-            grid-template-columns: 118px minmax(0, 1fr) auto;
-            gap: 14px;
-            align-items: center;
+            grid-template-columns: 132px minmax(0, 1fr) 118px;
+            gap: 18px;
+            align-items: stretch;
             border: 1px solid var(--line);
             border-radius: 8px;
-            padding: 12px;
-            background: var(--white);
+            padding: 14px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 253, 245, 0.96));
+            box-shadow: 0 12px 28px rgba(13, 79, 48, 0.07);
+            transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
         }
 
-        .menu-item img {
-            width: 118px;
+        .menu-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(20, 122, 63, 0.26);
+            box-shadow: 0 18px 36px rgba(13, 79, 48, 0.12);
+        }
+
+        .menu-media {
+            display: block;
+            min-width: 0;
+        }
+
+        .menu-thumb {
+            width: 100%;
             aspect-ratio: 1 / 1;
             object-fit: cover;
             border-radius: 8px;
             background: #f4ffe9;
+            box-shadow: inset 0 0 0 1px rgba(20, 122, 63, 0.08);
+        }
+
+        .menu-content {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .menu-item h3 {
             margin: 0 0 4px;
             color: var(--green-dark);
+            font-size: 20px;
+            line-height: 1.2;
         }
 
         .menu-item p {
             margin: 0 0 8px;
             color: var(--muted);
             font-size: 14px;
+            line-height: 1.45;
         }
 
         .meta {
@@ -284,6 +309,9 @@
         }
 
         .pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 28px;
             border-radius: 999px;
             padding: 4px 9px;
             background: #fff6c7;
@@ -293,8 +321,16 @@
         }
 
         .item-actions {
-            display: grid;
+            display: flex;
+            flex-direction: column;
             gap: 8px;
+            justify-content: center;
+        }
+
+        .item-actions .btn {
+            width: 100%;
+            min-height: 46px;
+            padding-inline: 12px;
         }
 
         /* Modern Login UI */
@@ -449,19 +485,47 @@
         @media (max-width: 880px) {
 
             .layout,
-            .menu-item,
             .auth-panel,
             .auth-form {
                 grid-template-columns: 1fr;
             }
 
-            .menu-item img {
+            .menu-item {
+                grid-template-columns: 112px minmax(0, 1fr);
+            }
+
+            .menu-media {
+                grid-row: span 2;
+            }
+
+            .menu-thumb {
                 width: 100%;
-                aspect-ratio: 16 / 9;
+                aspect-ratio: 1 / 1;
             }
 
             .item-actions {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-column: 2;
+                flex-direction: row;
+            }
+
+            .item-actions .btn {
+                min-height: 42px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .menu-item {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-media,
+            .item-actions {
+                grid-column: auto;
+                grid-row: auto;
+            }
+
+            .menu-thumb {
+                aspect-ratio: 16 / 10;
             }
         }
     </style>
@@ -853,15 +917,16 @@
             menuList.innerHTML = menus.map((menu, index) => {
                 const badges = [`Rating ${menu.rating || "4.8"}`, ...(menu.badges || []), menu.status || "Tersedia"];
                 const uniqueBadges = [...new Set(badges.filter(Boolean))];
+                const image = menu.image || "foto2/estelleroriginal.webp";
+                const webpImage = image.replace(/\.(jpg|jpeg|png)$/i, ".webp");
 
                 return `
                     <article class="menu-item">
-                        <img src="${escapeHtml(menu.image || "")}" alt="${escapeHtml(menu.name)}">
-                        <picture>
-                            <source srcset="${escapeHtml(menu.image.replace(/\.(jpg|jpeg|png)$/i, '.webp') || "")}" type="image/webp">
-                            <img src="${escapeHtml(menu.image || "")}" alt="${escapeHtml(menu.name)}">
+                        <picture class="menu-media">
+                            <source srcset="${escapeHtml(webpImage)}" type="image/webp">
+                            <img class="menu-thumb" src="${escapeHtml(image)}" alt="${escapeHtml(menu.name)}" loading="lazy" onerror="this.onerror=null;this.src='foto2/estelleroriginal.webp';">
                         </picture>
-                        <div>
+                        <div class="menu-content">
                             <h3>${escapeHtml(menu.name)}</h3>
                             <p>${escapeHtml(menu.description)}</p>
                             <div class="meta">
