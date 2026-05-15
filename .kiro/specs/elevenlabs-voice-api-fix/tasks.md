@@ -1,0 +1,101 @@
+# Implementation Plan
+
+- [x] 1. Write bug condition exploration test
+  - **Property 1: Bug Condition** - ElevenLabs Steven Voice HTTP 402 Error
+  - **CRITICAL**: This test MUST FAIL on unfixed code - failure confirms the bug exists
+  - **DO NOT attempt to fix the test or the code when it fails**
+  - **NOTE**: This test encodes the expected behavior - it will validate the fix when it passes after implementation
+  - **GOAL**: Surface counterexamples that demonstrate the bug exists
+  - **Scoped PBT Approach**: Scope the property to concrete failing case: Voice ID 9zOaLLJKBwYOwr8bOPDj with free account
+  - Test that ElevenLabs TTS API call with Steven voice ID (9zOaLLJKBwYOwr8bOPDj) returns HTTP 402 "payment_required" error for free account
+  - Test that `playElevenLabsTts("Test message", "9zOaLLJKBwYOwr8bOPDj")` fails with payment_required error
+  - Test that AI orb click triggers API call but receives HTTP 402 error
+  - Run test on UNFIXED code
+  - **EXPECTED OUTCOME**: Test FAILS (this is correct - it proves the bug exists)
+  - Document counterexamples found: specific HTTP 402 error messages, failed API responses, no audio output
+  - Mark task complete when test is written, run, and failure is documented
+  - _Requirements: 1.1, 1.2, 1.4_
+
+- [x] 2. Write preservation property tests (BEFORE implementing fix)
+  - **Property 2: Preservation** - Voice AI Functionality Preservation
+  - **IMPORTANT**: Follow observation-first methodology
+  - Observe behavior on UNFIXED code for successful voice interactions (if any exist with different voice IDs)
+  - Observe AI orb speaking animation behavior when voice API is called
+  - Observe emoji animation triggers and timing patterns
+  - Observe notification overlay display and duration
+  - Observe voice settings configuration (stability: 0.55, similarity_boost: 0.85, use_speaker_boost: true)
+  - Write property-based tests capturing observed behavior patterns from Preservation Requirements
+  - Test that AI orb animations continue to work regardless of voice API success/failure
+  - Test that emoji effects trigger correctly based on message type
+  - Test that notification overlays appear with correct timing
+  - Test that voice settings are preserved in API calls
+  - Property-based testing generates many test cases for stronger guarantees
+  - Run tests on UNFIXED code
+  - **EXPECTED OUTCOME**: Tests PASS (this confirms baseline behavior to preserve)
+  - Mark task complete when tests are written, run, and passing on unfixed code
+  - _Requirements: 3.1, 3.2, 3.3, 3.4_
+
+- [x] 3. Fix ElevenLabs Voice API HTTP 402 Error
+
+  - [x] 3.1 Research and identify compatible voice ID
+    - Investigate ElevenLabs free account voice limitations
+    - Test alternative voice IDs that work with free accounts
+    - Identify generated voices vs library voices compatibility
+    - Document voice ID options and their characteristics
+    - Select best alternative voice ID that maintains similar voice quality
+    - _Bug_Condition: isBugCondition(input) where input.voice_id == "9zOaLLJKBwYOwr8bOPDj" AND account_type == "free"_
+    - _Expected_Behavior: Voice API calls succeed without HTTP 402 errors_
+    - _Preservation: Voice settings and UI animations remain unchanged_
+    - _Requirements: 1.1, 2.1, 2.2, 3.1_
+
+  - [x] 3.2 Implement voice ID replacement in config
+    - Update `ELEVENLABS_VOICE_ID` in `parking/config.php` with compatible voice ID
+    - Add fallback voice ID configuration for error handling
+    - Ensure voice settings (stability, similarity_boost, use_speaker_boost) are preserved
+    - Test configuration changes don't break existing functionality
+    - _Bug_Condition: isBugCondition(input) from design_
+    - _Expected_Behavior: expectedBehavior(result) from design - successful audio generation_
+    - _Preservation: Preservation Requirements from design - UI animations and settings_
+    - _Requirements: 2.1, 2.2, 3.1, 3.4_
+
+  - [x] 3.3 Enhance error handling in ElevenLabs API
+    - Modify `parking/api_elevenlabs_tts.php` to handle HTTP 402 errors gracefully
+    - Implement fallback logic to retry with alternative voice ID on payment_required error
+    - Add proper error logging for debugging and monitoring
+    - Implement voice compatibility pre-check to prevent unnecessary API calls
+    - Add structured error responses with actionable information
+    - _Bug_Condition: isBugCondition(input) from design_
+    - _Expected_Behavior: expectedBehavior(result) from design - robust error handling_
+    - _Preservation: Preservation Requirements from design - existing functionality_
+    - _Requirements: 1.3, 2.3, 3.3_
+
+  - [x] 3.4 Verify bug condition exploration test now passes
+    - **Property 1: Expected Behavior** - ElevenLabs Voice API Success
+    - **IMPORTANT**: Re-run the SAME test from task 1 - do NOT write a new test
+    - The test from task 1 encodes the expected behavior
+    - When this test passes, it confirms the expected behavior is satisfied
+    - Run bug condition exploration test from step 1
+    - Verify that ElevenLabs TTS API calls now succeed without HTTP 402 errors
+    - Verify that `playElevenLabsTts()` generates audio successfully
+    - Verify that AI orb click produces voice output
+    - **EXPECTED OUTCOME**: Test PASSES (confirms bug is fixed)
+    - _Requirements: 2.1, 2.2, 2.4_
+
+  - [x] 3.5 Verify preservation tests still pass
+    - **Property 2: Preservation** - Voice AI Functionality Preservation
+    - **IMPORTANT**: Re-run the SAME tests from task 2 - do NOT write new tests
+    - Run preservation property tests from step 2
+    - Verify AI orb speaking animations still work correctly
+    - Verify emoji effects still trigger with proper timing
+    - Verify notification overlays still appear with correct duration
+    - Verify voice settings are still applied correctly
+    - **EXPECTED OUTCOME**: Tests PASS (confirms no regressions)
+    - Confirm all tests still pass after fix (no regressions)
+
+- [x] 4. Checkpoint - Ensure all tests pass
+  - Run complete test suite to verify bug fix and preservation
+  - Test voice AI functionality across different scenarios (AI orb click, parking notifications, welcome messages)
+  - Verify voice quality and clarity match expectations
+  - Confirm no HTTP 402 errors appear in browser console
+  - Ensure all visual animations and UI elements work correctly
+  - Ask the user if questions arise or additional testing is needed

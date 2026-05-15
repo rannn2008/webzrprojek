@@ -129,6 +129,7 @@ $current_client_name = $_SESSION['client_name'] ?? $_SESSION['name'] ?? 'User';
     const G_CLIENT_NAME = <?= json_encode($current_client_name) ?>;
     let G_LAST_KNOWN_ID = 0;
     let G_AUDIO_UNLOCKED = false;
+    let G_ELEVENLABS_DISABLED_UNTIL = 0;
 
     function triggerEmojiAnimation(type, isBurst = false) {
         const container = document.body;
@@ -166,16 +167,83 @@ $current_client_name = $_SESSION['client_name'] ?? $_SESSION['name'] ?? 'User';
 
 
 
+    function pickBrowserVoice() {
+        if (!('speechSynthesis' in window)) return null;
+
+        const voices = window.speechSynthesis.getVoices();
+        return voices.find(v => v.lang === 'id-ID') ||
+            voices.find(v => v.lang && v.lang.toLowerCase().startsWith('id')) ||
+            voices.find(v => /indonesia|bahasa/i.test(v.name)) ||
+            voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en')) ||
+            voices[0] ||
+            null;
+    }
+
+    function speakWithBrowserVoice(text) {
+        return new Promise((resolve) => {
+            if (!text || text.trim() === "" || !('speechSynthesis' in window)) {
+                resolve(false);
+                return;
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'id-ID';
+            utterance.rate = 0.95;
+            utterance.pitch = 0.95;
+            utterance.volume = 1;
+
+            const voice = pickBrowserVoice();
+            if (voice) utterance.voice = voice;
+
+            let finished = false;
+            const done = (played) => {
+                if (finished) return;
+                finished = true;
+                resolve(played);
+            };
+
+            utterance.onend = () => done(true);
+            utterance.onerror = () => done(false);
+
+            try {
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+                setTimeout(() => done(true), Math.max(2500, text.length * 90));
+            } catch (e) {
+                console.warn('Browser voice failed:', e);
+                done(false);
+            }
+        });
+    }
+
     async function playElevenLabsTts(text, voiceId = '9zOaLLJKBwYOwr8bOPDj') {
         if (!text || text.trim() === "") return false;
+        if (Date.now() < G_ELEVENLABS_DISABLED_UNTIL) return false;
+
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
             const response = await fetch('api_elevenlabs_tts.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text, voice_id: voiceId })
+                body: JSON.stringify({ text, voice_id: voiceId }),
+                signal: controller.signal
             });
+            clearTimeout(timeoutId);
+
+            const contentType = response.headers.get('Content-Type') || '';
+            if (contentType.includes('application/json')) {
+                const payload = await response.json().catch(() => ({}));
+                if (payload && payload.success === false) {
+                    G_ELEVENLABS_DISABLED_UNTIL = Date.now() + 10 * 60 * 1000;
+                    console.warn('ElevenLabs TTS unavailable, using browser voice:', payload.message || payload.reason || response.status);
+                    return false;
+                }
+            }
+
             if (!response.ok) {
                 console.warn('ElevenLabs TTS failed:', response.status, await response.text());
+                G_ELEVENLABS_DISABLED_UNTIL = Date.now() + 2 * 60 * 1000;
                 return false;
             }
 
@@ -200,12 +268,15 @@ $current_client_name = $_SESSION['client_name'] ?? $_SESSION['name'] ?? 'User';
             });
         } catch (e) {
             console.warn('ElevenLabs TTS fallback:', e);
+            G_ELEVENLABS_DISABLED_UNTIL = Date.now() + 2 * 60 * 1000;
             return false;
         }
     }
 
     async function playAiVoiceTts(text) {
-        return await playElevenLabsTts(text, '9zOaLLJKBwYOwr8bOPDj');
+        const playedWithElevenLabs = await playElevenLabsTts(text, '9zOaLLJKBwYOwr8bOPDj');
+        if (playedWithElevenLabs) return true;
+        return await speakWithBrowserVoice(text);
     }
 
 

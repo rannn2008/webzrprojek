@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice AI Browser Console Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .console-log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎤 Voice AI Browser Console Test</h1>
+        <p>This page tests the ElevenLabs Voice API directly in the browser to verify no HTTP 402 errors appear in the console.</p>
+        
+        <h3>Test Scenarios:</h3>
+        <button class="test-button" onclick="testVoiceAPI('AI Orb Click', 'Halo User, asisten AI SpotFinder siap membantu Anda!')">Test AI Orb Click</button>
+        <button class="test-button" onclick="testVoiceAPI('Welcome Message', 'Selamat datang John. Silahkan parkir.')">Test Welcome Message</button>
+        <button class="test-button" onclick="testVoiceAPI('Goodbye Message', 'Terima kasih John. Sampai jumpa kembali!')">Test Goodbye Message</button>
+        <button class="test-button" onclick="testVoiceAPI('Admin Notification', 'Sistem: Kendaraan John telah masuk.')">Test Admin Notification</button>
+        <button class="test-button" onclick="testVoiceAPI('Chat Notification', 'Ada pesan baru.')">Test Chat Notification</button>
+        
+        <h3>Console Output:</h3>
+        <div id="console-output" class="console-log">Click any test button above to start testing...\n\n✅ Expected Result: HTTP 200 OK responses with audio/mpeg content\n❌ Check for: No HTTP 402 "payment_required" errors in browser console</div>
+        
+        <h3>Instructions:</h3>
+        <ol>
+            <li>Open browser Developer Tools (F12)</li>
+            <li>Go to the Console tab</li>
+            <li>Click the test buttons above</li>
+            <li>Verify no HTTP 402 errors appear in the console</li>
+            <li>Confirm audio is generated successfully</li>
+        </ol>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('console-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const colorClass = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            output.innerHTML += `<span class="${colorClass}">[${timestamp}] ${message}</span>\n`;
+            output.scrollTop = output.scrollHeight;
+            
+            // Also log to browser console
+            console.log(`[Voice Test] ${message}`);
+        }
+
+        async function testVoiceAPI(scenarioName, text) {
+            log(`🧪 Testing: ${scenarioName}`, 'info');
+            log(`📝 Text: "${text}"`, 'info');
+            
+            try {
+                const response = await fetch('api_elevenlabs_tts.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        voice_id: 'pNInz6obpgDQGcFmaJgB' // Adam voice
+                    })
+                });
+                
+                log(`📡 HTTP Status: ${response.status} ${response.statusText}`, 
+                    response.status === 200 ? 'success' : 'error');
+                log(`📋 Content-Type: ${response.headers.get('Content-Type')}`, 'info');
+                
+                if (response.status === 200) {
+                    const audioBlob = await response.blob();
+                    log(`🎵 Audio Size: ${audioBlob.size} bytes`, 'success');
+                    
+                    // Play the audio
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audio = new Audio(audioUrl);
+                    
+                    audio.onended = () => {
+                        URL.revokeObjectURL(audioUrl);
+                        log(`✅ ${scenarioName}: Audio played successfully!`, 'success');
+                    };
+                    
+                    audio.onerror = (e) => {
+                        URL.revokeObjectURL(audioUrl);
+                        log(`❌ ${scenarioName}: Audio playback failed`, 'error');
+                    };
+                    
+                    await audio.play();
+                    log(`🔊 Playing audio for: ${scenarioName}`, 'info');
+                    
+                } else if (response.status === 402) {
+                    const errorText = await response.text();
+                    log(`❌ HTTP 402 ERROR DETECTED: ${errorText}`, 'error');
+                    console.error('HTTP 402 Payment Required Error:', errorText);
+                } else {
+                    const errorText = await response.text();
+                    log(`❌ API Error: ${errorText}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Network Error: ${error.message}`, 'error');
+                console.error('Voice API Test Error:', error);
+            }
+            
+            log(`─────────────────────────────────────────`, 'info');
+        }
+
+        // Initialize
+        log('🚀 Voice AI Browser Console Test Ready', 'success');
+        log('📍 Testing ElevenLabs Voice API with Adam voice (pNInz6obpgDQGcFmaJgB)', 'info');
+        log('🎯 Goal: Verify no HTTP 402 errors occur', 'info');
+        log('─────────────────────────────────────────', 'info');
+    </script>
+</body>
+</html>

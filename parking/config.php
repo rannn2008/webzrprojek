@@ -85,12 +85,21 @@ if (!defined('ELEVENLABS_API_KEY')) {
     define('ELEVENLABS_API_KEY', 'sk_efa5fd674e50eccfeba1bcb3a508c7112d2eaa754cd7e7c5');
 }
 if (!defined('ELEVENLABS_VOICE_ID')) {
-    define('ELEVENLABS_VOICE_ID', '9zOaLLJKBwYOwr8bOPDj');
+    define('ELEVENLABS_VOICE_ID', 'pNInz6obpgDQGcFmaJgB');
 }
 if (!defined('ELEVENLABS_TTS_MODEL')) {
     define('ELEVENLABS_TTS_MODEL', 'eleven_multilingual_v2');
 }
 if (!defined('ELEVENLABS_OUTPUT_FORMAT')) {
     define('ELEVENLABS_OUTPUT_FORMAT', 'mp3_44100_128');
+}
+if (!defined('ELEVENLABS_VOICE_STABILITY')) {
+    define('ELEVENLABS_VOICE_STABILITY', 0.55);
+}
+if (!defined('ELEVENLABS_VOICE_SIMILARITY_BOOST')) {
+    define('ELEVENLABS_VOICE_SIMILARITY_BOOST', 0.85);
+}
+if (!defined('ELEVENLABS_USE_SPEAKER_BOOST')) {
+    define('ELEVENLABS_USE_SPEAKER_BOOST', true);
 }
 ?>

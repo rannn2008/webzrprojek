@@ -188,39 +188,39 @@ if ($globalAiContent) {
     );
 }
 
-// Test 3.4: Verify Steven voice ID configuration
-echo "Test 3.4: Checking Steven voice ID configuration...\n";
+// Test 3.4: Verify voice ID configuration (updated for Adam voice after fix)
+echo "Test 3.4: Checking voice ID configuration...\n";
 $configFile = __DIR__ . '/../config.php';
 $configContent = file_exists($configFile) ? file_get_contents($configFile) : '';
 
 if ($configContent) {
-    // Check for Steven voice ID (9zOaLLJKBwYOwr8bOPDj)
-    $stevenVoiceId = '9zOaLLJKBwYOwr8bOPDj';
-    $hasStevenVoiceId = strpos($configContent, $stevenVoiceId) !== false;
+    // Check for Adam voice ID (pNInz6obpgDQGcFmaJgB) - the fixed voice ID
+    $adamVoiceId = 'pNInz6obpgDQGcFmaJgB';
+    $hasAdamVoiceId = strpos($configContent, $adamVoiceId) !== false;
     $hasElevenLabsVoiceIdConstant = preg_match('/define\s*\(\s*[\'"]ELEVENLABS_VOICE_ID[\'"]/i', $configContent);
     
-    if ($hasStevenVoiceId && $hasElevenLabsVoiceIdConstant) {
+    if ($hasAdamVoiceId && $hasElevenLabsVoiceIdConstant) {
         logTest(
-            "Test 3.4: Steven voice ID configuration",
+            "Test 3.4: Voice ID configuration",
             true,
-            "Preservation verified: Steven voice ID (9zOaLLJKBwYOwr8bOPDj) is configured",
-            "ELEVENLABS_VOICE_ID constant found with Steven voice"
+            "Preservation verified: Adam voice ID (pNInz6obpgDQGcFmaJgB) is configured",
+            "ELEVENLABS_VOICE_ID constant found with Adam voice (fixed from Steven)"
         );
     } else {
         $issues = [];
-        if (!$hasStevenVoiceId) $issues[] = "Steven voice ID not found";
+        if (!$hasAdamVoiceId) $issues[] = "Adam voice ID not found";
         if (!$hasElevenLabsVoiceIdConstant) $issues[] = "ELEVENLABS_VOICE_ID constant not defined";
         
         logTest(
-            "Test 3.4: Steven voice ID configuration",
+            "Test 3.4: Voice ID configuration",
             false,
-            "Preservation violation: Steven voice ID configuration is incomplete",
+            "Preservation violation: Voice ID configuration is incomplete",
             "Issues: " . implode(", ", $issues)
         );
     }
 } else {
     logTest(
-        "Test 3.4: Steven voice ID configuration",
+        "Test 3.4: Voice ID configuration",
         false,
         "Preservation violation: config.php not found",
         "Expected file: {$configFile}"
