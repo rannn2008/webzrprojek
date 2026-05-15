@@ -594,8 +594,8 @@
 
                 <section class="panel hidden" id="reviewPanel">
                     <h2>Kelola Testimoni</h2>
-                    <div class="note" style="margin-bottom: 12px;">Sistem akan otomatis memilih 3 ulasan bintang 5
-                        terbaik untuk dipajang di halaman depan. Anda bisa menghapus ulasan yang spam atau tidak pantas.
+                    <div class="note" style="margin-bottom: 12px;">Halaman depan menampilkan maksimal 3 ulasan yang
+                        ditandai <strong>Pajang</strong>. Sembunyikan ulasan yang belum siap, spam, atau tidak pantas.
                     </div>
                     <div class="menu-list" id="reviewList">Memuat testimoni...</div>
                 </section>
@@ -1158,19 +1158,39 @@
             // Fallback escape html jika fungsi global tidak terjangkau
             const escHtml = (val) => String(val).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-            reviewList.innerHTML = data.map(review => `
+            reviewList.innerHTML = data.map(review => {
+                const displayOnHome = review.display_on_home !== false;
+                return `
                 <div class="menu-item" style="grid-template-columns: minmax(0, 1fr) auto;">
                     <div>
                         <h3 style="margin-bottom:4px; font-size:16px;">${escHtml(review.name)} <span style="color:#ffd447; font-size:14px; margin-left:8px;">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span></h3>
                         <p style="margin: 0 0 8px; font-size: 14px; color: var(--ink);">"${escHtml(review.comment)}"</p>
                         <span class="pill" style="font-size:11px; background: rgba(20, 122, 63, 0.1);">${new Date(review.created_at).toLocaleDateString('id-ID')}</span>
+                        <span class="pill" style="font-size:11px; background:${displayOnHome ? 'rgba(183, 224, 68, 0.35)' : 'rgba(255, 143, 63, 0.18)'};">${displayOnHome ? 'Dipajang' : 'Disembunyikan'}</span>
                     </div>
                     <div class="actions">
+                        <button class="btn ${displayOnHome ? 'btn-danger' : 'btn-green'}" type="button" onclick="toggleReviewDisplay('${review.id}', ${!displayOnHome})" style="min-height: 32px; padding: 6px 12px; font-size: 13px;">${displayOnHome ? 'Sembunyikan' : 'Pajang'}</button>
                         <button class="btn btn-danger" type="button" onclick="deleteReview('${review.id}')" style="min-height: 32px; padding: 6px 12px; font-size: 13px;">Hapus</button>
                     </div>
                 </div>
-            `).join("");
+            `;
+            }).join("");
         }
+
+        window.toggleReviewDisplay = async function (id, displayOnHome) {
+            if (!supabaseClient) return;
+
+            const { error } = await supabaseClient
+                .from("reviews")
+                .update({ display_on_home: displayOnHome })
+                .eq("id", id);
+
+            if (error) {
+                alert("Gagal mengubah status pajang ulasan. Pastikan kolom display_on_home dan policy update reviews sudah ada di Supabase.");
+            } else {
+                await renderReviews();
+            }
+        };
 
         window.deleteReview = async function (id) {
             if (!confirm("Hapus ulasan ini secara permanen?")) return;

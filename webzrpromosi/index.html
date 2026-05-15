@@ -3502,6 +3502,26 @@
         // ==========================================
         // FITUR TESTIMONI (SMART ALGORITHM)
         // ==========================================
+        function renderFallbackTestimonials() {
+            return `
+                <article class="testimonial-card">
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>Rasanya segar, manisnya pas, dan alpukatnya terasa banget. Cocok buat siang-siang.</p>
+                    <strong>Rani, Padang</strong>
+                </article>
+                <article class="testimonial-card">
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>Porsinya puas dan isiannya ramai. Enak buat pesan bareng teman kantor.</p>
+                    <strong>Dika, Kalumbuk</strong>
+                </article>
+                <article class="testimonial-card">
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>Pesan lewat WhatsApp praktis, tinggal pilih menu dan totalnya langsung jelas.</p>
+                    <strong>Maya, Padang</strong>
+                </article>
+            `;
+        }
+
         async function fetchAndRenderTestimonials() {
             const testimonialGrid = document.getElementById("testimonialGrid");
             if (!supabaseClient || !testimonialGrid) return;
@@ -3522,13 +3542,22 @@
                     .select("*")
                     .order("created_at", { ascending: false });
 
-                if (error || !data || data.length === 0) return;
+                if (error || !data || data.length === 0) {
+                    testimonialGrid.innerHTML = renderFallbackTestimonials();
+                    return;
+                }
+
+                const displayedReviews = data.filter(review => review.display_on_home === true);
+                if (displayedReviews.length === 0) {
+                    testimonialGrid.innerHTML = renderFallbackTestimonials();
+                    return;
+                }
 
                 // SMART ALGORITHM: Penilaian Komentar
                 // Kriteria: Bintang 5 > Kata Positif > Panjang Komentar > Terbaru
                 const positiveWords = ["enak", "segar", "mantap", "murah", "ramah", "puas", "banyak", "melimpah", "langganan", "favorit", "recommended", "terbaik", "pas", "nagih"];
 
-                const scoredReviews = data.map(review => {
+                const scoredReviews = displayedReviews.map(review => {
                     let score = 0;
                     if (review.rating === 5) score += 50;
                     if (review.rating === 4) score += 20;
@@ -3575,7 +3604,8 @@
                 const payload = {
                     name: formData.get("name"),
                     rating: parseInt(formData.get("rating")),
-                    comment: formData.get("comment")
+                    comment: formData.get("comment"),
+                    display_on_home: false
                 };
 
                 const { error } = await supabaseClient.from("reviews").insert([payload]);

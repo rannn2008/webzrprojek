@@ -61,8 +61,12 @@ create table if not exists public.reviews (
     name text not null,
     rating integer not null check (rating >= 1 and rating <= 5),
     comment text not null,
+    display_on_home boolean not null default false,
     created_at timestamptz not null default now()
 );
+
+alter table public.reviews
+add column if not exists display_on_home boolean not null default false;
 
 alter table public.reviews enable row level security;
 
@@ -71,13 +75,21 @@ create policy "Public can insert reviews"
 on public.reviews
 for insert
 to anon, authenticated
-with check (true);
+with check (display_on_home = false);
 
 drop policy if exists "Public can read reviews" on public.reviews;
-create policy "Public can read reviews"
+drop policy if exists "Public can read displayed reviews" on public.reviews;
+create policy "Public can read displayed reviews"
 on public.reviews
 for select
-to anon, authenticated
+to anon
+using (display_on_home = true);
+
+drop policy if exists "Authenticated admins can read reviews" on public.reviews;
+create policy "Authenticated admins can read reviews"
+on public.reviews
+for select
+to authenticated
 using (true);
 
 drop policy if exists "Authenticated admins can delete reviews" on public.reviews;
@@ -86,3 +98,11 @@ on public.reviews
 for delete
 to authenticated
 using (true);
+
+drop policy if exists "Authenticated admins can update reviews" on public.reviews;
+create policy "Authenticated admins can update reviews"
+on public.reviews
+for update
+to authenticated
+using (true)
+with check (true);
