@@ -267,11 +267,6 @@
             box-shadow: 0 18px 36px rgba(13, 79, 48, 0.12);
         }
 
-        .menu-media {
-            display: block;
-            min-width: 0;
-        }
-
         .menu-thumb {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -494,7 +489,7 @@
                 grid-template-columns: 112px minmax(0, 1fr);
             }
 
-            .menu-media {
+            .menu-thumb {
                 grid-row: span 2;
             }
 
@@ -518,7 +513,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .menu-media,
+            .menu-thumb,
             .item-actions {
                 grid-column: auto;
                 grid-row: auto;
@@ -918,14 +913,10 @@
                 const badges = [`Rating ${menu.rating || "4.8"}`, ...(menu.badges || []), menu.status || "Tersedia"];
                 const uniqueBadges = [...new Set(badges.filter(Boolean))];
                 const image = menu.image || "foto2/estelleroriginal.webp";
-                const webpImage = image.replace(/\.(jpg|jpeg|png)$/i, ".webp");
 
                 return `
                     <article class="menu-item">
-                        <picture class="menu-media">
-                            <source srcset="${escapeHtml(webpImage)}" type="image/webp">
-                            <img class="menu-thumb" src="${escapeHtml(image)}" alt="${escapeHtml(menu.name)}" loading="lazy" onerror="this.onerror=null;this.src='foto2/estelleroriginal.webp';">
-                        </picture>
+                        <img class="menu-thumb" src="${escapeHtml(image)}" alt="${escapeHtml(menu.name)}" loading="lazy" onerror="this.onerror=null;this.src='foto2/estelleroriginal.webp';">
                         <div class="menu-content">
                             <h3>${escapeHtml(menu.name)}</h3>
                             <p>${escapeHtml(menu.description)}</p>
