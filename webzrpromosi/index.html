@@ -2581,6 +2581,37 @@
                             </label>
                             <button class="btn btn-primary" id="addMenuButton" type="button">Tambah Menu</button>
                         </div>
+                        <div class="time-picker-group full">
+                            <label>Es
+                                <select name="es">
+                                    <option>Normal</option>
+                                    <option>Sedikit es</option>
+                                    <option>Tanpa es</option>
+                                    <option>Extra es</option>
+                                </select>
+                            </label>
+                            <label>Manis
+                                <select name="manis">
+                                    <option>Normal</option>
+                                    <option>Kurang manis</option>
+                                    <option>Manis banget</option>
+                                </select>
+                            </label>
+                            <label>Susu/Santan
+                                <select name="kuah">
+                                    <option>Normal</option>
+                                    <option>Extra susu</option>
+                                    <option>Extra santan</option>
+                                    <option>Tanpa susu</option>
+                                </select>
+                            </label>
+                            <label>Alat makan
+                                <select name="alat">
+                                    <option>Pakai sendok/sedotan</option>
+                                    <option>Tidak perlu alat makan</option>
+                                </select>
+                            </label>
+                        </div>
                         <label class="full hidden" id="deliveryAddressField">Alamat Delivery
                             <textarea name="alamat"
                                 placeholder="Tulis alamat lengkap, patokan, dan nomor yang bisa dihubungi"></textarea>
@@ -3066,7 +3097,7 @@
             }
         }
 
-        function openWhatsapp({ items, metode, phone, nama = "", alamat = "", catatan = "", tanggal = "", waktu = "" }) {
+        function openWhatsapp({ items, metode, phone, nama = "", alamat = "", catatan = "", tanggal = "", waktu = "", es = "", manis = "", kuah = "", alat = "" }) {
             const total = items.reduce((sum, item) => sum + item.harga * item.jumlah, 0);
             const orderLines = items.map((item, index) => {
                 const subtotal = item.harga * item.jumlah;
@@ -3085,6 +3116,10 @@
                 `Total estimasi: ${formatRupiah.format(total)}`,
                 `Metode: ${metode}`,
                 tanggal && waktu ? `Waktu: ${dateStr}, Jam ${waktu} WIB` : "",
+                es ? `Es: ${es}` : "",
+                manis ? `Manis: ${manis}` : "",
+                kuah ? `Susu/Santan: ${kuah}` : "",
+                alat ? `Alat makan: ${alat}` : "",
                 nama ? `Nama: ${nama}` : "",
                 alamat ? `Alamat delivery: ${alamat}` : "",
                 catatan ? `Catatan: ${catatan}` : "",
@@ -3183,7 +3218,11 @@
                 alamat: data.get("alamat"),
                 catatan: data.get("catatan"),
                 tanggal: tanggal,
-                waktu: waktu
+                waktu: waktu,
+                es: data.get("es"),
+                manis: data.get("manis"),
+                kuah: data.get("kuah"),
+                alat: data.get("alat")
             });
         });
 

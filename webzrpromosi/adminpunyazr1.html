@@ -328,6 +328,32 @@
             padding-inline: 12px;
         }
 
+        .review-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .review-filter {
+            min-height: 36px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 7px 12px;
+            background: #fffdf5;
+            color: var(--green-dark);
+            cursor: pointer;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .review-filter.active {
+            border-color: var(--green);
+            background: var(--green);
+            color: var(--white);
+        }
+
         /* Modern Login UI */
         .login-overlay {
             position: fixed;
@@ -656,6 +682,12 @@
                     <div class="note" style="margin-bottom: 12px;">Halaman depan menampilkan maksimal 3 ulasan yang
                         ditandai <strong>Pajang</strong>. Sembunyikan ulasan yang belum siap, spam, atau tidak pantas.
                     </div>
+                    <div class="review-toolbar" id="reviewFilters" aria-label="Filter testimoni">
+                        <button class="review-filter active" type="button" data-filter="all">Semua</button>
+                        <button class="review-filter" type="button" data-filter="displayed">Dipajang</button>
+                        <button class="review-filter" type="button" data-filter="hidden">Disembunyikan</button>
+                        <button class="review-filter" type="button" data-filter="five">Bintang 5</button>
+                    </div>
                     <div class="menu-list" id="reviewList">Memuat testimoni...</div>
                 </section>
             </div>
@@ -742,6 +774,8 @@
         const authFormMain = document.getElementById("authFormMain");
         const logoutButton = document.getElementById("logoutButton");
         const loginTabs = document.querySelectorAll(".login-tab");
+        const reviewFilters = document.getElementById("reviewFilters");
+        let currentReviewFilter = "all";
         const tabContentLogin = document.getElementById("tabContentLogin");
         const tabContentHelp = document.getElementById("tabContentHelp");
 
@@ -1214,7 +1248,19 @@
             // Fallback escape html jika fungsi global tidak terjangkau
             const escHtml = (val) => String(val).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-            reviewList.innerHTML = data.map(review => {
+            const filteredReviews = data.filter((review) => {
+                if (currentReviewFilter === "displayed") return review.display_on_home !== false;
+                if (currentReviewFilter === "hidden") return review.display_on_home === false;
+                if (currentReviewFilter === "five") return Number(review.rating) === 5;
+                return true;
+            });
+
+            if (!filteredReviews.length) {
+                reviewList.innerHTML = "<p>Tidak ada ulasan untuk filter ini.</p>";
+                return;
+            }
+
+            reviewList.innerHTML = filteredReviews.map(review => {
                 const displayOnHome = review.display_on_home !== false;
                 return `
                 <div class="menu-item" style="grid-template-columns: minmax(0, 1fr) auto;">
@@ -1259,6 +1305,17 @@
                 await renderReviews();
             }
         };
+
+        reviewFilters?.addEventListener("click", async (event) => {
+            const button = event.target.closest(".review-filter");
+            if (!button) return;
+
+            currentReviewFilter = button.dataset.filter || "all";
+            reviewFilters.querySelectorAll(".review-filter").forEach((filterButton) => {
+                filterButton.classList.toggle("active", filterButton === button);
+            });
+            await renderReviews();
+        });
 
         await refreshAuthState();
     </script>
