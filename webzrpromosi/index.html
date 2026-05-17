@@ -30,8 +30,6 @@
     <meta name="application-name" content="EsTellerZR">
     <meta name="apple-mobile-web-app-title" content="EsTellerZR">
     <meta property="og:site_name" content="EsTellerZR">
-    <link rel="preconnect" href="https://images.unsplash.com">
-    <link rel="preconnect" href="https://images.pexels.com">
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
@@ -39,7 +37,7 @@
     <meta property="og:title" content="Pondok Es Teller ZR Padang | Es Teler Kalumbuk">
     <meta property="og:description"
         content="Es teller segar di Kalumbuk, Kota Padang dengan buah pilihan, gula asli, dan alpukat melimpah. Pesan via WhatsApp.">
-    <meta property="og:image" content="https://estellerzrpadang.vercel.app/foto2/herobackground.jpg">
+    <meta property="og:image" content="https://estellerzrpadang.vercel.app/foto2/estelleroriginal.jpg">
 
     <!-- Schema.org JSON-LD (SEO) -->
     <script type="application/ld+json">
@@ -53,7 +51,7 @@
         "Pondok Es Teler ZR"
       ],
       "description": "Pondok Es Teller ZR adalah tempat es teller dan minuman segar di Kalumbuk, Kota Padang. Menu favoritnya es teller alpukat, sop buah, dan es rumput laut.",
-      "image": "https://estellerzrpadang.vercel.app/foto2/herobackground.jpg",
+      "image": "https://estellerzrpadang.vercel.app/foto2/estelleroriginal.jpg",
       "@id": "https://estellerzrpadang.vercel.app/",
       "url": "https://estellerzrpadang.vercel.app/",
       "telephone": "+6281374110444",
@@ -144,6 +142,26 @@
                 "price": "18000",
                 "priceCurrency": "IDR"
               }
+            },
+            {
+              "@type": "MenuItem",
+              "name": "Es Teller Jumbo",
+              "description": "Porsi lebih besar untuk yang ingin segar maksimal.",
+              "offers": {
+                "@type": "Offer",
+                "price": "20000",
+                "priceCurrency": "IDR"
+              }
+            },
+            {
+              "@type": "MenuItem",
+              "name": "Es Teller Campur",
+              "description": "Campuran buah pilihan dengan rasa manis segar.",
+              "offers": {
+                "@type": "Offer",
+                "price": "15000",
+                "priceCurrency": "IDR"
+              }
             }
           ]
         },
@@ -168,6 +186,16 @@
               "offers": {
                 "@type": "Offer",
                 "price": "14000",
+                "priceCurrency": "IDR"
+              }
+            },
+            {
+              "@type": "MenuItem",
+              "name": "Paket Keluarga",
+              "description": "Paket ramai-ramai untuk keluarga, teman kantor, atau kumpul santai.",
+              "offers": {
+                "@type": "Offer",
+                "price": "55000",
                 "priceCurrency": "IDR"
               }
             }
@@ -794,7 +822,7 @@
             border-radius: 8px;
             background:
                 linear-gradient(rgba(20, 122, 63, 0.1), rgba(20, 122, 63, 0.1)),
-                url("https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80") center/cover;
+                url("foto2/galeri/kedai-depan.webp") center/cover;
         }
 
         .map-frame iframe {
@@ -810,7 +838,7 @@
             padding: 92px 0;
             background:
                 linear-gradient(135deg, rgba(255, 212, 71, 0.92), rgba(183, 224, 68, 0.86)),
-                url("https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=1600&q=80") center/cover;
+                url("foto2/galeri/buah-segar.webp") center/cover;
         }
 
         .quick-order::before {
@@ -847,7 +875,7 @@
             padding: 30px;
             background:
                 linear-gradient(180deg, rgba(13, 79, 48, 0.92), rgba(20, 122, 63, 0.78)),
-                url("https://images.unsplash.com/photo-1622597467836-f3285f2131b8?auto=format&fit=crop&w=900&q=80") center/cover;
+                url("foto2/galeri/display-esteller.webp") center/cover;
             color: var(--white);
         }
 
@@ -1334,7 +1362,7 @@
             border: 2px solid white;
         }
 
-        /* 📱 RESPONSIVE MOBILE FIXES */
+        /* Responsive mobile fixes */
         @media (max-width: 900px) {
             .nav {
                 min-height: auto;
@@ -1615,7 +1643,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 0;
-            font-size: 24px;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0;
+            text-transform: uppercase;
         }
 
         .theme-toggle:hover {
@@ -1866,13 +1897,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 60px;
-            height: 60px;
+            min-width: 72px;
+            min-height: 42px;
+            padding: 0 14px;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.95);
             display: grid;
             place-items: center;
-            font-size: 28px;
+            font-size: 13px;
+            font-weight: 900;
             color: var(--green-dark);
             transition: transform 0.3s ease;
             pointer-events: none;
@@ -2094,15 +2127,15 @@
 
     <!-- Dark Mode Toggle Button -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode" title="Ganti Tema">
-        <span id="themeIcon">🌙</span>
+        <span id="themeIcon">Dark</span>
     </button>
 
     <main>
         <section class="hero" id="beranda">
             <div class="hero-bg">
                 <div class="hero-video-fallback"></div>
-                <video class="hero-video" id="heroBgVideo" autoplay muted loop playsinline preload="none">
-                    <source src="foto2/hero-video-compressed.mp4" type="video/mp4">
+                <video class="hero-video" id="heroBgVideo" muted loop playsinline preload="none" poster="foto2/herobackground.webp">
+                    <source data-src="foto2/hero-video-compressed.mp4" type="video/mp4">
                 </video>
                 <div class="hero-video-overlay"></div>
             </div>
@@ -2265,12 +2298,12 @@
                         <img src="foto2/galeri/kedai-depan.webp"
                             alt="Tampak Depan Pondok Es Teller ZR yang Ramai Pelanggan" class="gallery-img"
                             loading="lazy"
-                            onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=85'">
+                            onerror="this.src='foto2/galeri/kedai-depan.jpg'">
                         <div class="gallery-overlay">
                             <div class="gallery-title">Kedai Ramai Pelanggan</div>
                             <span class="gallery-category">Kedai</span>
                         </div>
-                        <div class="gallery-icon">🔍</div>
+                        <div class="gallery-icon">Lihat</div>
                     </div>
 
                     <!-- Foto 2: Buah-buahan Segar Colorful -->
@@ -2278,12 +2311,12 @@
                         <img src="foto2/galeri/buah-segar.webp"
                             alt="Buah-buahan Segar Colorful - Pepaya, Nanas, Buah Naga" class="gallery-img"
                             loading="lazy"
-                            onerror="this.src='https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=85'">
+                            onerror="this.src='foto2/galeri/buah-segar.jpg'">
                         <div class="gallery-overlay">
                             <div class="gallery-title">Buah Segar Pilihan</div>
                             <span class="gallery-category">Bahan Segar</span>
                         </div>
-                        <div class="gallery-icon">🔍</div>
+                        <div class="gallery-icon">Lihat</div>
                     </div>
 
                     <!-- Foto 3: Suasana Dalam Kedai dengan Pelanggan -->
@@ -2291,12 +2324,12 @@
                         <img src="foto2/galeri/suasana-dalam.webp"
                             alt="Suasana Dalam Kedai dengan Pelanggan Menikmati Es Teller" class="gallery-img"
                             loading="lazy"
-                            onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=85'">
+                            onerror="this.src='foto2/galeri/suasana-dalam.jpg'">
                         <div class="gallery-overlay">
                             <div class="gallery-title">Suasana Nyaman</div>
                             <span class="gallery-category">Suasana</span>
                         </div>
-                        <div class="gallery-icon">🔍</div>
+                        <div class="gallery-icon">Lihat</div>
                     </div>
 
                     <!-- Foto 4: Display Es Teller dengan Alpukat -->
@@ -2308,55 +2341,55 @@
                             <div class="gallery-title">Display Es Teller</div>
                             <span class="gallery-category">Produk</span>
                         </div>
-                        <div class="gallery-icon">🔍</div>
+                        <div class="gallery-icon">Lihat</div>
                     </div>
 
                     <!-- Foto 5: Booth di Mall -->
                     <div class="gallery-item" data-category="kedai">
                         <img src="foto2/galeri/display-esteller.webp"
                             alt="Booth Es Teller ZR di Mall dengan Display Menarik" class="gallery-img" loading="lazy"
-                            onerror="this.src='https://images.unsplash.com/photo-1567521464027-f127ff144326?auto=format&fit=crop&w=800&q=85'">
+                            onerror="this.src='foto2/galeri/display-esteller.jpg'">
                         <div class="gallery-overlay">
                             <div class="gallery-title">Booth di Mall</div>
                             <span class="gallery-category">Kedai</span>
                         </div>
-                        <div class="gallery-icon">🔍</div>
+                        <div class="gallery-icon">Lihat</div>
                     </div>
 
                     <!-- Foto 6: Alpukat Segar Melimpah -->
                     <div class="gallery-item" data-category="bahan">
                         <img src="foto2/galeri/alpukat-segar.webp"
                             alt="Alpukat Segar Melimpah - Bahan Premium Es Teller ZR" class="gallery-img" loading="lazy"
-                            onerror="this.src='https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=85'">
+                            onerror="this.src='foto2/galeri/alpukat-segar.jpg'">
                         <div class="gallery-overlay">
                             <div class="gallery-title">Alpukat Premium</div>
                             <span class="gallery-category">Bahan Segar</span>
                         </div>
-                        <div class="gallery-icon">🔍</div>
+                        <div class="gallery-icon">Lihat</div>
                     </div>
 
                     <!-- Foto 7: Menu Board / Banner -->
                     <div class="gallery-item" data-category="produk">
                         <img src="foto2/galeri/menu-luar.webp" alt="Menu Board Es Teller ZR dengan Berbagai Varian"
                             class="gallery-img" loading="lazy"
-                            onerror="this.src='https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=85'">
+                            onerror="this.src='foto2/galeri/menu-luar.jpg'">
                         <div class="gallery-overlay">
                             <div class="gallery-title">Menu Luar</div>
                             <span class="gallery-category">Produk</span>
                         </div>
-                        <div class="gallery-icon">🔍</div>
+                        <div class="gallery-icon">Lihat</div>
                     </div>
 
                     <!-- Foto 8: Proses Pembuatan / Counter -->
                     <div class="gallery-item" data-category="suasana">
                         <img src="foto2/galeri/menu-juga.webp" alt="Counter Pembuatan Es Teller dengan Bahan Segar"
                             class="gallery-img" loading="lazy"
-                            onerror="this.src='https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=800&q=85'">
+                            onerror="this.src='foto2/galeri/menu-juga.jpg'">
                         <div class="gallery-overlay">
                             <div class="gallery-title">esteller keren</div>
                             <span class="gallery-category">Suasana</span>
                         </div>
-                        <div class="gallery-icon">🔍</div>
+                        <div class="gallery-icon">Lihat</div>
                     </div>
 
                     <!-- Foto 9: Es Teller Siap Saji -->
@@ -2367,7 +2400,7 @@
                             <div class="gallery-title">Siap Dinikmati</div>
                             <span class="gallery-category">Produk</span>
                         </div>
-                        <div class="gallery-icon">🔍</div>
+                        <div class="gallery-icon">Lihat</div>
                     </div>
                 </div>
 
@@ -2567,7 +2600,7 @@
                                 </select>
                             </label>
                             <div class="delivery-estimate" id="deliveryEstimate">
-                                ⏱️ Estimasi waktu persiapan: <strong>15-30 menit</strong>
+                                Estimasi waktu persiapan: <strong>15-30 menit</strong>
                             </div>
                         </div>
                         <label class="full">Menu
@@ -2637,7 +2670,7 @@
                                 <strong id="summaryTotal">Rp0</strong>
                             </div>
                         </div>
-                        <p class="order-helper">Pesanan akan terbuka di WhatsApp. Total belum termasuk ongkir delivery.</p>
+                        <p class="order-helper">Pesanan akan terbuka di WhatsApp. Delivery sekitar Kalumbuk, Kuranji, Siteba, dan area Padang terdekat. Total belum termasuk ongkir dan akan dikonfirmasi sesuai jarak.</p>
                         <button class="btn btn-green full" type="submit">Kirim Pesanan ke WhatsApp</button>
                     </form>
                 </div>
@@ -2730,7 +2763,7 @@
                 name: "Es Teller Alpukat Spesial",
                 price: 16000,
                 description: "Menu unggulan dengan alpukat lebih banyak, creamy, dan bikin puas.",
-                image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=85",
+                image: "foto2/alpukat-segar.jpg.webp",
                 rating: "4.9",
                 badges: ["Alpukat favorit", "Tersedia"],
                 status: "Tersedia",
@@ -2740,7 +2773,7 @@
                 name: "Es Teller Durian",
                 price: 18000,
                 description: "Tambahan aroma durian untuk rasa yang lebih tebal dan nikmat.",
-                image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=85",
+                image: "foto2/estelleroriginal.webp",
                 rating: "4.7",
                 badges: ["Aroma durian", "Tersedia"],
                 status: "Tersedia",
@@ -2750,7 +2783,7 @@
                 name: "Es Teller Jumbo",
                 price: 20000,
                 description: "Porsi lebih besar untuk yang lagi haus berat dan butuh segar maksimal.",
-                image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=85",
+                image: "foto2/estelleroriginal.webp",
                 rating: "4.8",
                 badges: ["Porsi besar", "Tersedia"],
                 status: "Tersedia",
@@ -2760,7 +2793,7 @@
                 name: "Es Teller Campur",
                 price: 15000,
                 description: "Campuran buah pilihan dengan rasa manis segar yang cocok untuk semua orang.",
-                image: "https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=800&q=85",
+                image: "foto2/buah-segar.jpg.webp",
                 rating: "4.7",
                 badges: ["Buah campur", "Tersedia"],
                 status: "Tersedia",
@@ -2770,7 +2803,7 @@
                 name: "Sop Buah Segar",
                 price: 15000,
                 description: "Potongan buah-buahan segar dengan sirup dan susu yang nikmat.",
-                image: "https://images.unsplash.com/photo-1519996529931-28324d5a630e?auto=format&fit=crop&w=800&q=85",
+                image: "foto2/galeri/buah-segar.webp",
                 rating: "4.8",
                 badges: ["Full Vitamin", "Tersedia"],
                 status: "Tersedia",
@@ -2780,7 +2813,7 @@
                 name: "Es Rumput Laut Spesial",
                 price: 14000,
                 description: "Sensasi kenyal rumput laut pilihan dipadu dengan kuah manis segar.",
-                image: "https://images.unsplash.com/photo-1543648964-187252f8c51b?auto=format&fit=crop&w=800&q=85",
+                image: "foto2/galeri/display-esteller.webp",
                 rating: "4.7",
                 badges: ["Serat tinggi", "Tersedia"],
                 status: "Tersedia",
@@ -2790,7 +2823,7 @@
                 name: "Paket Keluarga",
                 price: 55000,
                 description: "Paket ramai-ramai untuk keluarga, teman kantor, atau kumpul santai.",
-                image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=85",
+                image: "foto2/galeri/menu-juga.webp",
                 rating: "4.9",
                 badges: ["Untuk ramai", "Tersedia"],
                 status: "Tersedia",
@@ -2969,7 +3002,7 @@
             try {
                 if (window.smartBot && typeof window.smartBot.updateMenuData === 'function') {
                     window.smartBot.updateMenuData(menus);
-                    console.log('✅ Smart Chatbot updated with latest menu data');
+                    console.log('Smart Chatbot updated with latest menu data');
                 }
             } catch (error) {
                 console.warn('Failed to update chatbot menu data:', error);
@@ -3251,9 +3284,9 @@
             try {
                 if (typeof SmartChatbot !== 'undefined') {
                     smartBot = new SmartChatbot(currentMenus);
-                    console.log('✅ Smart AI Chatbot initialized with', currentMenus.length, 'menus');
+                    console.log('Smart AI Chatbot initialized with', currentMenus.length, 'menus');
                 } else {
-                    console.warn('⚠️ SmartChatbot class not loaded, using fallback');
+                    console.warn('SmartChatbot class not loaded, using fallback');
                 }
             } catch (error) {
                 console.error('❌ Error initializing chatbot:', error);
@@ -3284,12 +3317,12 @@
 
             // Delivery questions
             if (q.includes("delivery") || q.includes("antar") || q.includes("kirim") || q.includes("ongkir")) {
-                return "Bisa delivery! Ongkir menyesuaikan jarak (via Gojek/Grab). Estimasi waktu persiapan 15-30 menit. Pesan via WhatsApp ya! 📦";
+                return "Bisa delivery! Ongkir menyesuaikan jarak via Gojek/Grab atau kurir terdekat. Estimasi waktu persiapan 15-30 menit. Pesan via WhatsApp ya!";
             }
 
             // Payment questions
             if (q.includes("bayar") || q.includes("pembayaran") || q.includes("transfer") || q.includes("cash")) {
-                return "Pembayaran bisa cash saat ambil/terima pesanan, atau transfer dulu. Nanti dikonfirmasi via WhatsApp ya! 💳";
+                return "Pembayaran bisa cash saat ambil/terima pesanan, atau transfer dulu. Nanti dikonfirmasi via WhatsApp ya!";
             }
 
             // Recommendation questions
@@ -3303,7 +3336,7 @@
 
             // Promo questions
             if (q.includes("promo") || q.includes("diskon") || q.includes("murah")) {
-                return "Untuk info promo terbaru, langsung chat WhatsApp kami ya! Kadang ada promo khusus untuk pembelian ramai-ramai. 🎉";
+                return "Untuk info promo terbaru, langsung chat WhatsApp kami ya! Kadang ada promo khusus untuk pembelian ramai-ramai.";
             }
 
             // Ingredient questions
@@ -3313,7 +3346,7 @@
 
             // Order process
             if (q.includes("pesan") || q.includes("order") || q.includes("cara")) {
-                return "Cara pesan gampang: 1) Pilih menu di bawah, 2) Isi form pesanan, 3) Klik 'Kirim ke WhatsApp'. Praktis! 📱";
+                return "Cara pesan gampang: 1) Pilih menu di bawah, 2) Isi form pesanan, 3) Klik 'Kirim ke WhatsApp'. Praktis!";
             }
 
             // Greeting
@@ -3429,11 +3462,11 @@
         function setTheme(theme) {
             if (theme === "dark") {
                 document.body.classList.add("dark-mode");
-                themeIcon.textContent = "☀️";
+                themeIcon.textContent = "Light";
                 localStorage.setItem(THEME_KEY, "dark");
             } else {
                 document.body.classList.remove("dark-mode");
-                themeIcon.textContent = "🌙";
+                themeIcon.textContent = "Dark";
                 localStorage.setItem(THEME_KEY, "light");
             }
         }
@@ -3492,16 +3525,16 @@
                 let estimateText = "⏱️ Estimasi waktu persiapan: <strong>15-30 menit</strong>";
 
                 if (isToday && selectedHour <= currentHour) {
-                    estimateText = "⚠️ Jam yang dipilih sudah lewat. Pilih jam yang lebih lama atau besok.";
+                    estimateText = "Jam yang dipilih sudah lewat. Pilih jam yang lebih lama atau besok.";
                     deliveryEstimate.style.background = "rgba(255, 143, 63, 0.15)";
                     deliveryEstimate.style.borderColor = "rgba(255, 143, 63, 0.3)";
                     deliveryEstimate.style.color = "#8b2d12";
                 } else if (isToday && selectedHour - currentHour < 2) {
-                    estimateText = "⚡ Pesanan mendesak! Mohon konfirmasi ketersediaan via WhatsApp dulu ya.";
+                    estimateText = "Pesanan mendesak! Mohon konfirmasi ketersediaan via WhatsApp dulu ya.";
                     deliveryEstimate.style.background = "rgba(255, 212, 71, 0.15)";
                     deliveryEstimate.style.borderColor = "rgba(255, 212, 71, 0.3)";
                 } else {
-                    estimateText = `✅ Pesanan untuk ${isToday ? 'hari ini' : 'besok'} jam ${selectedTime} WIB. Estimasi persiapan: <strong>15-30 menit</strong>`;
+                    estimateText = `Pesanan untuk ${isToday ? 'hari ini' : 'besok'} jam ${selectedTime} WIB. Estimasi persiapan: <strong>15-30 menit</strong>`;
                     deliveryEstimate.style.background = "rgba(183, 224, 68, 0.15)";
                     deliveryEstimate.style.borderColor = "rgba(20, 122, 63, 0.2)";
                     deliveryEstimate.style.color = "var(--green-dark)";
@@ -3841,15 +3874,26 @@
             }
         });
 
-        // Hero Background Video - Aggressive Load
+        // Hero background video loads after the first screen is usable.
         (function () {
             const video = document.getElementById('heroBgVideo');
             if (!video) return;
+            const source = video.querySelector('source[data-src]');
+            const fallback = document.querySelector('.hero-video-fallback');
+            const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const saveData = navigator.connection && navigator.connection.saveData;
+            let started = false;
 
-            // Show video and stop fallback animation to save resources
+            if (!source || prefersReducedMotion || saveData) {
+                return;
+            }
+
             const playVideo = () => {
+                if (started) return;
+                started = true;
+                source.src = source.dataset.src;
+                video.load();
                 video.classList.add('loaded');
-                const fallback = document.querySelector('.hero-video-fallback');
                 if (fallback) fallback.style.animation = 'none'; // Stop kenBurns to save CPU
 
                 video.play().catch(e => {
@@ -3861,13 +3905,19 @@
                 });
             };
 
-            if (video.readyState >= 1) {
-                playVideo();
-            } else {
-                video.addEventListener('loadedmetadata', playVideo, { once: true });
-            }
+            const scheduleVideo = () => {
+                if ('requestIdleCallback' in window) {
+                    requestIdleCallback(playVideo, { timeout: 2500 });
+                } else {
+                    setTimeout(playVideo, 1800);
+                }
+            };
 
-            video.load();
+            if (document.readyState === 'complete') {
+                scheduleVideo();
+            } else {
+                window.addEventListener('load', scheduleVideo, { once: true });
+            }
         })();
 
         // Testimonial Slider Navigation
@@ -3889,7 +3939,4 @@
     </script>
 </body>
 
-</html>  
- 
- 
-
+</html>
