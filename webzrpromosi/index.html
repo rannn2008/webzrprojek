@@ -3635,6 +3635,8 @@
         function updateAiOptions() {
             const aiOptions = document.getElementById("aiOptions");
             if (!aiOptions) return;
+            const contentEl = document.getElementById("aiContent");
+            const typingEl = document.getElementById("aiTyping");
             const options = [
                 { label: "Menu best seller", question: "AE, menu best seller Esteller ZR apa?" },
                 { label: "Harga minuman", question: "AE, berapa harga minuman Esteller ZR?" },
@@ -3650,8 +3652,10 @@
             aiOptions.innerHTML = options.map((option) => `
                 <button class="ai-opt" data-question="${escapeHtml(option.question)}">${escapeHtml(option.label)}</button>
             `).join("");
-            aiContent.insertBefore(aiOptions, aiTyping);
-            aiContent.scrollTop = aiContent.scrollHeight;
+            if (contentEl && typingEl) {
+                contentEl.insertBefore(aiOptions, typingEl);
+                contentEl.scrollTop = contentEl.scrollHeight;
+            }
         }
         // ==========================================
         // DARK MODE FUNCTIONALITY
