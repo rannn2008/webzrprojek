@@ -1322,19 +1322,22 @@
 
         .ai-options {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             gap: 8px;
             margin-top: 10px;
         }
 
         .ai-opt {
-            padding: 10px;
+            flex: 1 1 calc(50% - 8px);
+            min-height: 36px;
+            padding: 8px 10px;
             background: white;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 999px;
             cursor: pointer;
             font-size: 13px;
-            text-align: left;
+            font-weight: 800;
+            text-align: center;
             transition: all 0.2s;
         }
 
@@ -3314,6 +3317,16 @@
         const aiTyping = document.getElementById("aiTyping");
         const aiStatus = document.getElementById("aiStatus");
         const aeHistory = [];
+        const MENU_TAGS = {
+            "Es Teller Original": ["segar", "hemat", "classic"],
+            "Es Teller Alpukat Spesial": ["creamy", "bestSeller", "alpukat"],
+            "Es Teller Durian": ["creamy", "premium", "durian"],
+            "Es Teller Jumbo": ["segar", "ramai", "porsi besar"],
+            "Es Teller Campur": ["segar", "hemat", "buah"],
+            "Sop Buah Segar": ["segar", "hemat", "buah"],
+            "Es Rumput Laut Spesial": ["segar", "hemat", "ringan"],
+            "Paket Keluarga": ["ramai", "bestSeller", "paket"]
+        };
 
         aiBtn.addEventListener("click", () => {
             const isOpen = aiWindow.classList.toggle("show-ai");
@@ -3333,61 +3346,141 @@
             smartBot = null;
         }
 
+        function normalizeChatText(value) {
+            return String(value || "")
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^\w\s]/g, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
+
+        function hasAny(text, words) {
+            return words.some((word) => text.includes(word));
+        }
+
+        function getAvailableMenus() {
+            const source = currentMenus.length ? currentMenus : defaultMenus;
+            return source.filter((menu) => menu.status !== "Habis");
+        }
+
+        function withMenuTags(menu) {
+            const baseTags = MENU_TAGS[menu.name] || [];
+            const badgeTags = Array.isArray(menu.badges) ? menu.badges : [];
+            const text = `${menu.name} ${menu.description || ""} ${menu.category || ""} ${badgeTags.join(" ")}`.toLowerCase();
+            const inferred = [
+                text.includes("alpukat") || text.includes("creamy") || text.includes("durian") ? "creamy" : "",
+                text.includes("buah") || text.includes("rumput") || text.includes("segar") ? "segar" : "",
+                Number(menu.price || 0) <= 15000 ? "hemat" : "",
+                text.includes("keluarga") || text.includes("jumbo") || text.includes("ramai") ? "ramai" : "",
+                text.includes("best") || parseFloat(menu.rating || 0) >= 4.9 ? "bestSeller" : ""
+            ].filter(Boolean);
+
+            return { ...menu, tags: [...new Set([...baseTags, ...inferred])] };
+        }
+
+        function findMenusByTag(tag, limit = 2) {
+            return getAvailableMenus()
+                .map(withMenuTags)
+                .filter((menu) => menu.tags.includes(tag))
+                .sort((a, b) => Number(a.price || 0) - Number(b.price || 0))
+                .slice(0, limit);
+        }
+
+        function formatMenuLine(menu) {
+            return `${menu.name} - ${formatRupiah.format(Number(menu.price || 0))}`;
+        }
+
+        function formatMenuList(menus) {
+            return menus.map(formatMenuLine).join("\n");
+        }
+
         function getFallbackResponse(question) {
-            const q = question.toLowerCase();
+            const q = normalizeChatText(question);
+            const menus = getAvailableMenus().map(withMenuTags);
 
-            if (q.includes("menu") || q.includes("harga") || q.includes("berapa")) {
-                const menuList = currentMenus.filter(m => m.status !== 'Habis')
-                    .map(m => `${m.name} (${formatRupiah.format(m.price)})`)
-                    .join(", ");
-                return `Saya AE. Menu yang tersedia: ${menuList}. Mau saya bantu pilih yang paling cocok?`;
+            if (hasAny(q, ["assalamualaikum", "salam"])) {
+                return "Waalaikumsalam! Saya AE. Mau cari menu Esteller ZR yang creamy, segar, hemat, atau cocok buat ramai-ramai?";
             }
 
-            if (q.includes("jam") || q.includes("buka") || q.includes("tutup") || q.includes("kapan")) {
-                return "Saya AE. Esteller ZR buka setiap hari jam 10.00 - 22.00 WIB. Mampir atau pesan via WhatsApp ya.";
+            if (hasAny(q, ["apa kabar", "kabar", "gimana kabarnya", "sehat"])) {
+                return "Alhamdulillah baik! AE siap bantu kamu cari menu Esteller ZR yang segar. Lagi pengen yang creamy, hemat, atau yang paling best seller?";
             }
 
-            if (q.includes("lokasi") || q.includes("alamat") || q.includes("dimana") || q.includes("di mana")) {
-                return "Esteller ZR ada di Jl. Kalumbuk No21, Kota Padang. Klik bagian Lokasi untuk buka rute Google Maps.";
-            }
-
-            if (q.includes("delivery") || q.includes("antar") || q.includes("kirim") || q.includes("ongkir")) {
-                return "Bisa delivery untuk sekitar Kalumbuk, Kuranji, Siteba, dan area Padang terdekat. Ongkir dikonfirmasi sesuai jarak lewat WhatsApp.";
-            }
-
-            if (q.includes("bayar") || q.includes("pembayaran") || q.includes("transfer") || q.includes("cash") || q.includes("qris")) {
-                return "Pembayaran bisa cash, transfer, dan QRIS jika tersedia saat konfirmasi. Tim Esteller ZR akan memastikan detailnya via WhatsApp.";
-            }
-
-            if (q.includes("rekomendasi") || q.includes("enak") || q.includes("favorit") || q.includes("best")) {
-                const topMenu = currentMenus.filter(m => m.status !== 'Habis' && parseFloat(m.rating) >= 4.8)[0];
-                if (topMenu) {
-                    return `Rekomendasi AE: ${topMenu.name}. Rating ${topMenu.rating}, harga ${formatRupiah.format(topMenu.price)}. Cocok kalau kamu mau yang segar dan jadi favorit pelanggan.`;
-                }
-                return "Rekomendasi AE: Es Teller Alpukat Spesial. Rasanya creamy, alpukatnya terasa, dan cocok untuk cuaca Padang.";
-            }
-
-            if (q.includes("promo") || q.includes("diskon") || q.includes("murah")) {
-                return "Untuk promo terbaru, AE sarankan konfirmasi langsung via WhatsApp karena promo bisa berubah sesuai stok dan pembelian ramai-ramai.";
-            }
-
-            if (q.includes("bahan") || q.includes("isi") || q.includes("alpukat") || q.includes("buah")) {
-                return "Esteller ZR memakai buah segar pilihan, alpukat premium, gula asli, dan racikan kuah creamy yang dibuat segar.";
-            }
-
-            if (q.includes("pesan") || q.includes("order") || q.includes("cara")) {
-                return "Cara pesan: pilih menu, tambah ke pesanan, isi nama dan waktu, lalu klik Kirim Pesanan ke WhatsApp. AE siap bantu pilih menunya dulu.";
-            }
-
-            if (q.includes("halo") || q.includes("hai") || q.includes("hi") || q.includes("hello")) {
+            if (hasAny(q, ["halo", "hai", "hi", "hello", "pagi", "siang", "sore", "malam"])) {
                 return "Halo, saya AE. Mau cari menu yang creamy, segar, hemat, atau cocok untuk ramai-ramai?";
             }
 
-            if (q.includes("terima kasih") || q.includes("makasih") || q.includes("thanks")) {
-                return "Sama-sama. AE senang bisa bantu. Semoga harimu tetap segar bersama Esteller ZR.";
+            if (hasAny(q, ["siapa kamu", "kamu siapa", "nama kamu", "ae itu apa"])) {
+                return "Saya AE, asisten virtual Esteller ZR. Saya bisa bantu cek menu, harga, lokasi, jam buka, promo, dan rekomendasi minuman yang paling cocok buat kamu.";
             }
 
-            return "Saya AE, belum menangkap pertanyaan itu dengan jelas. Coba tanya tentang menu, harga, lokasi, jam buka, promo, delivery, atau rekomendasi minuman.";
+            if (hasAny(q, ["terima kasih", "makasih", "thanks", "thank you", "tq"])) {
+                return "Sama-sama! AE senang bisa bantu. Semoga harimu makin segar bareng Esteller ZR.";
+            }
+
+            if (hasAny(q, ["best seller", "bestseller", "favorit", "menu favorit", "paling laris", "laris"])) {
+                const bestMenus = menus
+                    .filter((menu) => menu.tags.includes("bestSeller") || parseFloat(menu.rating || 0) >= 4.8)
+                    .sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0))
+                    .slice(0, 2);
+                return `Menu best seller versi AE:\n${formatMenuList(bestMenus.length ? bestMenus : menus.slice(0, 2))}\nKalau mau rasa paling aman dan creamy, AE condong ke Es Teller Alpukat Spesial.`;
+            }
+
+            if (hasAny(q, ["creamy", "susu", "alpukat", "durian", "kental"])) {
+                const creamyMenus = findMenusByTag("creamy", 2);
+                return `Kalau mau yang creamy, AE rekomendasikan:\n${formatMenuList(creamyMenus)}\nRasanya lebih lembut dan cocok buat yang suka kuah manis creamy.`;
+            }
+
+            if (hasAny(q, ["segar", "fresh", "haus", "panas", "dingin"])) {
+                const freshMenus = findMenusByTag("segar", 2);
+                return `Kalau lagi pengen yang segar, coba:\n${formatMenuList(freshMenus)}\nCocok buat cuaca Padang yang panas.`;
+            }
+
+            if (hasAny(q, ["hemat", "murah", "termurah", "budget", "harga murah"])) {
+                const hematMenus = menus
+                    .filter((menu) => menu.tags.includes("hemat") || Number(menu.price || 0) <= 15000)
+                    .sort((a, b) => Number(a.price || 0) - Number(b.price || 0))
+                    .slice(0, 3);
+                return `Untuk pilihan hemat, AE pilih:\n${formatMenuList(hematMenus)}\nTetap segar tanpa bikin kantong kaget.`;
+            }
+
+            if (hasAny(q, ["ramai", "keluarga", "rame", "bareng", "kantor", "arisan", "teman"])) {
+                const groupMenus = findMenusByTag("ramai", 2);
+                return `Untuk ramai-ramai, AE rekomendasikan:\n${formatMenuList(groupMenus.length ? groupMenus : menus.slice(-2))}\nKalau jumlahnya banyak, lebih enak konfirmasi dulu via WhatsApp supaya stok aman.`;
+            }
+
+            if (hasAny(q, ["harga", "berapa", "menu", "daftar menu", "minuman"])) {
+                const menuList = menus.map(formatMenuLine).join("\n");
+                return `Ini menu Esteller ZR yang bisa AE bantu cek:\n${menuList}\nMau AE pilihkan yang creamy, segar, atau hemat?`;
+            }
+
+            if (hasAny(q, ["jam", "buka", "tutup", "operasional", "kapan"])) {
+                return "Esteller ZR buka setiap hari jam 10.00 - 22.00 WIB. Kalau mau aman, kamu bisa pesan dulu lewat WhatsApp sebelum datang.";
+            }
+
+            if (hasAny(q, ["lokasi", "alamat", "dimana", "di mana", "maps", "outlet"])) {
+                return "Outlet Esteller ZR ada di Jl. Kalumbuk No21, Kota Padang. Kamu bisa klik bagian Lokasi di website untuk buka Google Maps.";
+            }
+
+            if (hasAny(q, ["promo", "diskon", "voucher", "sale"])) {
+                return "Untuk promo hari ini belum ada yang AE catat. Tapi AE bisa bantu pilih menu yang paling hemat atau paling cocok buat kamu.";
+            }
+
+            if (hasAny(q, ["delivery", "antar", "kirim", "ongkir", "gojek", "grab"])) {
+                return "Bisa delivery untuk sekitar Kalumbuk, Kuranji, Siteba, dan area Padang terdekat. Ongkir dikonfirmasi sesuai jarak lewat WhatsApp.";
+            }
+
+            if (hasAny(q, ["bayar", "pembayaran", "transfer", "cash", "qris"])) {
+                return "Pembayaran bisa cash, transfer, dan QRIS jika tersedia saat konfirmasi. Detailnya nanti dipastikan lewat WhatsApp ya.";
+            }
+
+            if (hasAny(q, ["pesan", "order", "cara beli", "cara pesan"])) {
+                return "Cara pesan gampang: pilih menu, tambah ke pesanan, isi nama dan waktu, lalu klik Kirim Pesanan ke WhatsApp. AE bisa bantu pilih menu dulu kalau kamu masih bingung.";
+            }
+
+            return "AE belum nangkap maksudnya dengan jelas. Coba tanya tentang menu, harga, lokasi, jam buka, promo, atau rekomendasi rasa ya.";
         }
 
         function appendAiMessage(role, text, extraClass = "") {
@@ -3395,7 +3488,8 @@
             msg.className = `ai-msg ${role}${extraClass ? ` ${extraClass}` : ""}`;
             msg.style.whiteSpace = "pre-line";
             msg.textContent = text;
-            aiContent.appendChild(msg);
+            const options = document.getElementById("aiOptions");
+            aiContent.insertBefore(msg, options || aiTyping);
             aiContent.scrollTop = aiContent.scrollHeight;
             return msg;
         }
@@ -3463,6 +3557,7 @@
                 aeHistory.push({ role: "user", content: message });
                 aeHistory.push({ role: "assistant", content: reply });
                 if (aeHistory.length > 10) aeHistory.splice(0, aeHistory.length - 10);
+                updateAiOptions();
                 trackEvent("ae_chat_message", { mode: fromFallback ? "fallback" : "openai" });
             } catch (error) {
                 aiTyping.classList.remove("show");
@@ -3491,17 +3586,23 @@
         function updateAiOptions() {
             const aiOptions = document.getElementById("aiOptions");
             if (!aiOptions) return;
-            const favorites = currentMenus.filter(m => m.status !== 'Habis').slice(0, 2).map(m => m.name).join(" dan ") || "Es Teller Original";
             const options = [
-                { label: "Jam Buka?", question: "AE, Esteller ZR buka jam berapa?" },
-                { label: "Menu Favorit?", question: `AE, rekomendasikan menu favorit. Saat ini kandidat favorit: ${favorites}.` },
-                { label: "Bisa Delivery?", question: "AE, apakah Esteller ZR bisa delivery dan bagaimana ongkirnya?" },
-                { label: "Lokasi Dimana?", question: "AE, lokasi Esteller ZR di mana?" }
+                { label: "Menu best seller", question: "AE, menu best seller Esteller ZR apa?" },
+                { label: "Harga minuman", question: "AE, berapa harga minuman Esteller ZR?" },
+                { label: "Lokasi outlet", question: "AE, lokasi outlet Esteller ZR di mana?" },
+                { label: "Jam buka", question: "AE, Esteller ZR buka jam berapa?" },
+                { label: "Promo hari ini", question: "AE, ada promo hari ini?" },
+                { label: "Rekomendasi creamy", question: "AE, rekomendasikan menu yang creamy." },
+                { label: "Rekomendasi hemat", question: "AE, rekomendasikan menu yang hemat." },
+                { label: "Untuk ramai-ramai", question: "AE, menu apa yang cocok untuk ramai-ramai?" }
             ];
 
+            aiOptions.style.display = "flex";
             aiOptions.innerHTML = options.map((option) => `
                 <button class="ai-opt" data-question="${escapeHtml(option.question)}">${escapeHtml(option.label)}</button>
             `).join("");
+            aiContent.insertBefore(aiOptions, aiTyping);
+            aiContent.scrollTop = aiContent.scrollHeight;
         }
         // ==========================================
         // DARK MODE FUNCTIONALITY
