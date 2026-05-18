@@ -2940,20 +2940,38 @@
         }
 
         let currentMenus = []; // Simpan data menu global untuk AI
+        const MENU_FETCH_TIMEOUT = 3500;
+
+        function withTimeout(promise, timeoutMs, label = "request") {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error(`${label} timeout`)), timeoutMs);
+                })
+            ]);
+        }
 
         async function getMenus() {
             if (supabaseClient) {
-                const { data, error } = await supabaseClient
-                    .from("menus")
-                    .select("*")
-                    .order("sort_order", { ascending: true })
-                    .order("created_at", { ascending: true });
+                try {
+                    const { data, error } = await withTimeout(
+                        supabaseClient
+                            .from("menus")
+                            .select("*")
+                            .order("sort_order", { ascending: true })
+                            .order("created_at", { ascending: true }),
+                        MENU_FETCH_TIMEOUT,
+                        "menu cloud"
+                    );
 
-                if (!error && Array.isArray(data) && data.length) {
-                    const cloudMenus = data.map(normalizeMenu);
-                    // Simpan ke local sebagai cadangan jika nanti offline
-                    localStorage.setItem(menuStorageKey, JSON.stringify(cloudMenus));
-                    return cloudMenus;
+                    if (!error && Array.isArray(data) && data.length) {
+                        const cloudMenus = data.map(normalizeMenu);
+                        // Simpan ke local sebagai cadangan jika nanti offline
+                        localStorage.setItem(menuStorageKey, JSON.stringify(cloudMenus));
+                        return cloudMenus;
+                    }
+                } catch (error) {
+                    console.warn("Menu cloud lambat/gagal, pakai data lokal:", error.message);
                 }
             }
 
@@ -2986,7 +3004,12 @@
                 `).join("");
             }
 
-            const menus = await getMenus();
+            let menus = defaultMenus;
+            try {
+                menus = await getMenus();
+            } catch (error) {
+                console.warn("Gagal memuat menu, pakai default:", error);
+            }
             currentMenus = menus; // Update data global
             updateAiOptions(); // Update opsi AI
 
@@ -3219,7 +3242,33 @@
             window.open(`https://wa.me/${phone}?text=${message}`, "_blank", "noopener");
         }
 
-        await renderMenuCatalog();
+        try {
+            await renderMenuCatalog();
+        } catch (error) {
+            console.error("Render menu gagal, pakai data default:", error);
+            currentMenus = defaultMenus;
+            updateAiOptions();
+            const availableMenus = defaultMenus.filter((menu) => menu.status !== "Habis");
+            menuSelect.innerHTML = availableMenus.map((menu) => {
+                return `<option value="${escapeHtml(menu.name)}" data-price="${Number(menu.price || 0)}">${escapeHtml(menu.name)} - ${formatRupiah.format(Number(menu.price || 0))}</option>`;
+            }).join("");
+            const menuGrid = document.getElementById("menuGrid");
+            if (menuGrid) {
+                menuGrid.innerHTML = defaultMenus.map((menu) => `
+                    <article class="menu-card reveal">
+                        <img class="menu-photo" src="${escapeHtml(menu.image)}" alt="${escapeHtml(menu.name)}">
+                        <div class="menu-body">
+                            <div class="menu-title">
+                                <h3>${escapeHtml(menu.name)}</h3>
+                                <span class="price">${formatRupiah.format(Number(menu.price || 0))}</span>
+                            </div>
+                            <p>${escapeHtml(menu.description || "")}</p>
+                            <button class="btn btn-green choose-menu" type="button" data-menu="${escapeHtml(menu.name)}">Tambah ke Pesanan</button>
+                        </div>
+                    </article>
+                `).join("");
+            }
+        }
 
         // Initialize Smart Chatbot after menu is loaded (with error handling)
         try {
